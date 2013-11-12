@@ -195,6 +195,10 @@ extern "C" {
 #error Unsupported __BYTE_ORDER__
 #endif
 
+#if !defined(__FLOAT_WORD_ORDER__)
+#define __FLOAT_WORD_ORDER__ __BYTE_ORDER__
+#endif /* defined(__FLOAT_WORD_ORDER__) */
+
 #if __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
 MP_PROTO float
 mp_bswap_float(float f);

@@ -44,7 +44,7 @@
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a2d475ca7ff94ba648ab4fbdc8e49eabd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a2d475ca7ff94ba648ab4fbdc8e49eabd">mp_type</a> { <br/>
+<tr class="memitem:a2d475ca7ff94ba648ab4fbdc8e49eabd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d475ca7ff94ba648ab4fbdc8e49eabd">mp_type</a> { <br/>
 &#160;&#160;<b>MP_NIL</b> =  0, 
 <b>MP_UINT</b>, 
 <b>MP_INT</b>, 
@@ -64,86 +64,86 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:acfbb6b07e83befbb488218b46d4b01d8"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="msgpuck_8h.html#a2d475ca7ff94ba648ab4fbdc8e49eabd">mp_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#acfbb6b07e83befbb488218b46d4b01d8">mp_typeof</a> (const char c)</td></tr>
+<tr class="memitem:acfbb6b07e83befbb488218b46d4b01d8"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="#a2d475ca7ff94ba648ab4fbdc8e49eabd">mp_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acfbb6b07e83befbb488218b46d4b01d8">mp_typeof</a> (const char c)</td></tr>
 <tr class="memdesc:acfbb6b07e83befbb488218b46d4b01d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine MsgPack type by a first byte <em>c</em> of encoded data.  <a href="#acfbb6b07e83befbb488218b46d4b01d8"></a><br/></td></tr>
-<tr class="memitem:a675d81bfbadddbdb3afdbe5efa70f8b0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a675d81bfbadddbdb3afdbe5efa70f8b0">mp_sizeof_array</a> (uint32_t size)</td></tr>
+<tr class="memitem:a675d81bfbadddbdb3afdbe5efa70f8b0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a675d81bfbadddbdb3afdbe5efa70f8b0">mp_sizeof_array</a> (uint32_t size)</td></tr>
 <tr class="memdesc:a675d81bfbadddbdb3afdbe5efa70f8b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store an array header of <em>size</em> elements. Maximum return value is 5. For performance reasons you can preallocate buffer for maximum size without calling the function.  <a href="#a675d81bfbadddbdb3afdbe5efa70f8b0"></a><br/></td></tr>
-<tr class="memitem:aefb68eba767403432699c731cc953607"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607">mp_encode_array</a> (char *data, uint32_t size)</td></tr>
+<tr class="memitem:aefb68eba767403432699c731cc953607"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefb68eba767403432699c731cc953607">mp_encode_array</a> (char *data, uint32_t size)</td></tr>
 <tr class="memdesc:aefb68eba767403432699c731cc953607"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode an array header of <em>size</em> elements.  <a href="#aefb68eba767403432699c731cc953607"></a><br/></td></tr>
-<tr class="memitem:aa12d3afba83d915dbb9678b5e4c360a3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#aa12d3afba83d915dbb9678b5e4c360a3">mp_decode_array</a> (const char **data)</td></tr>
+<tr class="memitem:aa12d3afba83d915dbb9678b5e4c360a3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa12d3afba83d915dbb9678b5e4c360a3">mp_decode_array</a> (const char **data)</td></tr>
 <tr class="memdesc:aa12d3afba83d915dbb9678b5e4c360a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode an array header from MsgPack <em>data</em>.  <a href="#aa12d3afba83d915dbb9678b5e4c360a3"></a><br/></td></tr>
-<tr class="memitem:acc611a52256d0a7213bb210f84388c5b"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#acc611a52256d0a7213bb210f84388c5b">mp_sizeof_map</a> (uint32_t size)</td></tr>
+<tr class="memitem:acc611a52256d0a7213bb210f84388c5b"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc611a52256d0a7213bb210f84388c5b">mp_sizeof_map</a> (uint32_t size)</td></tr>
 <tr class="memdesc:acc611a52256d0a7213bb210f84388c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store a map header of <em>size</em> elements. Maximum return value is 5. For performance reasons you can preallocate buffer for maximum size without calling the function.  <a href="#acc611a52256d0a7213bb210f84388c5b"></a><br/></td></tr>
-<tr class="memitem:afabd4d215515815ba4974dddd5b084df"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#afabd4d215515815ba4974dddd5b084df">mp_encode_map</a> (char *data, uint32_t size)</td></tr>
+<tr class="memitem:afabd4d215515815ba4974dddd5b084df"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afabd4d215515815ba4974dddd5b084df">mp_encode_map</a> (char *data, uint32_t size)</td></tr>
 <tr class="memdesc:afabd4d215515815ba4974dddd5b084df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a map header of <em>size</em> elements.  <a href="#afabd4d215515815ba4974dddd5b084df"></a><br/></td></tr>
-<tr class="memitem:a0c98c844de9181c4b1fd18296228e7be"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a0c98c844de9181c4b1fd18296228e7be">mp_decode_map</a> (const char **data)</td></tr>
+<tr class="memitem:a0c98c844de9181c4b1fd18296228e7be"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c98c844de9181c4b1fd18296228e7be">mp_decode_map</a> (const char **data)</td></tr>
 <tr class="memdesc:a0c98c844de9181c4b1fd18296228e7be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a map header from MsgPack <em>data</em>.  <a href="#a0c98c844de9181c4b1fd18296228e7be"></a><br/></td></tr>
-<tr class="memitem:a421b5dcec5f9a372273f59ba191bbfec"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a421b5dcec5f9a372273f59ba191bbfec">mp_sizeof_uint</a> (uint64_t num)</td></tr>
+<tr class="memitem:a421b5dcec5f9a372273f59ba191bbfec"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a421b5dcec5f9a372273f59ba191bbfec">mp_sizeof_uint</a> (uint64_t num)</td></tr>
 <tr class="memdesc:a421b5dcec5f9a372273f59ba191bbfec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store an integer <em>num</em>. Maximum return value is 9. For performance reasons you can preallocate buffer for maximum size without calling the function. Example usage:  <a href="#a421b5dcec5f9a372273f59ba191bbfec"></a><br/></td></tr>
-<tr class="memitem:a05359e502aaa765c4dd8836e2b1fff6c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a05359e502aaa765c4dd8836e2b1fff6c">mp_sizeof_int</a> (int64_t num)</td></tr>
+<tr class="memitem:a05359e502aaa765c4dd8836e2b1fff6c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05359e502aaa765c4dd8836e2b1fff6c">mp_sizeof_int</a> (int64_t num)</td></tr>
 <tr class="memdesc:a05359e502aaa765c4dd8836e2b1fff6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store an integer <em>num</em>. Maximum return value is 9. For performance reasons you can preallocate buffer for maximum size without calling the function.  <a href="#a05359e502aaa765c4dd8836e2b1fff6c"></a><br/></td></tr>
-<tr class="memitem:a49c473097cc682ec58c2ea69da40f2f4"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a49c473097cc682ec58c2ea69da40f2f4">mp_encode_uint</a> (char *data, uint64_t num)</td></tr>
+<tr class="memitem:a49c473097cc682ec58c2ea69da40f2f4"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49c473097cc682ec58c2ea69da40f2f4">mp_encode_uint</a> (char *data, uint64_t num)</td></tr>
 <tr class="memdesc:a49c473097cc682ec58c2ea69da40f2f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode an unsigned integer <em>num</em>. It is your responsibility to ensure that <em>data</em> has enough space.  <a href="#a49c473097cc682ec58c2ea69da40f2f4"></a><br/></td></tr>
-<tr class="memitem:a2e3d9c643d49c4ff23432e16e2531d6a"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a2e3d9c643d49c4ff23432e16e2531d6a">mp_encode_int</a> (char *data, int64_t num)</td></tr>
+<tr class="memitem:a2e3d9c643d49c4ff23432e16e2531d6a"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e3d9c643d49c4ff23432e16e2531d6a">mp_encode_int</a> (char *data, int64_t num)</td></tr>
 <tr class="memdesc:a2e3d9c643d49c4ff23432e16e2531d6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a signed integer <em>num</em>. It is your responsibility to ensure that <em>data</em> has enough space.  <a href="#a2e3d9c643d49c4ff23432e16e2531d6a"></a><br/></td></tr>
-<tr class="memitem:ab1877819e684632bd600ee0886c01ae6"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#ab1877819e684632bd600ee0886c01ae6">mp_decode_uint</a> (const char **data)</td></tr>
+<tr class="memitem:ab1877819e684632bd600ee0886c01ae6"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1877819e684632bd600ee0886c01ae6">mp_decode_uint</a> (const char **data)</td></tr>
 <tr class="memdesc:ab1877819e684632bd600ee0886c01ae6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode an unsigned integer from MsgPack <em>data</em>.  <a href="#ab1877819e684632bd600ee0886c01ae6"></a><br/></td></tr>
-<tr class="memitem:a410cccb0859f6d7337c20a62e7f72bc4"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a410cccb0859f6d7337c20a62e7f72bc4">mp_decode_int</a> (const char **data)</td></tr>
+<tr class="memitem:a410cccb0859f6d7337c20a62e7f72bc4"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a410cccb0859f6d7337c20a62e7f72bc4">mp_decode_int</a> (const char **data)</td></tr>
 <tr class="memdesc:a410cccb0859f6d7337c20a62e7f72bc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a signed integer from MsgPack <em>data</em>.  <a href="#a410cccb0859f6d7337c20a62e7f72bc4"></a><br/></td></tr>
-<tr class="memitem:a89d5c072b5089133501f473ff230d37c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a89d5c072b5089133501f473ff230d37c">mp_compare_uint</a> (const char *data_a, const char *data_b)</td></tr>
+<tr class="memitem:a89d5c072b5089133501f473ff230d37c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89d5c072b5089133501f473ff230d37c">mp_compare_uint</a> (const char *data_a, const char *data_b)</td></tr>
 <tr class="memdesc:a89d5c072b5089133501f473ff230d37c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two packed unsigned integers.  <a href="#a89d5c072b5089133501f473ff230d37c"></a><br/></td></tr>
-<tr class="memitem:aa292a0d52d0580771295dfb7de481ed6"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#aa292a0d52d0580771295dfb7de481ed6">mp_sizeof_float</a> (float num)</td></tr>
+<tr class="memitem:aa292a0d52d0580771295dfb7de481ed6"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa292a0d52d0580771295dfb7de481ed6">mp_sizeof_float</a> (float num)</td></tr>
 <tr class="memdesc:aa292a0d52d0580771295dfb7de481ed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store a float <em>num</em>. The return value is always 5. The function was added to provide integrity of the library.  <a href="#aa292a0d52d0580771295dfb7de481ed6"></a><br/></td></tr>
-<tr class="memitem:a71488923530c88797cdad250c0c6bef6"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a71488923530c88797cdad250c0c6bef6">mp_sizeof_double</a> (double num)</td></tr>
+<tr class="memitem:a71488923530c88797cdad250c0c6bef6"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71488923530c88797cdad250c0c6bef6">mp_sizeof_double</a> (double num)</td></tr>
 <tr class="memdesc:a71488923530c88797cdad250c0c6bef6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store a double <em>num</em>. The return value is either 5 or 9. The function was added to provide integrity of the library. For performance reasons you can preallocate buffer for maximum size without calling the function.  <a href="#a71488923530c88797cdad250c0c6bef6"></a><br/></td></tr>
-<tr class="memitem:a1793e9942a486ea2319e92bd9050cbfc"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a1793e9942a486ea2319e92bd9050cbfc">mp_encode_float</a> (char *data, float num)</td></tr>
+<tr class="memitem:a1793e9942a486ea2319e92bd9050cbfc"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1793e9942a486ea2319e92bd9050cbfc">mp_encode_float</a> (char *data, float num)</td></tr>
 <tr class="memdesc:a1793e9942a486ea2319e92bd9050cbfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a float <em>num</em>. It is your responsibility to ensure that <em>data</em> has enough space.  <a href="#a1793e9942a486ea2319e92bd9050cbfc"></a><br/></td></tr>
-<tr class="memitem:a74cc4a438ffb7a01188aa980efd55a26"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a74cc4a438ffb7a01188aa980efd55a26">mp_encode_double</a> (char *data, double num)</td></tr>
+<tr class="memitem:a74cc4a438ffb7a01188aa980efd55a26"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74cc4a438ffb7a01188aa980efd55a26">mp_encode_double</a> (char *data, double num)</td></tr>
 <tr class="memdesc:a74cc4a438ffb7a01188aa980efd55a26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a double <em>num</em>. It is your responsibility to ensure that <em>data</em> has enough space.  <a href="#a74cc4a438ffb7a01188aa980efd55a26"></a><br/></td></tr>
-<tr class="memitem:a0da52b82b517517c7f951352f97895be"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a0da52b82b517517c7f951352f97895be">mp_decode_float</a> (const char **data)</td></tr>
+<tr class="memitem:a0da52b82b517517c7f951352f97895be"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0da52b82b517517c7f951352f97895be">mp_decode_float</a> (const char **data)</td></tr>
 <tr class="memdesc:a0da52b82b517517c7f951352f97895be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a float from MsgPack <em>data</em>.  <a href="#a0da52b82b517517c7f951352f97895be"></a><br/></td></tr>
-<tr class="memitem:a28071d0cd3692dcef2c8815736f2bd60"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a28071d0cd3692dcef2c8815736f2bd60">mp_decode_double</a> (const char **data)</td></tr>
+<tr class="memitem:a28071d0cd3692dcef2c8815736f2bd60"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a28071d0cd3692dcef2c8815736f2bd60">mp_decode_double</a> (const char **data)</td></tr>
 <tr class="memdesc:a28071d0cd3692dcef2c8815736f2bd60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a double from MsgPack <em>data</em>.  <a href="#a28071d0cd3692dcef2c8815736f2bd60"></a><br/></td></tr>
-<tr class="memitem:a69001d4993ed1f1522187aed7d9d84ce"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a69001d4993ed1f1522187aed7d9d84ce">mp_sizeof_strl</a> (uint32_t len)</td></tr>
+<tr class="memitem:a69001d4993ed1f1522187aed7d9d84ce"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69001d4993ed1f1522187aed7d9d84ce">mp_sizeof_strl</a> (uint32_t len)</td></tr>
 <tr class="memdesc:a69001d4993ed1f1522187aed7d9d84ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store a string header of length <em>num</em>. Maximum return value is 5. For performance reasons you can preallocate buffer for maximum size without calling the function.  <a href="#a69001d4993ed1f1522187aed7d9d84ce"></a><br/></td></tr>
-<tr class="memitem:a5b3e9054717dfbc2a3592cf75819546f"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a5b3e9054717dfbc2a3592cf75819546f">mp_sizeof_str</a> (uint32_t len)</td></tr>
+<tr class="memitem:a5b3e9054717dfbc2a3592cf75819546f"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b3e9054717dfbc2a3592cf75819546f">mp_sizeof_str</a> (uint32_t len)</td></tr>
 <tr class="memdesc:a5b3e9054717dfbc2a3592cf75819546f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equivalent to mp_sizeof_strl(<em>len</em>) + <em>len</em>.  <a href="#a5b3e9054717dfbc2a3592cf75819546f"></a><br/></td></tr>
-<tr class="memitem:a577241595d6586e0405151e4ab4ac1b4"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a577241595d6586e0405151e4ab4ac1b4">mp_sizeof_binl</a> (uint32_t len)</td></tr>
+<tr class="memitem:a577241595d6586e0405151e4ab4ac1b4"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a577241595d6586e0405151e4ab4ac1b4">mp_sizeof_binl</a> (uint32_t len)</td></tr>
 <tr class="memdesc:a577241595d6586e0405151e4ab4ac1b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store a binstring header of length <em>num</em>. Maximum return value is 5. For performance reasons you can preallocate buffer for maximum size without calling the function.  <a href="#a577241595d6586e0405151e4ab4ac1b4"></a><br/></td></tr>
-<tr class="memitem:a7944215fb4c9ab5871be816d5b1a4394"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a7944215fb4c9ab5871be816d5b1a4394">mp_sizeof_bin</a> (uint32_t len)</td></tr>
+<tr class="memitem:a7944215fb4c9ab5871be816d5b1a4394"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7944215fb4c9ab5871be816d5b1a4394">mp_sizeof_bin</a> (uint32_t len)</td></tr>
 <tr class="memdesc:a7944215fb4c9ab5871be816d5b1a4394"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equivalent to mp_sizeof_binl(<em>len</em>) + <em>len</em>.  <a href="#a7944215fb4c9ab5871be816d5b1a4394"></a><br/></td></tr>
-<tr class="memitem:a4ed3db6110d7c12dc5129fe643566c28"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28">mp_encode_strl</a> (char *data, uint32_t len)</td></tr>
+<tr class="memitem:a4ed3db6110d7c12dc5129fe643566c28"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ed3db6110d7c12dc5129fe643566c28">mp_encode_strl</a> (char *data, uint32_t len)</td></tr>
 <tr class="memdesc:a4ed3db6110d7c12dc5129fe643566c28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a string header of length <em>len</em>.  <a href="#a4ed3db6110d7c12dc5129fe643566c28"></a><br/></td></tr>
-<tr class="memitem:aa1e8044ca31b3e4011dac8d96340a5dd"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd">mp_encode_str</a> (char *data, const char *str, uint32_t len)</td></tr>
-<tr class="memdesc:aa1e8044ca31b3e4011dac8d96340a5dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a string of length <em>len</em>. The function is equivalent to <a class="el" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl()</a> + memcpy.  <a href="#aa1e8044ca31b3e4011dac8d96340a5dd"></a><br/></td></tr>
-<tr class="memitem:ace2b1df405a632b0761c04323299a970"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#ace2b1df405a632b0761c04323299a970">mp_encode_binl</a> (char *data, uint32_t len)</td></tr>
-<tr class="memdesc:ace2b1df405a632b0761c04323299a970"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a binstring header of length <em>len</em>. See <a class="el" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl()</a> for more details.  <a href="#ace2b1df405a632b0761c04323299a970"></a><br/></td></tr>
-<tr class="memitem:a726422a3e62a43676ff45224e64e8212"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a726422a3e62a43676ff45224e64e8212">mp_encode_bin</a> (char *data, const char *str, uint32_t len)</td></tr>
-<tr class="memdesc:a726422a3e62a43676ff45224e64e8212"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a binstring of length <em>len</em>. The function is equivalent to <a class="el" href="msgpuck_8h.html#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl()</a> + memcpy.  <a href="#a726422a3e62a43676ff45224e64e8212"></a><br/></td></tr>
-<tr class="memitem:a0b717213c64e3bdf665820acb2ae768c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a0b717213c64e3bdf665820acb2ae768c">mp_decode_strl</a> (const char **data)</td></tr>
+<tr class="memitem:aa1e8044ca31b3e4011dac8d96340a5dd"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1e8044ca31b3e4011dac8d96340a5dd">mp_encode_str</a> (char *data, const char *str, uint32_t len)</td></tr>
+<tr class="memdesc:aa1e8044ca31b3e4011dac8d96340a5dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a string of length <em>len</em>. The function is equivalent to <a class="el" href="#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl()</a> + memcpy.  <a href="#aa1e8044ca31b3e4011dac8d96340a5dd"></a><br/></td></tr>
+<tr class="memitem:ace2b1df405a632b0761c04323299a970"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace2b1df405a632b0761c04323299a970">mp_encode_binl</a> (char *data, uint32_t len)</td></tr>
+<tr class="memdesc:ace2b1df405a632b0761c04323299a970"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a binstring header of length <em>len</em>. See <a class="el" href="#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl()</a> for more details.  <a href="#ace2b1df405a632b0761c04323299a970"></a><br/></td></tr>
+<tr class="memitem:a726422a3e62a43676ff45224e64e8212"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a726422a3e62a43676ff45224e64e8212">mp_encode_bin</a> (char *data, const char *str, uint32_t len)</td></tr>
+<tr class="memdesc:a726422a3e62a43676ff45224e64e8212"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a binstring of length <em>len</em>. The function is equivalent to <a class="el" href="#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl()</a> + memcpy.  <a href="#a726422a3e62a43676ff45224e64e8212"></a><br/></td></tr>
+<tr class="memitem:a0b717213c64e3bdf665820acb2ae768c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b717213c64e3bdf665820acb2ae768c">mp_decode_strl</a> (const char **data)</td></tr>
 <tr class="memdesc:a0b717213c64e3bdf665820acb2ae768c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a length of a string from MsgPack <em>data</em>.  <a href="#a0b717213c64e3bdf665820acb2ae768c"></a><br/></td></tr>
-<tr class="memitem:a60224a98b8f0f8269d005bf080621f94"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a60224a98b8f0f8269d005bf080621f94">mp_decode_str</a> (const char **data, uint32_t *len)</td></tr>
+<tr class="memitem:a60224a98b8f0f8269d005bf080621f94"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60224a98b8f0f8269d005bf080621f94">mp_decode_str</a> (const char **data, uint32_t *len)</td></tr>
 <tr class="memdesc:a60224a98b8f0f8269d005bf080621f94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a string from MsgPack <em>data</em>.  <a href="#a60224a98b8f0f8269d005bf080621f94"></a><br/></td></tr>
-<tr class="memitem:ac1b8bf254b190354c4bf29bff4e2a155"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#ac1b8bf254b190354c4bf29bff4e2a155">mp_decode_binl</a> (const char **data)</td></tr>
+<tr class="memitem:ac1b8bf254b190354c4bf29bff4e2a155"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1b8bf254b190354c4bf29bff4e2a155">mp_decode_binl</a> (const char **data)</td></tr>
 <tr class="memdesc:ac1b8bf254b190354c4bf29bff4e2a155"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a length of a binstring from MsgPack <em>data</em>.  <a href="#ac1b8bf254b190354c4bf29bff4e2a155"></a><br/></td></tr>
-<tr class="memitem:a0871f476708b1ac83200a2ed1094131e"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a0871f476708b1ac83200a2ed1094131e">mp_decode_bin</a> (const char **data, uint32_t *len)</td></tr>
+<tr class="memitem:a0871f476708b1ac83200a2ed1094131e"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0871f476708b1ac83200a2ed1094131e">mp_decode_bin</a> (const char **data, uint32_t *len)</td></tr>
 <tr class="memdesc:a0871f476708b1ac83200a2ed1094131e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a binstring from MsgPack <em>data</em>.  <a href="#a0871f476708b1ac83200a2ed1094131e"></a><br/></td></tr>
-<tr class="memitem:a46c6c7274b67726cafea517e38a9ac0a"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a46c6c7274b67726cafea517e38a9ac0a">mp_sizeof_nil</a> (void)</td></tr>
+<tr class="memitem:a46c6c7274b67726cafea517e38a9ac0a"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46c6c7274b67726cafea517e38a9ac0a">mp_sizeof_nil</a> (void)</td></tr>
 <tr class="memdesc:a46c6c7274b67726cafea517e38a9ac0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store the nil value. The return value is always 1. The function was added to provide integrity of the library.  <a href="#a46c6c7274b67726cafea517e38a9ac0a"></a><br/></td></tr>
-<tr class="memitem:aea5097e4ef9751b87eecf075ccb1ac18"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#aea5097e4ef9751b87eecf075ccb1ac18">mp_encode_nil</a> (char *data)</td></tr>
+<tr class="memitem:aea5097e4ef9751b87eecf075ccb1ac18"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea5097e4ef9751b87eecf075ccb1ac18">mp_encode_nil</a> (char *data)</td></tr>
 <tr class="memdesc:aea5097e4ef9751b87eecf075ccb1ac18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode the nil value. It is your responsibility to ensure that <em>data</em> has enough space.  <a href="#aea5097e4ef9751b87eecf075ccb1ac18"></a><br/></td></tr>
-<tr class="memitem:a07498f4874cbf2b082750216e414edf2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a07498f4874cbf2b082750216e414edf2">mp_decode_nil</a> (const char **data)</td></tr>
+<tr class="memitem:a07498f4874cbf2b082750216e414edf2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07498f4874cbf2b082750216e414edf2">mp_decode_nil</a> (const char **data)</td></tr>
 <tr class="memdesc:a07498f4874cbf2b082750216e414edf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode the nil value from MsgPack <em>data</em>.  <a href="#a07498f4874cbf2b082750216e414edf2"></a><br/></td></tr>
-<tr class="memitem:adff6fdd2ecbcaa8bdbfd30b03ee64ea3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#adff6fdd2ecbcaa8bdbfd30b03ee64ea3">mp_sizeof_bool</a> (bool val)</td></tr>
+<tr class="memitem:adff6fdd2ecbcaa8bdbfd30b03ee64ea3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adff6fdd2ecbcaa8bdbfd30b03ee64ea3">mp_sizeof_bool</a> (bool val)</td></tr>
 <tr class="memdesc:adff6fdd2ecbcaa8bdbfd30b03ee64ea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate exact buffer size needed to store a boolean value. The return value is always 1. The function was added to provide integrity of the library.  <a href="#adff6fdd2ecbcaa8bdbfd30b03ee64ea3"></a><br/></td></tr>
-<tr class="memitem:ab83ed15f5199c7717492f50acdec79f4"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#ab83ed15f5199c7717492f50acdec79f4">mp_encode_bool</a> (char *data, bool val)</td></tr>
+<tr class="memitem:ab83ed15f5199c7717492f50acdec79f4"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab83ed15f5199c7717492f50acdec79f4">mp_encode_bool</a> (char *data, bool val)</td></tr>
 <tr class="memdesc:ab83ed15f5199c7717492f50acdec79f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a bool value <em>val</em>. It is your responsibility to ensure that <em>data</em> has enough space.  <a href="#ab83ed15f5199c7717492f50acdec79f4"></a><br/></td></tr>
-<tr class="memitem:a2d3042689fde2eee585cb5a2bcf1ff45"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a2d3042689fde2eee585cb5a2bcf1ff45">mp_decode_bool</a> (const char **data)</td></tr>
+<tr class="memitem:a2d3042689fde2eee585cb5a2bcf1ff45"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d3042689fde2eee585cb5a2bcf1ff45">mp_decode_bool</a> (const char **data)</td></tr>
 <tr class="memdesc:a2d3042689fde2eee585cb5a2bcf1ff45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a bool value from MsgPack <em>data</em>.  <a href="#a2d3042689fde2eee585cb5a2bcf1ff45"></a><br/></td></tr>
-<tr class="memitem:abf842a6e84f360fd9b9fc4dca35c8529"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529">mp_next</a> (const char **data)</td></tr>
+<tr class="memitem:abf842a6e84f360fd9b9fc4dca35c8529"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf842a6e84f360fd9b9fc4dca35c8529">mp_next</a> (const char **data)</td></tr>
 <tr class="memdesc:abf842a6e84f360fd9b9fc4dca35c8529"><td class="mdescLeft">&#160;</td><td class="mdescRight">Skip one element in a packed <em>data</em>.  <a href="#abf842a6e84f360fd9b9fc4dca35c8529"></a><br/></td></tr>
-<tr class="memitem:a67b476a2d2b0f2919a51a6f5dec3989c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="msgpuck_8h.html#a67b476a2d2b0f2919a51a6f5dec3989c">mp_check</a> (const char **data, const char *end)</td></tr>
-<tr class="memdesc:a67b476a2d2b0f2919a51a6f5dec3989c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equivalent to <a class="el" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next()</a> but also validates MsgPack in <em>data</em>.  <a href="#a67b476a2d2b0f2919a51a6f5dec3989c"></a><br/></td></tr>
+<tr class="memitem:a67b476a2d2b0f2919a51a6f5dec3989c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67b476a2d2b0f2919a51a6f5dec3989c">mp_check</a> (const char **data, const char *end)</td></tr>
+<tr class="memdesc:a67b476a2d2b0f2919a51a6f5dec3989c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equivalent to <a class="el" href="#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next()</a> but also validates MsgPack in <em>data</em>.  <a href="#a67b476a2d2b0f2919a51a6f5dec3989c"></a><br/></td></tr>
 </table>
 <a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>MsgPuck is a simple and efficient MsgPack encoder/decoder library in a single self-contained file. </p>
@@ -151,15 +151,15 @@ Functions</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Encode</span></div>
 <div class="line"><span class="keywordtype">char</span> buf[1024];</div>
 <div class="line"><span class="keywordtype">char</span> *w = buf;</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607" title="Encode an array header of size elements.">mp_encode_array</a>(w, 4)</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 10);</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, &quot;hello world&quot;, strlen(&quot;hello world&quot;));</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#ab83ed15f5199c7717492f50acdec79f4" title="Encode a bool value val. It is your responsibility to ensure that data has enough space...">mp_encode_bool</a>(w, true);</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#a74cc4a438ffb7a01188aa980efd55a26" title="Encode a double num. It is your responsibility to ensure that data has enough space.">mp_encode_double</a>(w, 3.1415);</div>
+<div class="line">w = <a class="code" href="#aefb68eba767403432699c731cc953607" title="Encode an array header of size elements.">mp_encode_array</a>(w, 4)</div>
+<div class="line">w = <a class="code" href="#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 10);</div>
+<div class="line">w = <a class="code" href="#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, &quot;hello world&quot;, strlen(&quot;hello world&quot;));</div>
+<div class="line">w = <a class="code" href="#ab83ed15f5199c7717492f50acdec79f4" title="Encode a bool value val. It is your responsibility to ensure that data has enough space...">mp_encode_bool</a>(w, true);</div>
+<div class="line">w = <a class="code" href="#a74cc4a438ffb7a01188aa980efd55a26" title="Encode a double num. It is your responsibility to ensure that data has enough space.">mp_encode_double</a>(w, 3.1415);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Validate</span></div>
 <div class="line">const <span class="keywordtype">char</span> *b = buf;</div>
-<div class="line"><a class="code" href="msgpuck_8h.html#a67b476a2d2b0f2919a51a6f5dec3989c" title="Equivalent to mp_next() but also validates MsgPack in data.">mp_check</a>(&amp;b);</div>
+<div class="line"><a class="code" href="#a67b476a2d2b0f2919a51a6f5dec3989c" title="Equivalent to mp_next() but also validates MsgPack in data.">mp_check</a>(&amp;b);</div>
 <div class="line">assert(b == w);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Decode</span></div>
@@ -172,25 +172,25 @@ Functions</h2></td></tr>
 <div class="line"></div>
 <div class="line">const <span class="keywordtype">char</span> *r = buf;</div>
 <div class="line"></div>
-<div class="line">size = <a class="code" href="msgpuck_8h.html#aa12d3afba83d915dbb9678b5e4c360a3" title="Decode an array header from MsgPack data.">mp_decode_array</a>(&amp;r);</div>
+<div class="line">size = <a class="code" href="#aa12d3afba83d915dbb9678b5e4c360a3" title="Decode an array header from MsgPack data.">mp_decode_array</a>(&amp;r);</div>
 <div class="line"><span class="comment">// size is 4</span></div>
 <div class="line"></div>
-<div class="line">ival = <a class="code" href="msgpuck_8h.html#ab1877819e684632bd600ee0886c01ae6" title="Decode an unsigned integer from MsgPack data.">mp_decode_uint</a>(&amp;r);</div>
+<div class="line">ival = <a class="code" href="#ab1877819e684632bd600ee0886c01ae6" title="Decode an unsigned integer from MsgPack data.">mp_decode_uint</a>(&amp;r);</div>
 <div class="line"><span class="comment">// ival is 10;</span></div>
 <div class="line"></div>
-<div class="line">sval = <a class="code" href="msgpuck_8h.html#a60224a98b8f0f8269d005bf080621f94" title="Decode a string from MsgPack data.">mp_decode_str</a>(&amp;r, &amp;sval_len);</div>
+<div class="line">sval = <a class="code" href="#a60224a98b8f0f8269d005bf080621f94" title="Decode a string from MsgPack data.">mp_decode_str</a>(&amp;r, &amp;sval_len);</div>
 <div class="line"><span class="comment">// sval is &quot;hello world&quot;, sval_len is strlen(&quot;hello world&quot;)</span></div>
 <div class="line"></div>
-<div class="line">bval = <a class="code" href="msgpuck_8h.html#a2d3042689fde2eee585cb5a2bcf1ff45" title="Decode a bool value from MsgPack data.">mp_decode_bool</a>(&amp;r);</div>
+<div class="line">bval = <a class="code" href="#a2d3042689fde2eee585cb5a2bcf1ff45" title="Decode a bool value from MsgPack data.">mp_decode_bool</a>(&amp;r);</div>
 <div class="line"><span class="comment">// bval is true</span></div>
 <div class="line"></div>
-<div class="line">dval = <a class="code" href="msgpuck_8h.html#a28071d0cd3692dcef2c8815736f2bd60" title="Decode a double from MsgPack data.">mp_decode_double</a>(&amp;r);</div>
+<div class="line">dval = <a class="code" href="#a28071d0cd3692dcef2c8815736f2bd60" title="Decode a double from MsgPack data.">mp_decode_double</a>(&amp;r);</div>
 <div class="line"><span class="comment">// dval is 3.1415</span></div>
 <div class="line"></div>
 <div class="line">assert(r == w);</div>
 </div><!-- fragment --><dl class="section note"><dt>Note</dt><dd>Supported compilers. The implementation requires a C99+ or C++03+ compatible compiler.</dd>
 <dd>
-Inline functions. The implementation is compatible with both C99 and GNU inline functions. Please define MP_SOURCE 1 before #include &lt;<a class="el" href="msgpuck_8h.html" title="MsgPuck is a simple and efficient MsgPack encoder/decoder library in a single self-contained file...">msgpuck.h</a>&gt; in a single compilation unit. This module will be used to store non-inlined versions of functions and global tables. </dd></dl>
+Inline functions. The implementation is compatible with both C99 and GNU inline functions. Please define MP_SOURCE 1 before #include &lt;<a class="el" href="" title="MsgPuck is a simple and efficient MsgPack encoder/decoder library in a single self-contained file...">msgpuck.h</a>&gt; in a single compilation unit. This module will be used to store non-inlined versions of functions and global tables. </dd></dl>
 </div><h2>Function Documentation</h2>
 <a class="anchor" id="a67b476a2d2b0f2919a51a6f5dec3989c"></a>
 <div class="memitem">
@@ -216,7 +216,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
       </table>
 </div><div class="memdoc">
 
-<p>Equivalent to <a class="el" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next()</a> but also validates MsgPack in <em>data</em>. </p>
+<p>Equivalent to <a class="el" href="#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next()</a> but also validates MsgPack in <em>data</em>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>- the pointer to a buffer </td></tr>
@@ -234,7 +234,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 <dl class="section post"><dt>Postcondition</dt><dd>*data = *data + mp_sizeof_TYPE() where TYPE is mp_typeof(**data) </dd>
 <dd>
 *data is not defined if MsgPack is not valid </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next()</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next()</a> </dd></dl>
 
 </div>
 </div>
@@ -263,7 +263,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 </div><div class="memdoc">
 
 <p>Compare two packed unsigned integers. </p>
-<p>The function is faster than two <a class="el" href="msgpuck_8h.html#ab1877819e684632bd600ee0886c01ae6" title="Decode an unsigned integer from MsgPack data.">mp_decode_uint()</a> calls. </p>
+<p>The function is faster than two <a class="el" href="#ab1877819e684632bd600ee0886c01ae6" title="Decode an unsigned integer from MsgPack data.">mp_decode_uint()</a> calls. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data_a</td><td>unsigned int a </td></tr>
@@ -306,7 +306,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the number of elements in an array </dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>*data = *data + mp_sizeof_array(retval) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607">An usage example </a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#aefb68eba767403432699c731cc953607">An usage example </a> </dd></dl>
 
 </div>
 </div>
@@ -344,7 +344,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to a decoded binstring </dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>*data = *data + mp_sizeof_str(*len) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl</a> </dd></dl>
 
 </div>
 </div>
@@ -371,7 +371,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a length of a binstring </dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>*data = *data + mp_sizeof_binl(retval) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl</a> </dd></dl>
 
 </div>
 </div>
@@ -503,7 +503,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the number of key/value pairs in a map </dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>*data = *data + mp_sizeof_array(retval) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#afabd4d215515815ba4974dddd5b084df">An usage example </a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#afabd4d215515815ba4974dddd5b084df">An usage example </a> </dd></dl>
 
 </div>
 </div>
@@ -528,7 +528,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </table>
   </dd>
 </dl>
-<dl class="section post"><dt>Postcondition</dt><dd>*data = *data + <a class="el" href="msgpuck_8h.html#a46c6c7274b67726cafea517e38a9ac0a" title="Calculate exact buffer size needed to store the nil value. The return value is always 1...">mp_sizeof_nil()</a> </dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>*data = *data + <a class="el" href="#a46c6c7274b67726cafea517e38a9ac0a" title="Calculate exact buffer size needed to store the nil value. The return value is always 1...">mp_sizeof_nil()</a> </dd></dl>
 
 </div>
 </div>
@@ -566,7 +566,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to a decoded string </dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>*data = *data + mp_sizeof_str(*len) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl</a> </dd></dl>
 
 </div>
 </div>
@@ -593,7 +593,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a length of astring </dd></dl>
 <dl class="section post"><dt>Postcondition</dt><dd>*data = *data + mp_sizeof_strl(retval) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a> </dd></dl>
 
 </div>
 </div>
@@ -653,15 +653,15 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 <div class="fragment"><div class="line"><span class="comment">// Encode</span></div>
 <div class="line"><span class="keywordtype">char</span> buf[1024];</div>
 <div class="line"><span class="keywordtype">char</span> *w = buf;</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607" title="Encode an array header of size elements.">mp_encode_array</a>(w, 2)</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 10);</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 15);</div>
+<div class="line">w = <a class="code" href="#aefb68eba767403432699c731cc953607" title="Encode an array header of size elements.">mp_encode_array</a>(w, 2)</div>
+<div class="line">w = <a class="code" href="#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 10);</div>
+<div class="line">w = <a class="code" href="#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 15);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Decode</span></div>
 <div class="line">const <span class="keywordtype">char</span> *r = buf;</div>
-<div class="line">uint32_t size = <a class="code" href="msgpuck_8h.html#aa12d3afba83d915dbb9678b5e4c360a3" title="Decode an array header from MsgPack data.">mp_decode_array</a>(&amp;r);</div>
+<div class="line">uint32_t size = <a class="code" href="#aa12d3afba83d915dbb9678b5e4c360a3" title="Decode an array header from MsgPack data.">mp_decode_array</a>(&amp;r);</div>
 <div class="line">for (uint32_t i = 0; i &lt; size; i++) {</div>
-<div class="line">    uint64_t val = <a class="code" href="msgpuck_8h.html#ab1877819e684632bd600ee0886c01ae6" title="Decode an unsigned integer from MsgPack data.">mp_decode_uint</a>(&amp;r);</div>
+<div class="line">    uint64_t val = <a class="code" href="#ab1877819e684632bd600ee0886c01ae6" title="Decode an unsigned integer from MsgPack data.">mp_decode_uint</a>(&amp;r);</div>
 <div class="line">}</div>
 <div class="line">assert (r == w);</div>
 </div><!-- fragment --><p> It is your responsibility to ensure that <em>data</em> has enough space. </p>
@@ -672,8 +672,8 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><em>data</em> + <a class="el" href="msgpuck_8h.html#a675d81bfbadddbdb3afdbe5efa70f8b0">mp_sizeof_array(size) </a> </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#a675d81bfbadddbdb3afdbe5efa70f8b0" title="Calculate exact buffer size needed to store an array header of size elements. Maximum return value is...">mp_sizeof_array</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><em>data</em> + <a class="el" href="#a675d81bfbadddbdb3afdbe5efa70f8b0">mp_sizeof_array(size) </a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#a675d81bfbadddbdb3afdbe5efa70f8b0" title="Calculate exact buffer size needed to store an array header of size elements. Maximum return value is...">mp_sizeof_array</a> </dd></dl>
 
 </div>
 </div>
@@ -707,7 +707,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
       </table>
 </div><div class="memdoc">
 
-<p>Encode a binstring of length <em>len</em>. The function is equivalent to <a class="el" href="msgpuck_8h.html#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl()</a> + memcpy. </p>
+<p>Encode a binstring of length <em>len</em>. The function is equivalent to <a class="el" href="#ace2b1df405a632b0761c04323299a970" title="Encode a binstring header of length len. See mp_encode_strl() for more details.">mp_encode_binl()</a> + memcpy. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>- a buffer </td></tr>
@@ -717,7 +717,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>data</em> + mp_sizeof_bin(<em>len</em>) == data + mp_sizeof_binl(<em>len</em>) + <em>len</em> </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a> </dd></dl>
 
 </div>
 </div>
@@ -745,7 +745,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
       </table>
 </div><div class="memdoc">
 
-<p>Encode a binstring header of length <em>len</em>. See <a class="el" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl()</a> for more details. </p>
+<p>Encode a binstring header of length <em>len</em>. See <a class="el" href="#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl()</a> for more details. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>- a bufer </td></tr>
@@ -754,7 +754,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>data + mp_sizeof_binl(<em>len</em>) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a> </dd></dl>
 
 </div>
 </div>
@@ -791,9 +791,9 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>data</em> + mp_sizeof_bool(val) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
 <dd>
-<a class="el" href="msgpuck_8h.html#adff6fdd2ecbcaa8bdbfd30b03ee64ea3" title="Calculate exact buffer size needed to store a boolean value. The return value is always 1...">mp_sizeof_bool()</a> </dd></dl>
+<a class="el" href="#adff6fdd2ecbcaa8bdbfd30b03ee64ea3" title="Calculate exact buffer size needed to store a boolean value. The return value is always 1...">mp_sizeof_bool()</a> </dd></dl>
 
 </div>
 </div>
@@ -830,9 +830,9 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>data</em> + mp_sizeof_double(<em>num</em>) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
 <dd>
-<a class="el" href="msgpuck_8h.html#a71488923530c88797cdad250c0c6bef6" title="Calculate exact buffer size needed to store a double num. The return value is either 5 or 9...">mp_sizeof_double()</a> </dd></dl>
+<a class="el" href="#a71488923530c88797cdad250c0c6bef6" title="Calculate exact buffer size needed to store a double num. The return value is either 5 or 9...">mp_sizeof_double()</a> </dd></dl>
 
 </div>
 </div>
@@ -869,9 +869,9 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>data</em> + mp_sizeof_float(<em>num</em>) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#aa292a0d52d0580771295dfb7de481ed6" title="Calculate exact buffer size needed to store a float num. The return value is always 5...">mp_sizeof_float()</a> </dd>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#aa292a0d52d0580771295dfb7de481ed6" title="Calculate exact buffer size needed to store a float num. The return value is always 5...">mp_sizeof_float()</a> </dd>
 <dd>
-<a class="el" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607">An usage example </a> </dd></dl>
+<a class="el" href="#aefb68eba767403432699c731cc953607">An usage example </a> </dd></dl>
 
 </div>
 </div>
@@ -900,7 +900,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 </div><div class="memdoc">
 
 <p>Encode a signed integer <em>num</em>. It is your responsibility to ensure that <em>data</em> has enough space. </p>
-<dl class="section note"><dt>Note</dt><dd>If <em>num</em> is positive it will encoded by <a class="el" href="msgpuck_8h.html#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint()</a>. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>If <em>num</em> is positive it will encoded by <a class="el" href="#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint()</a>. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>- a buffer </td></tr>
@@ -909,9 +909,9 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>data</em> + mp_sizeof_int(<em>num</em>) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
 <dd>
-<a class="el" href="msgpuck_8h.html#a05359e502aaa765c4dd8836e2b1fff6c" title="Calculate exact buffer size needed to store an integer num. Maximum return value is 9...">mp_sizeof_int()</a> </dd></dl>
+<a class="el" href="#a05359e502aaa765c4dd8836e2b1fff6c" title="Calculate exact buffer size needed to store an integer num. Maximum return value is 9...">mp_sizeof_int()</a> </dd></dl>
 
 </div>
 </div>
@@ -946,20 +946,20 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 <div class="line"></div>
 <div class="line"><span class="comment">// Encode</span></div>
 <div class="line"><span class="keywordtype">char</span> *w = buf;</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#afabd4d215515815ba4974dddd5b084df" title="Encode a map header of size elements.">mp_encode_map</a>(b, 2);</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(b, <span class="stringliteral">&quot;key1&quot;</span>, 4);</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(b, <span class="stringliteral">&quot;value1&quot;</span>, 6);</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(b, <span class="stringliteral">&quot;key2&quot;</span>, 4);</div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(b, <span class="stringliteral">&quot;value2&quot;</span>, 6);</div>
+<div class="line">w = <a class="code" href="#afabd4d215515815ba4974dddd5b084df" title="Encode a map header of size elements.">mp_encode_map</a>(b, 2);</div>
+<div class="line">w = <a class="code" href="#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(b, <span class="stringliteral">&quot;key1&quot;</span>, 4);</div>
+<div class="line">w = <a class="code" href="#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(b, <span class="stringliteral">&quot;value1&quot;</span>, 6);</div>
+<div class="line">w = <a class="code" href="#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(b, <span class="stringliteral">&quot;key2&quot;</span>, 4);</div>
+<div class="line">w = <a class="code" href="#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(b, <span class="stringliteral">&quot;value2&quot;</span>, 6);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Decode</span></div>
 <div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span> *r = buf;</div>
-<div class="line">uint32_t size = <a class="code" href="msgpuck_8h.html#a0c98c844de9181c4b1fd18296228e7be" title="Decode a map header from MsgPack data.">mp_decode_map</a>(&amp;r);</div>
+<div class="line">uint32_t size = <a class="code" href="#a0c98c844de9181c4b1fd18296228e7be" title="Decode a map header from MsgPack data.">mp_decode_map</a>(&amp;r);</div>
 <div class="line"><span class="keywordflow">for</span> (uint32_t i = 0; i &lt; size; i++) {</div>
 <div class="line">     <span class="comment">// Use switch(mp_typeof(**r)) to support more types</span></div>
 <div class="line">    uint32_t key_len, val_len;</div>
-<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span> *key = <a class="code" href="msgpuck_8h.html#a60224a98b8f0f8269d005bf080621f94" title="Decode a string from MsgPack data.">mp_decode_str</a>(&amp;r, key_len);</div>
-<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span> *val = <a class="code" href="msgpuck_8h.html#a60224a98b8f0f8269d005bf080621f94" title="Decode a string from MsgPack data.">mp_decode_str</a>(&amp;r, val_len);</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span> *key = <a class="code" href="#a60224a98b8f0f8269d005bf080621f94" title="Decode a string from MsgPack data.">mp_decode_str</a>(&amp;r, key_len);</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span> *val = <a class="code" href="#a60224a98b8f0f8269d005bf080621f94" title="Decode a string from MsgPack data.">mp_decode_str</a>(&amp;r, val_len);</div>
 <div class="line">}</div>
 <div class="line">assert (r == w);</div>
 </div><!-- fragment --><p> It is your responsibility to ensure that <em>data</em> has enough space. </p>
@@ -970,8 +970,8 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><em>data</em> + <a class="el" href="msgpuck_8h.html#acc611a52256d0a7213bb210f84388c5b">mp_sizeof_map(size)</a> </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#acc611a52256d0a7213bb210f84388c5b" title="Calculate exact buffer size needed to store a map header of size elements. Maximum return value is 5...">mp_sizeof_map</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><em>data</em> + <a class="el" href="#acc611a52256d0a7213bb210f84388c5b">mp_sizeof_map(size)</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#acc611a52256d0a7213bb210f84388c5b" title="Calculate exact buffer size needed to store a map header of size elements. Maximum return value is 5...">mp_sizeof_map</a> </dd></dl>
 
 </div>
 </div>
@@ -996,10 +996,10 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><em>data</em> + <a class="el" href="msgpuck_8h.html#a46c6c7274b67726cafea517e38a9ac0a" title="Calculate exact buffer size needed to store the nil value. The return value is always 1...">mp_sizeof_nil()</a> </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
+<dl class="section return"><dt>Returns</dt><dd><em>data</em> + <a class="el" href="#a46c6c7274b67726cafea517e38a9ac0a" title="Calculate exact buffer size needed to store the nil value. The return value is always 1...">mp_sizeof_nil()</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
 <dd>
-<a class="el" href="msgpuck_8h.html#a46c6c7274b67726cafea517e38a9ac0a" title="Calculate exact buffer size needed to store the nil value. The return value is always 1...">mp_sizeof_nil()</a> </dd></dl>
+<a class="el" href="#a46c6c7274b67726cafea517e38a9ac0a" title="Calculate exact buffer size needed to store the nil value. The return value is always 1...">mp_sizeof_nil()</a> </dd></dl>
 
 </div>
 </div>
@@ -1033,7 +1033,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
       </table>
 </div><div class="memdoc">
 
-<p>Encode a string of length <em>len</em>. The function is equivalent to <a class="el" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl()</a> + memcpy. </p>
+<p>Encode a string of length <em>len</em>. The function is equivalent to <a class="el" href="#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl()</a> + memcpy. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>- a buffer </td></tr>
@@ -1043,7 +1043,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>data</em> + mp_sizeof_str(len) == data + mp_sizeof_strl(len) + len </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a> </dd></dl>
 
 </div>
 </div>
@@ -1077,7 +1077,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 <p>It is your responsibility to ensure that <em>data</em> has enough space. Usage example: </p>
 <div class="fragment"><div class="line"><span class="keywordtype">char</span> buffer[1024];</div>
 <div class="line"><span class="keywordtype">char</span> *b = buffer;</div>
-<div class="line">b = <a class="code" href="msgpuck_8h.html#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a>(b, hdr.total_len);</div>
+<div class="line">b = <a class="code" href="#a4ed3db6110d7c12dc5129fe643566c28" title="Encode a string header of length len.">mp_encode_strl</a>(b, hdr.total_len);</div>
 <div class="line"><span class="keywordtype">char</span> *s = b;</div>
 <div class="line">memcpy(b, pkt1.data, pkt1.len)</div>
 <div class="line">b += pkt1.len;</div>
@@ -1099,7 +1099,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>data</em> + mp_sizeof_strl(len) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#a69001d4993ed1f1522187aed7d9d84ce" title="Calculate exact buffer size needed to store a string header of length num. Maximum return value is 5...">mp_sizeof_strl()</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#a69001d4993ed1f1522187aed7d9d84ce" title="Calculate exact buffer size needed to store a string header of length num. Maximum return value is 5...">mp_sizeof_strl()</a> </dd></dl>
 
 </div>
 </div>
@@ -1136,9 +1136,9 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>data</em> + mp_sizeof_uint(<em>num</em>) </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="#aefb68eba767403432699c731cc953607">An usage example </a> </dd>
 <dd>
-<a class="el" href="msgpuck_8h.html#a421b5dcec5f9a372273f59ba191bbfec" title="Calculate exact buffer size needed to store an integer num. Maximum return value is 9...">mp_sizeof_uint()</a> </dd></dl>
+<a class="el" href="#a421b5dcec5f9a372273f59ba191bbfec" title="Calculate exact buffer size needed to store an integer num. Maximum return value is 9...">mp_sizeof_uint()</a> </dd></dl>
 
 </div>
 </div>
@@ -1163,44 +1163,44 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 <div class="line"></div>
 <div class="line"><span class="keywordtype">char</span> *w = buf;</div>
 <div class="line"><span class="comment">// First MsgPack object</span></div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 10);</div>
+<div class="line">w = <a class="code" href="#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 10);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Second MsgPack object</span></div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607" title="Encode an array header of size elements.">mp_encode_array</a>(w, 4);</div>
-<div class="line">   w = <a class="code" href="msgpuck_8h.html#aefb68eba767403432699c731cc953607" title="Encode an array header of size elements.">mp_encode_array</a>(w, 2);</div>
+<div class="line">w = <a class="code" href="#aefb68eba767403432699c731cc953607" title="Encode an array header of size elements.">mp_encode_array</a>(w, 4);</div>
+<div class="line">   w = <a class="code" href="#aefb68eba767403432699c731cc953607" title="Encode an array header of size elements.">mp_encode_array</a>(w, 2);</div>
 <div class="line">        <span class="comment">// Begin of an inner array</span></div>
-<div class="line">        w = <a class="code" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, <span class="stringliteral">&quot;second inner 1&quot;</span>, 14);</div>
-<div class="line">        w = <a class="code" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, <span class="stringliteral">&quot;second inner 2&quot;</span>, 14);</div>
+<div class="line">        w = <a class="code" href="#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, <span class="stringliteral">&quot;second inner 1&quot;</span>, 14);</div>
+<div class="line">        w = <a class="code" href="#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, <span class="stringliteral">&quot;second inner 2&quot;</span>, 14);</div>
 <div class="line">        <span class="comment">// End of an inner array</span></div>
-<div class="line">   w = <a class="code" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, <span class="stringliteral">&quot;second&quot;</span>, 6);</div>
-<div class="line">   w = <a class="code" href="msgpuck_8h.html#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 20);</div>
-<div class="line">   w = <a class="code" href="msgpuck_8h.html#ab83ed15f5199c7717492f50acdec79f4" title="Encode a bool value val. It is your responsibility to ensure that data has enough space...">mp_encode_bool</a>(w, <span class="keyword">true</span>);</div>
+<div class="line">   w = <a class="code" href="#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, <span class="stringliteral">&quot;second&quot;</span>, 6);</div>
+<div class="line">   w = <a class="code" href="#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(w, 20);</div>
+<div class="line">   w = <a class="code" href="#ab83ed15f5199c7717492f50acdec79f4" title="Encode a bool value val. It is your responsibility to ensure that data has enough space...">mp_encode_bool</a>(w, <span class="keyword">true</span>);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Third MsgPack object</span></div>
-<div class="line">w = <a class="code" href="msgpuck_8h.html#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, <span class="stringliteral">&quot;third&quot;</span>, 5);</div>
+<div class="line">w = <a class="code" href="#aa1e8044ca31b3e4011dac8d96340a5dd" title="Encode a string of length len. The function is equivalent to mp_encode_strl() + memcpy.">mp_encode_str</a>(w, <span class="stringliteral">&quot;third&quot;</span>, 5);</div>
 <div class="line"><span class="comment">// EOF</span></div>
 <div class="line"></div>
 <div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span> *r = buf;</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// First MsgPack object</span></div>
-<div class="line">assert(<a class="code" href="msgpuck_8h.html#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_UINT);</div>
-<div class="line"><a class="code" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r); <span class="comment">// skip the first object</span></div>
+<div class="line">assert(<a class="code" href="#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_UINT);</div>
+<div class="line"><a class="code" href="#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r); <span class="comment">// skip the first object</span></div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Second MsgPack object</span></div>
-<div class="line">assert(<a class="code" href="msgpuck_8h.html#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_ARRAY);</div>
-<div class="line"><a class="code" href="msgpuck_8h.html#aa12d3afba83d915dbb9678b5e4c360a3" title="Decode an array header from MsgPack data.">mp_decode_array</a>(&amp;r);</div>
-<div class="line">    assert(<a class="code" href="msgpuck_8h.html#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_ARRAY); <span class="comment">// inner array</span></div>
-<div class="line">    <a class="code" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r); <span class="comment">// --&gt;&gt; skip the entire inner array (with all members)</span></div>
-<div class="line">    assert(<a class="code" href="msgpuck_8h.html#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_STR); <span class="comment">// second</span></div>
-<div class="line">    <a class="code" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r);</div>
-<div class="line">    assert(<a class="code" href="msgpuck_8h.html#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_UINT); <span class="comment">// 20</span></div>
-<div class="line">    <a class="code" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r);</div>
-<div class="line">    assert(<a class="code" href="msgpuck_8h.html#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_BOOL); <span class="comment">// true</span></div>
-<div class="line">    <a class="code" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r);</div>
+<div class="line">assert(<a class="code" href="#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_ARRAY);</div>
+<div class="line"><a class="code" href="#aa12d3afba83d915dbb9678b5e4c360a3" title="Decode an array header from MsgPack data.">mp_decode_array</a>(&amp;r);</div>
+<div class="line">    assert(<a class="code" href="#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_ARRAY); <span class="comment">// inner array</span></div>
+<div class="line">    <a class="code" href="#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r); <span class="comment">// --&gt;&gt; skip the entire inner array (with all members)</span></div>
+<div class="line">    assert(<a class="code" href="#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_STR); <span class="comment">// second</span></div>
+<div class="line">    <a class="code" href="#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r);</div>
+<div class="line">    assert(<a class="code" href="#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_UINT); <span class="comment">// 20</span></div>
+<div class="line">    <a class="code" href="#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r);</div>
+<div class="line">    assert(<a class="code" href="#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_BOOL); <span class="comment">// true</span></div>
+<div class="line">    <a class="code" href="#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Third MsgPack object</span></div>
-<div class="line">assert(<a class="code" href="msgpuck_8h.html#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_STR); <span class="comment">// third</span></div>
-<div class="line"><a class="code" href="msgpuck_8h.html#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r);</div>
+<div class="line">assert(<a class="code" href="#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(**r) == MP_STR); <span class="comment">// third</span></div>
+<div class="line"><a class="code" href="#abf842a6e84f360fd9b9fc4dca35c8529" title="Skip one element in a packed data.">mp_next</a>(&amp;r);</div>
 <div class="line"></div>
 <div class="line">assert(r == w); <span class="comment">// EOF</span></div>
 </div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
@@ -1493,9 +1493,9 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 <p>Calculate exact buffer size needed to store an integer <em>num</em>. Maximum return value is 9. For performance reasons you can preallocate buffer for maximum size without calling the function. Example usage: </p>
 <div class="fragment"><div class="line"><span class="keywordtype">char</span> **data = ...;</div>
 <div class="line"><span class="keywordtype">char</span> *end = *data;</div>
-<div class="line">my_buffer_ensure(<a class="code" href="msgpuck_8h.html#a421b5dcec5f9a372273f59ba191bbfec" title="Calculate exact buffer size needed to store an integer num. Maximum return value is 9...">mp_sizeof_uint</a>(x), &amp;end);</div>
+<div class="line">my_buffer_ensure(<a class="code" href="#a421b5dcec5f9a372273f59ba191bbfec" title="Calculate exact buffer size needed to store an integer num. Maximum return value is 9...">mp_sizeof_uint</a>(x), &amp;end);</div>
 <div class="line"><span class="comment">// my_buffer_ensure(9, &amp;end);</span></div>
-<div class="line"><a class="code" href="msgpuck_8h.html#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(buffer, x);</div>
+<div class="line"><a class="code" href="#a49c473097cc682ec58c2ea69da40f2f4" title="Encode an unsigned integer num. It is your responsibility to ensure that data has enough space...">mp_encode_uint</a>(buffer, x);</div>
 </div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">num</td><td>- a number </td></tr>
@@ -1511,7 +1511,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="msgpuck_8h.html#a2d475ca7ff94ba648ab4fbdc8e49eabd">mp_type</a> mp_typeof </td>
+          <td class="memname">enum <a class="el" href="#a2d475ca7ff94ba648ab4fbdc8e49eabd">mp_type</a> mp_typeof </td>
           <td>(</td>
           <td class="paramtype">const char&#160;</td>
           <td class="paramname"><em>c</em></td><td>)</td>
@@ -1522,7 +1522,7 @@ Inline functions. The implementation is compatible with both C99 and GNU inline 
 
 <p>Determine MsgPack type by a first byte <em>c</em> of encoded data. </p>
 <p>Example usage: </p>
-<div class="fragment"><div class="line">assert(MP_ARRAY == <a class="code" href="msgpuck_8h.html#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(0x90));</div>
+<div class="fragment"><div class="line">assert(MP_ARRAY == <a class="code" href="#acfbb6b07e83befbb488218b46d4b01d8" title="Determine MsgPack type by a first byte c of encoded data.">mp_typeof</a>(0x90));</div>
 </div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">c</td><td>- a first byte of encoded data </td></tr>

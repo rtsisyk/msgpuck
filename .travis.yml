@@ -1,0 +1,14 @@
+language: c
+compiler:
+  - clang
+  - gcc
+
+script:
+  - mkdir ./build && cd ./build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+  - make
+  - make test
+
+notifications:
+  irc: false
+  email:
+    - roman@tsisyk.com

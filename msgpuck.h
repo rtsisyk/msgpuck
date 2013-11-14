@@ -1445,8 +1445,10 @@ enum {
 	MP_HINT_ARRAY_16 = MP_HINT - 3,
 	MP_HINT_ARRAY_32 = MP_HINT - 4,
 	MP_HINT_MAP_16 = MP_HINT - 5,
-	MP_HINT_MAP_32 = MP_HINT - 6
-
+	MP_HINT_MAP_32 = MP_HINT - 6,
+	MP_HINT_EXT_8 = MP_HINT - 7,
+	MP_HINT_EXT_16 = MP_HINT - 8,
+	MP_HINT_EXT_32 = MP_HINT - 9
 };
 
 MP_PROTO void
@@ -1502,6 +1504,20 @@ mp_next_slowpath(const char **data, int k)
 			/* MP_MAP (32) */
 			k += 2 * mp_bswap_u32(*(uint32_t *) *data);
 			*data += sizeof(uint32_t);
+			break;
+		case MP_HINT_EXT_8:
+			/* MP_EXT (8) */
+			*data += *(uint8_t *) *data + sizeof(uint8_t) + 1;
+			break;
+		case MP_HINT_EXT_16:
+			/* MP_EXT (16) */
+			*data += mp_bswap_u16(*(uint16_t *) *data) +
+					sizeof(uint16_t) + 1;
+			break;
+		case MP_HINT_EXT_32:
+			/* MP_EXT (32) */
+			*data += mp_bswap_u32(*(uint32_t *) *data) +
+					sizeof(uint32_t) + 1;
 			break;
 		default:
 			mp_unreachable();
@@ -1601,6 +1617,26 @@ mp_check(const char **data, const char *end)
 				return false;
 			k += 2 * mp_bswap_u32(*(uint32_t *) *data);
 			*data += sizeof(uint32_t);
+			break;
+		case MP_HINT_EXT_8:
+			/* MP_EXT (8) */
+			if (mp_unlikely(*data + sizeof(uint8_t) + 1 > end))
+				return false;
+			*data += *(uint8_t *) *data + sizeof(uint8_t);
+			break;
+		case MP_HINT_EXT_16:
+			/* MP_EXT (16) */
+			if (mp_unlikely(*data + sizeof(uint16_t) + 1 > end))
+				return false;
+			*data += mp_bswap_u16(*(uint16_t *) *data) +
+					sizeof(uint16_t) + 1;
+			break;
+		case MP_HINT_EXT_32:
+			/* MP_EXT (32) */
+			if (mp_unlikely(*data + sizeof(uint32_t) + 1 > end))
+				return false;
+			*data += mp_bswap_u32(*(uint32_t *) *data) +
+					sizeof(uint32_t) + 1;
 			break;
 		default:
 			mp_unreachable();
@@ -2161,9 +2197,9 @@ const int8_t mp_parser_hint[256] = {
 	/* }}} */
 
 	/* {{{ MP_EXT */
-	/* 0xc7 */ MP_HINT_STR_8,    /* MP_EXT (8)  */
-	/* 0xc8 */ MP_HINT_STR_16,   /* MP_EXT (16) */
-	/* 0xc9 */ MP_HINT_STR_32,   /* MP_EXT (32) */
+	/* 0xc7 */ MP_HINT_EXT_8,    /* MP_EXT (8)  */
+	/* 0xc8 */ MP_HINT_EXT_16,   /* MP_EXT (16) */
+	/* 0xc9 */ MP_HINT_EXT_32,   /* MP_EXT (32) */
 	/* }}} */
 
 	/* {{{ MP_FLOAT, MP_DOUBLE */

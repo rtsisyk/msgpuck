@@ -98,6 +98,7 @@
 #if defined(__cplusplus) && !defined(__STDC_LIMIT_MACROS)
 #define __STDC_LIMIT_MACROS 1    /* make С++ to be happy */
 #endif
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
@@ -141,7 +142,11 @@ extern "C" {
 	(__GNUC__ == (major) && __GNUC_MINOR__ >= (minor)))
 #endif
 
-#if MP_GCC_VERSION(2, 9)
+#if !defined(__has_builtin)
+#define __has_builtin(x) 0 /* clang */
+#endif
+
+#if MP_GCC_VERSION(2, 9) || __has_builtin(__builtin_expect)
 #define mp_likely(x) __builtin_expect((x), 1)
 #define mp_unlikely(x) __builtin_expect((x), 0)
 #else
@@ -149,15 +154,19 @@ extern "C" {
 #define mp_unlikely(x) (x)
 #endif
 
-#if MP_GCC_VERSION(4, 5)
+#if MP_GCC_VERSION(4, 5) || __has_builtin(__builtin_unreachable)
 #define mp_unreachable() (assert(0), __builtin_unreachable())
 #else
+MP_PROTO void
+mp_unreachable(void) __attribute__((noreturn));
+MP_PROTO void
+mp_unreachable(void) { assert(0); abort(); }
 #define mp_unreachable() (assert(0))
 #endif
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 
-#if MP_GCC_VERSION(4, 8)
+#if MP_GCC_VERSION(4, 8) || __has_builtin(__builtin_bswap16)
 #define mp_bswap_u16(x) __builtin_bswap16(x)
 #else /* !MP_GCC_VERSION(4, 8) */
 #define mp_bswap_u16(x) ( \
@@ -165,15 +174,19 @@ extern "C" {
 	(((x) >>  8) & 0x00ff) )
 #endif
 
-#if MP_GCC_VERSION(4, 3)
+#if MP_GCC_VERSION(4, 3) || __has_builtin(__builtin_bswap32)
 #define mp_bswap_u32(x) __builtin_bswap32(x)
-#define mp_bswap_u64(x) __builtin_bswap64(x)
 #else /* !MP_GCC_VERSION(4, 3) */
 #define mp_bswap_u32(x) ( \
 	(((x) << 24) & UINT32_C(0xff000000)) | \
 	(((x) <<  8) & UINT32_C(0x00ff0000)) | \
 	(((x) >>  8) & UINT32_C(0x0000ff00)) | \
 	(((x) >> 24) & UINT32_C(0x000000ff)) )
+#endif
+
+#if MP_GCC_VERSION(4, 3) || __has_builtin(__builtin_bswap64)
+#define mp_bswap_u64(x) __builtin_bswap64(x)
+#else /* !MP_GCC_VERSION(4, 3) */
 #define mp_bswap_u64(x) (\
 	(((x) << 56) & UINT64_C(0xff00000000000000)) | \
 	(((x) << 40) & UINT64_C(0x00ff000000000000)) | \

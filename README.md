@@ -113,3 +113,6 @@ MsgPuck was written to use within [Tarantool](http://tarantool.org) -
 the world's first full-featured MsgPack-based database.
 
  * roman@tsisyk.com
+
+<img src="https://d2weczhvl823v0.cloudfront.net/rtsisyk/msgpuck/trend.png"
+width="1px" height="1px" />

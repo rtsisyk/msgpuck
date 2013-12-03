@@ -93,11 +93,11 @@ test_uints(void)
 	test_uint(0xfffffffeU, "\xce\xff\xff\xff\xfe", 5);
 	test_uint(0xffffffffU, "\xce\xff\xff\xff\xff", 5);
 
-	test_uint(UINT64_C(0x100000000),
+	test_uint(0x100000000ULL,
 	     "\xcf\x00\x00\x00\x01\x00\x00\x00\x00", 9);
-	test_uint(UINT64_C(0xfffffffffffffffe),
+	test_uint(0xfffffffffffffffeULL,
 	     "\xcf\xff\xff\xff\xff\xff\xff\xff\xfe", 9);
-	test_uint(UINT64_C(0xffffffffffffffff),
+	test_uint(0xffffffffffffffffULL,
 	     "\xcf\xff\xff\xff\xff\xff\xff\xff\xff", 9);
 
 	footer();
@@ -125,15 +125,15 @@ test_ints(void)
 
 	test_int(-0x8001, "\xd2\xff\xff\x7f\xff", 5);
 	test_int(-0x7fffffff, "\xd2\x80\x00\x00\x01", 5);
-	test_int(INT64_C(-0x80000000), "\xd2\x80\x00\x00\x00", 5);
+	test_int(-0x80000000LL, "\xd2\x80\x00\x00\x00", 5);
 
-	test_int(INT64_C(-0x80000001),
+	test_int(-0x80000001LL,
 	     "\xd3\xff\xff\xff\xff\x7f\xff\xff\xff", 9);
-	test_int(INT64_C(-0x80000001),
+	test_int(-0x80000001LL,
 	     "\xd3\xff\xff\xff\xff\x7f\xff\xff\xff", 9);
-	test_int(INT64_C(-0x7fffffffffffffff),
+	test_int(-0x7fffffffffffffffLL,
 	     "\xd3\x80\x00\x00\x00\x00\x00\x00\x01", 9);
-	test_int(INT64_C(-0x8000000000000000),
+	test_int(-0x8000000000000000LL,
 	     "\xd3\x80\x00\x00\x00\x00\x00\x00\x00", 9);
 
 	footer();
@@ -159,9 +159,9 @@ test_floats(void)
 	plan(24);
 	header();
 
-	test_float(1.0f, "\xca\x3f\x80\x00\x00", 5);
-	test_float(3.141592653589793f, "\xca\x40\x49\x0f\xdb", 5);
-	test_float(-1e38f, "\xca\xfe\x96\x76\x99", 5);
+	test_float((float) 1.0, "\xca\x3f\x80\x00\x00", 5);
+	test_float((float) 3.141593, "\xca\x40\x49\x0f\xdc", 5);
+	test_float((float) -1e38f, "\xca\xfe\x96\x76\x99", 5);
 
 	footer();
 	return check_plan();
@@ -173,9 +173,12 @@ test_doubles(void)
 	plan(24);
 	header();
 
-	test_double(1.0, "\xcb\x3f\xf0\x00\x00\x00\x00\x00\x00", 9);
-	test_double(3.141592653589793, "\xcb\x40\x09\x21\xfb\x54\x44\x2d\x18", 9);
-	test_double(-1e99, "\xcb\xd4\x7d\x42\xae\xa2\x87\x9f\x2e", 9);
+	test_double((double) 1.0,
+		    "\xcb\x3f\xf0\x00\x00\x00\x00\x00\x00", 9);
+	test_double((double) 3.141592653589793,
+		    "\xcb\x40\x09\x21\xfb\x54\x44\x2d\x18", 9);
+	test_double((double) -1e99,
+		    "\xcb\xd4\x7d\x42\xae\xa2\x87\x9f\x2e", 9);
 
 	footer();
 	return check_plan();
@@ -459,8 +462,8 @@ test_compare_uints(void)
 
 	uint64_t nums[] = {
 		0, 1, 0x7eU, 0x7fU, 0x80U, 0xfeU, 0xffU, 0xfffeU, 0xffffU,
-		0x10000U, 0xfffffffeU, 0xffffffffU, UINT64_C(0x100000000),
-		UINT64_C(0xfffffffffffffffe), UINT64_C(0xffffffffffffffff)
+		0x10000U, 0xfffffffeU, 0xffffffffU, 0x100000000ULL,
+		0xfffffffffffffffeULL, 0xffffffffffffffffULL
 	};
 
 	int count = sizeof(nums) / sizeof(*nums);

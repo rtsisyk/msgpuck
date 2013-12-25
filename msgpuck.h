@@ -2311,13 +2311,5 @@ const int8_t mp_parser_hint[256] = {
 #undef MP_IMPL
 #undef MP_ALWAYSINLINE
 #undef MP_GCC_VERSION
-#undef mp_likely
-#undef mp_unlikely
-#undef mp_unreachable
-#undef mp_bswap_u16
-#undef mp_bswap_u32
-#undef mp_bswap_u64
-#undef mp_bswap_float
-#undef mp_bswap_double
 
 #endif /* MSGPUCK_H_INCLUDED */

@@ -288,7 +288,7 @@ enum mp_type {
  * \param c - a first byte of encoded data
  * \return MsgPack type
  */
-MP_PROTO enum mp_type
+MP_PROTO __attribute__((pure)) enum mp_type
 mp_typeof(const char c);
 
 /**
@@ -341,7 +341,7 @@ mp_encode_array(char *data, uint32_t size);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_ARRAY
  */
-MP_PROTO ptrdiff_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_array(const char *cur, const char *end);
 
 /**
@@ -412,7 +412,7 @@ mp_encode_map(char *data, uint32_t size);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_MAP
  */
-MP_PROTO ptrdiff_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_map(const char *cur, const char *end);
 
 /**
@@ -489,7 +489,7 @@ mp_encode_int(char *data, int64_t num);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_UINT
  */
-MP_PROTO ptrdiff_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_uint(const char *cur, const char *end);
 
 /**
@@ -501,7 +501,7 @@ mp_check_uint(const char *cur, const char *end);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_INT
  */
-MP_PROTO ptrdiff_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_int(const char *cur, const char *end);
 
 /**
@@ -532,7 +532,7 @@ mp_decode_int(const char **data);
  * \retval   0 when \a a == \a b
  * \retval > 0 when \a a > \a b
  */
-MP_PROTO int
+MP_PROTO __attribute__((pure)) int
 mp_compare_uint(const char *data_a, const char *data_b);
 
 /**
@@ -589,7 +589,7 @@ mp_encode_double(char *data, double num);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_FLOAT
  */
-MP_PROTO ptrdiff_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_float(const char *cur, const char *end);
 
 /**
@@ -601,7 +601,7 @@ mp_check_float(const char *cur, const char *end);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_DOUBLE
  */
-MP_PROTO ptrdiff_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_double(const char *cur, const char *end);
 
 /**
@@ -743,7 +743,7 @@ mp_encode_bin(char *data, const char *str, uint32_t len);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_STR
  */
-MP_PROTO ptrdiff_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_strl(const char *cur, const char *end);
 
 /**
@@ -755,7 +755,7 @@ mp_check_strl(const char *cur, const char *end);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_BIN
  */
-MP_PROTO ptrdiff_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_binl(const char *cur, const char *end);
 
 /**
@@ -829,7 +829,7 @@ mp_encode_nil(char *data);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_NIL
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((pure)) uint32_t
 mp_check_nil(const char *cur, const char *end);
 
 /**
@@ -870,7 +870,7 @@ mp_encode_bool(char *data, bool val);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_BOOL
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((pure)) uint32_t
 mp_check_bool(const char *cur, const char *end);
 
 /**

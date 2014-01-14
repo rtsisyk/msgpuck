@@ -298,7 +298,7 @@ mp_typeof(const char c);
  * \param size - a number of elements
  * \return buffer size in bytes (max is 5)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_array(uint32_t size);
 
 /**
@@ -363,7 +363,7 @@ mp_decode_array(const char **data);
  * \param size - a number of elements
  * \return buffer size in bytes (max is 5)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_map(uint32_t size);
 
 /**
@@ -442,7 +442,7 @@ mp_decode_map(const char **data);
  * \param num - a number
  * \return buffer size in bytes (max is 9)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_uint(uint64_t num);
 
 /**
@@ -452,7 +452,7 @@ mp_sizeof_uint(uint64_t num);
  * \param num - a number
  * \return buffer size in bytes (max is 9)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_int(int64_t num);
 
 /**
@@ -542,7 +542,7 @@ mp_compare_uint(const char *data_a, const char *data_b);
  * \param num - a float
  * \return buffer size in bytes (always 5)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_float(float num);
 
 /**
@@ -553,7 +553,7 @@ mp_sizeof_float(float num);
  * \param num - a double
  * \return buffer size in bytes (5 or 9)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_double(double num);
 
 /**
@@ -629,7 +629,7 @@ mp_decode_double(const char **data);
  * \param len - a string length
  * \return size in chars (max is 5)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_strl(uint32_t len);
 
 /**
@@ -637,7 +637,7 @@ mp_sizeof_strl(uint32_t len);
  * \param len - a string length
  * \return size in chars (max is 5 + \a len)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_str(uint32_t len);
 
 /**
@@ -647,7 +647,7 @@ mp_sizeof_str(uint32_t len);
  * \param len - a string length
  * \return size in chars (max is 5)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_binl(uint32_t len);
 
 /**
@@ -655,7 +655,7 @@ mp_sizeof_binl(uint32_t len);
  * \param len - a string length
  * \return size in chars (max is 5 + \a len)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_bin(uint32_t len);
 
 /**
@@ -806,7 +806,7 @@ mp_decode_bin(const char **data, uint32_t *len);
  * the library.
  * \return buffer size in bytes (always 1)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_nil(void);
 
 /**
@@ -846,7 +846,7 @@ mp_decode_nil(const char **data);
  * the library.
  * \return buffer size in bytes (always 1)
  */
-MP_PROTO uint32_t
+MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_bool(bool val);
 
 /**

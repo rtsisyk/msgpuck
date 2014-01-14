@@ -451,6 +451,7 @@ mp_sizeof_uint(uint64_t num);
  * buffer for maximum size without calling the function.
  * \param num - a number
  * \return buffer size in bytes (max is 9)
+ * \pre \a num < 0
  */
 MP_PROTO __attribute__((const)) uint32_t
 mp_sizeof_int(int64_t num);
@@ -470,12 +471,12 @@ mp_encode_uint(char *data, uint64_t num);
 /**
  * \brief Encode a signed integer \a num.
  * It is your responsibility to ensure that \a data has enough space.
- * \note If \a num is positive it will encoded by mp_encode_uint().
  * \param data - a buffer
  * \param num - a number
  * \return \a data + mp_sizeof_int(\a num)
  * \sa \link mp_encode_array() An usage example \endlink
  * \sa mp_sizeof_int()
+ * \pre \a num < 0
  */
 MP_PROTO char *
 mp_encode_int(char *data, int64_t num);
@@ -1134,9 +1135,8 @@ mp_sizeof_uint(uint64_t num)
 MP_IMPL uint32_t
 mp_sizeof_int(int64_t num)
 {
-	if (num >= 0) {
-		return mp_sizeof_uint(num);
-	} else if (num >= -0x20) {
+	assert(num < 0);
+	if (num >= -0x20) {
 		return 1;
 	} else if (num >= INT8_MIN && num <= INT8_MAX) {
 		return 1 + sizeof(int8_t);
@@ -1197,9 +1197,8 @@ mp_encode_uint(char *data, uint64_t num)
 MP_IMPL char *
 mp_encode_int(char *data, int64_t num)
 {
-	if (num >= 0) {
-		return mp_encode_uint(data, num);
-	} else if (num >= -0x20) {
+	assert(num < 0);
+	if (num >= -0x20) {
 		*data = (0xe0 | num);
 		return data + 1;
 	} else if (num >= INT8_MIN) {

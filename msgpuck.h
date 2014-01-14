@@ -100,6 +100,7 @@
 #endif
 #include <stdlib.h>
 #include <stdint.h>
+#include <stddef.h>
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
@@ -332,6 +333,18 @@ MP_PROTO char *
 mp_encode_array(char *data, uint32_t size);
 
 /**
+ * \brief Check that \a cur buffer has enough bytes to decode an array header
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_ARRAY
+ */
+MP_PROTO ptrdiff_t
+mp_check_array(const char *cur, const char *end);
+
+/**
  * \brief Decode an array header from MsgPack \a data.
  *
  * All array members must be decoded after the header.
@@ -389,6 +402,18 @@ mp_sizeof_map(uint32_t size);
  */
 MP_PROTO char *
 mp_encode_map(char *data, uint32_t size);
+
+/**
+ * \brief Check that \a cur buffer has enough bytes to decode a map header
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_MAP
+ */
+MP_PROTO ptrdiff_t
+mp_check_map(const char *cur, const char *end);
 
 /**
  * \brief Decode a map header from MsgPack \a data.
@@ -455,6 +480,29 @@ mp_encode_uint(char *data, uint64_t num);
 MP_PROTO char *
 mp_encode_int(char *data, int64_t num);
 
+/**
+ * \brief Check that \a cur buffer has enough bytes to decode an uint
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_UINT
+ */
+MP_PROTO ptrdiff_t
+mp_check_uint(const char *cur, const char *end);
+
+/**
+ * \brief Check that \a cur buffer has enough bytes to decode an int
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_INT
+ */
+MP_PROTO ptrdiff_t
+mp_check_int(const char *cur, const char *end);
 
 /**
  * \brief Decode an unsigned integer from MsgPack \a data
@@ -531,6 +579,30 @@ mp_encode_float(char *data, float num);
  */
 MP_PROTO char *
 mp_encode_double(char *data, double num);
+
+/**
+ * \brief Check that \a cur buffer has enough bytes to decode a float
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_FLOAT
+ */
+MP_PROTO ptrdiff_t
+mp_check_float(const char *cur, const char *end);
+
+/**
+ * \brief Check that \a cur buffer has enough bytes to decode a double
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_DOUBLE
+ */
+MP_PROTO ptrdiff_t
+mp_check_double(const char *cur, const char *end);
 
 /**
  * \brief Decode a float from MsgPack \a data
@@ -663,6 +735,30 @@ MP_PROTO char *
 mp_encode_bin(char *data, const char *str, uint32_t len);
 
 /**
+ * \brief Check that \a cur buffer has enough bytes to decode a string header
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_STR
+ */
+MP_PROTO ptrdiff_t
+mp_check_strl(const char *cur, const char *end);
+
+/**
+ * \brief Check that \a cur buffer has enough bytes to decode a binstring header
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_BIN
+ */
+MP_PROTO ptrdiff_t
+mp_check_binl(const char *cur, const char *end);
+
+/**
  * \brief Decode a length of a string from MsgPack \a data
  * \param data - the pointer to a buffer
  * \return a length of astring
@@ -725,6 +821,18 @@ MP_PROTO char *
 mp_encode_nil(char *data);
 
 /**
+ * \brief Check that \a cur buffer has enough bytes to decode nil
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval The return value is always 1. The function was added to provide
+ * integrity of the library.
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_NIL
+ */
+MP_PROTO uint32_t
+mp_check_nil(const char *cur, const char *end);
+
+/**
  * \brief Decode the nil value from MsgPack \a data
  * \param data - the pointer to a buffer
  * \post *data = *data + mp_sizeof_nil()
@@ -752,6 +860,18 @@ mp_sizeof_bool(bool val);
  */
 MP_PROTO char *
 mp_encode_bool(char *data, bool val);
+
+/**
+ * \brief Check that \a cur buffer has enough bytes to decode a bool value
+ * \param cur buffer
+ * \param end end of the buffer
+ * \retval The return value is always 1. The function was added to provide
+ * integrity of the library.
+ * \pre cur < end
+ * \pre mp_typeof(*cur) == MP_BOOL
+ */
+MP_PROTO uint32_t
+mp_check_bool(const char *cur, const char *end);
 
 /**
  * \brief Decode a bool value from MsgPack \a data
@@ -883,6 +1003,20 @@ mp_encode_array(char *data, uint32_t size)
 	}
 }
 
+MP_IMPL ptrdiff_t
+mp_check_array(const char *cur, const char *end)
+{
+	assert(cur < end);
+	assert(mp_typeof(*cur) == MP_ARRAY);
+	unsigned char c = *(unsigned char *) cur;
+	if (mp_likely(!(c & 0x40)))
+		return 1 - (end - cur);
+
+	assert(c >= 0xdc && c <= 0xdd); /* must be checked above by mp_typeof */
+	uint32_t hsize = 2U << (c & 0x1); /* 0xdc->2, 0xdd->4 */
+	return 1 + hsize - (end - cur);
+}
+
 MP_PROTO uint32_t
 mp_decode_array_slowpath(unsigned char c, const char **data);
 
@@ -945,6 +1079,20 @@ mp_encode_map(char *data, uint32_t size)
 	}
 }
 
+MP_IMPL ptrdiff_t
+mp_check_map(const char *cur, const char *end)
+{
+	assert(cur < end);
+	assert(mp_typeof(*cur) == MP_MAP);
+	unsigned char c = *(unsigned char *) cur;
+	if (mp_likely((c & ~0xfU) == 0x80))
+		return 1 - (end - cur);
+
+	assert(c >= 0xde && c <= 0xdf); /* must be checked above by mp_typeof */
+	uint32_t hsize = 2U << (c & 0x1); /* 0xde->2, 0xdf->4 */
+	return 1 + hsize - (end - cur);
+}
+
 MP_IMPL uint32_t
 mp_decode_map(const char **data)
 {
@@ -999,6 +1147,22 @@ mp_sizeof_int(int64_t num)
 	} else {
 		return 1 + sizeof(int64_t);
 	}
+}
+
+MP_IMPL ptrdiff_t
+mp_check_uint(const char *cur, const char *end)
+{
+	assert(cur < end);
+	assert(mp_typeof(*cur) == MP_UINT);
+	return 1 + mp_parser_hint[*(unsigned char *) cur] - (end - cur);
+}
+
+MP_IMPL ptrdiff_t
+mp_check_int(const char *cur, const char *end)
+{
+	assert(cur < end);
+	assert(mp_typeof(*cur) == MP_INT);
+	return 1 + mp_parser_hint[*(unsigned char *) cur] - (end - cur);
 }
 
 MP_IMPL char *
@@ -1178,6 +1342,22 @@ mp_sizeof_double(double num)
 	return 1 + sizeof(double);
 }
 
+MP_IMPL ptrdiff_t
+mp_check_float(const char *cur, const char *end)
+{
+	assert(cur < end);
+	assert(mp_typeof(*cur) == MP_FLOAT);
+	return 1 + sizeof(float) - (end - cur);
+}
+
+MP_IMPL ptrdiff_t
+mp_check_double(const char *cur, const char *end)
+{
+	assert(cur < end);
+	assert(mp_typeof(*cur) == MP_DOUBLE);
+	return 1 + sizeof(double) - (end - cur);
+}
+
 MP_IMPL char *
 mp_encode_float(char *data, float num)
 {
@@ -1323,6 +1503,33 @@ mp_encode_bin(char *data, const char *str, uint32_t len)
 	return data + len;
 }
 
+MP_IMPL ptrdiff_t
+mp_check_strl(const char *cur, const char *end)
+{
+	assert(cur < end);
+	assert(mp_typeof(*cur) == MP_STR);
+
+	unsigned char c = *(unsigned char *) cur;
+	if (mp_likely(c & ~0x1f) == 0xa0)
+		return 1 - (end - cur);
+
+	assert(c >= 0xd9 && c <= 0xdb); /* must be checked above by mp_typeof */
+	uint32_t hsize = 1U << (c & 0x3) >> 1; /* 0xd9->1, 0xda->2, 0xdb->4 */
+	return 1 + hsize - (end - cur);
+}
+
+MP_IMPL ptrdiff_t
+mp_check_binl(const char *cur, const char *end)
+{
+	unsigned char c = *(unsigned char *) cur;
+	assert(cur < end);
+	assert(mp_typeof(c) == MP_BIN);
+
+	assert(c >= 0xc4 && c <= 0xc6); /* must be checked above by mp_typeof */
+	uint32_t hsize = 1U << (c & 0x3); /* 0xc4->1, 0xc5->2, 0xc6->4 */
+	return 1 + hsize - (end - cur);
+}
+
 MP_IMPL uint32_t
 mp_decode_strl(const char **data)
 {
@@ -1411,6 +1618,14 @@ mp_encode_nil(char *data)
 	return data + 1;
 }
 
+MP_IMPL uint32_t
+mp_check_nil(const char *cur, const char *end)
+{
+	assert(cur < end);
+	assert(mp_typeof(*cur) == MP_NIL);
+	return 1 - (end - cur);
+}
+
 MP_IMPL void
 mp_decode_nil(const char **data)
 {
@@ -1432,6 +1647,14 @@ mp_encode_bool(char *data, bool val)
 {
 	*data = 0xc2 | (val & 1);
 	return data + 1;
+}
+
+MP_IMPL uint32_t
+mp_check_bool(const char *cur, const char *end)
+{
+	assert(cur < end);
+	assert(mp_typeof(*cur) == MP_BOOL);
+	return 1 - (end - cur);
 }
 
 MP_IMPL bool

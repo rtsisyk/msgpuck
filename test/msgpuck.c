@@ -23,9 +23,10 @@ static char str[STRBIN_MAXLEN];
 	_complex(const char *d3 = data);                                       \
 	_complex(const char *d4 = data);                                       \
 	note(""#_type" "#_v"");                                                \
+	is(mp_check_##_type(data, d1), 0, "mp_check_"#_type"("#_v") == 0");    \
 	is(mp_decode_##_type(&d2), (_v), "mp_decode(mp_encode("#_v")) == "#_v);\
 	_complex(mp_next(&d3));                                                \
-	_complex(ok(mp_check(&d4, d3 + _rl), "mp_check_"#_type"("#_v")"));     \
+	_complex(ok(mp_check(&d4, d3 + _rl), "mp_check("#_v")"));              \
 	is((d1 - data), (_rl), "len(mp_encode_"#_type"("#_v")");               \
 	is(d1, d2, "len(mp_decode_"#_type"("#_v"))");                          \
 	_complex(is(d1, d3, "len(mp_next_"#_type"("#_v"))"));                  \
@@ -74,7 +75,7 @@ static char str[STRBIN_MAXLEN];
 static int
 test_uints(void)
 {
-	plan(120);
+	plan(135);
 	header();
 
 	test_uint(0U, "\x00", 1);
@@ -107,7 +108,7 @@ test_uints(void)
 static int
 test_ints(void)
 {
-	plan(136);
+	plan(153);
 	header();
 
 	test_int(-0x01, "\xff", 1);
@@ -143,7 +144,7 @@ test_ints(void)
 static int
 test_bools(void)
 {
-	plan(16);
+	plan(18);
 	header();
 
 	test_bool(true, "\xc3", 1);
@@ -156,7 +157,7 @@ test_bools(void)
 static int
 test_floats(void)
 {
-	plan(24);
+	plan(27);
 	header();
 
 	test_float((float) 1.0, "\xca\x3f\x80\x00\x00", 5);
@@ -170,7 +171,7 @@ test_floats(void)
 static int
 test_doubles(void)
 {
-	plan(24);
+	plan(27);
 	header();
 
 	test_double((double) 1.0,
@@ -211,7 +212,7 @@ test_nils(void)
 static int
 test_arrays(void)
 {
-	plan(45);
+	plan(54);
 	header();
 
 	test_array(0, "\x90", 1);
@@ -231,7 +232,7 @@ test_arrays(void)
 static int
 test_maps(void)
 {
-	plan(45);
+	plan(54);
 	header();
 
 	test_map(0, "\x80", 1);
@@ -251,7 +252,7 @@ test_maps(void)
 static int
 test_strls(void)
 {
-	plan(65);
+	plan(78);
 	header();
 
 	test_strl(0x00U, "\xa0", 1);
@@ -278,7 +279,7 @@ test_strls(void)
 static int
 test_binls(void)
 {
-	plan(65);
+	plan(78);
 	header();
 
 	test_binl(0x00U, "\xc4\x00", 2);

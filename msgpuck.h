@@ -51,7 +51,8 @@
  *
  * // Validate
  * const char *b = buf;
- * mp_check(&b);
+ * int r = mp_check(&b);
+ * assert(!r)
  * assert(b == w);
  *
  * // Decode
@@ -825,12 +826,12 @@ mp_encode_nil(char *data);
  * \brief Check that \a cur buffer has enough bytes to decode nil
  * \param cur buffer
  * \param end end of the buffer
- * \retval The return value is always 1. The function was added to provide
- * integrity of the library.
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_NIL
  */
-MP_PROTO __attribute__((pure)) uint32_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_nil(const char *cur, const char *end);
 
 /**
@@ -866,12 +867,12 @@ mp_encode_bool(char *data, bool val);
  * \brief Check that \a cur buffer has enough bytes to decode a bool value
  * \param cur buffer
  * \param end end of the buffer
- * \retval The return value is always 1. The function was added to provide
- * integrity of the library.
+ * \retval 0 - buffer has enough bytes
+ * \retval > 0 - the number of remaining bytes to read
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_BOOL
  */
-MP_PROTO __attribute__((pure)) uint32_t
+MP_PROTO __attribute__((pure)) ptrdiff_t
 mp_check_bool(const char *cur, const char *end);
 
 /**
@@ -948,13 +949,13 @@ mp_next(const char **data);
  * \brief Equivalent to mp_next() but also validates MsgPack in \a data.
  * \param data - the pointer to a buffer
  * \param end - the end of a buffer
- * \retval true when MsgPack in \a data is valid.
- * \retval false when MsgPack in \a data is not valid.
+ * \retval 0 when MsgPack in \a data is valid.
+ * \retval != 0 when MsgPack in \a data is not valid.
  * \post *data = *data + mp_sizeof_TYPE() where TYPE is mp_typeof(**data)
  * \post *data is not defined if MsgPack is not valid
  * \sa mp_next()
  */
-MP_PROTO bool
+MP_PROTO int
 mp_check(const char **data, const char *end);
 
 /*
@@ -1617,7 +1618,7 @@ mp_encode_nil(char *data)
 	return data + 1;
 }
 
-MP_IMPL uint32_t
+MP_IMPL ptrdiff_t
 mp_check_nil(const char *cur, const char *end)
 {
 	assert(cur < end);
@@ -1648,7 +1649,7 @@ mp_encode_bool(char *data, bool val)
 	return data + 1;
 }
 
-MP_IMPL uint32_t
+MP_IMPL ptrdiff_t
 mp_check_bool(const char *cur, const char *end)
 {
 	assert(cur < end);
@@ -1785,13 +1786,13 @@ mp_next(const char **data)
 	}
 }
 
-MP_IMPL bool
+MP_IMPL int
 mp_check(const char **data, const char *end)
 {
 	int k;
 	for (k = 1; k > 0; k--) {
 		if (mp_unlikely(*data >= end))
-			return false;
+			return 1;
 
 		unsigned char c = (unsigned char) **data;
 		*data += 1;
@@ -1808,34 +1809,34 @@ mp_check(const char **data, const char *end)
 		case MP_HINT_STR_8:
 			/* MP_STR (8) */
 			if (mp_unlikely(*data + sizeof(uint8_t) > end))
-				return false;
+				return 1;
 			*data += *(uint8_t *) *data + sizeof(uint8_t);
 			break;
 		case MP_HINT_STR_16:
 			/* MP_STR (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) > end))
-				return false;
+				return 1;
 			*data += mp_bswap_u16(*(uint16_t *) *data) +
 					sizeof(uint16_t);
 			break;
 		case MP_HINT_STR_32:
 			/* MP_STR (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) > end))
-				return false;
+				return 1;
 			*data += mp_bswap_u32(*(uint32_t *) *data) +
 					sizeof(uint32_t);
 			break;
 		case MP_HINT_ARRAY_16:
 			/* MP_ARRAY (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) > end))
-				return false;
+				return 1;
 			k += mp_bswap_u16(*(uint16_t *) *data);
 			*data += sizeof(uint16_t);
 			break;
 		case MP_HINT_ARRAY_32:
 			/* MP_ARRAY (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) > end))
-				return false;
+				return 1;
 			k += mp_bswap_u32(*(uint32_t *) *data);
 			*data += sizeof(uint32_t);
 			break;
@@ -1849,27 +1850,27 @@ mp_check(const char **data, const char *end)
 		case MP_HINT_MAP_32:
 			/* MP_MAP (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) > end))
-				return false;
+				return 1;
 			k += 2 * mp_bswap_u32(*(uint32_t *) *data);
 			*data += sizeof(uint32_t);
 			break;
 		case MP_HINT_EXT_8:
 			/* MP_EXT (8) */
 			if (mp_unlikely(*data + sizeof(uint8_t) + 1 > end))
-				return false;
+				return 1;
 			*data += *(uint8_t *) *data + sizeof(uint8_t);
 			break;
 		case MP_HINT_EXT_16:
 			/* MP_EXT (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) + 1 > end))
-				return false;
+				return 1;
 			*data += mp_bswap_u16(*(uint16_t *) *data) +
 					sizeof(uint16_t) + 1;
 			break;
 		case MP_HINT_EXT_32:
 			/* MP_EXT (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) + 1 > end))
-				return false;
+				return 1;
 			*data += mp_bswap_u32(*(uint32_t *) *data) +
 					sizeof(uint32_t) + 1;
 			break;
@@ -1879,9 +1880,9 @@ mp_check(const char **data, const char *end)
 	}
 
 	if (mp_unlikely(*data > end))
-		return false;
+		return 1;
 
-	return true;
+	return 0;
 }
 
 /** \endcond */

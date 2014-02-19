@@ -26,7 +26,7 @@ static char str[STRBIN_MAXLEN];
 	is(mp_check_##_type(data, d1), 0, "mp_check_"#_type"("#_v") == 0");    \
 	is(mp_decode_##_type(&d2), (_v), "mp_decode(mp_encode("#_v")) == "#_v);\
 	_complex(mp_next(&d3));                                                \
-	_complex(ok(mp_check(&d4, d3 + _rl), "mp_check("#_v")"));              \
+	_complex(ok(!mp_check(&d4, d3 + _rl), "mp_check("#_v")"));             \
 	is((d1 - data), (_rl), "len(mp_encode_"#_type"("#_v")");               \
 	is(d1, d2, "len(mp_decode_"#_type"("#_v"))");                          \
 	_complex(is(d1, d3, "len(mp_next_"#_type"("#_v"))"));                  \
@@ -50,7 +50,7 @@ static char str[STRBIN_MAXLEN];
 	const char *d3 = data;                                                 \
 	mp_next(&d3);                                                          \
 	const char *d4 = data;                                                 \
-	ok(mp_check(&d4, d3 + _vl),                                            \
+	ok(!mp_check(&d4, d3 + _vl),                                           \
 		"mp_check_"#_type"(mp_encode_"#_type"(x, "#_vl"))");           \
 	is(d1, d2, "len(mp_decode_"#_type"(x, "#_vl")");                       \
 	is(d1, d3, "len(mp_next_"#_type"(x, "#_vl")");                         \
@@ -198,7 +198,7 @@ test_nils(void)
 	note("nil");
 	mp_decode_nil(&d2);
 	mp_next(&d3);
-	ok(mp_check(&d4, d3 + 1), "mp_check_nil()");
+	ok(!mp_check(&d4, d3 + 1), "mp_check_nil()");
 	is((d1 - data), 1, "len(mp_encode_nil() == 1");
 	is(d1, d2, "len(mp_decode_nil()) == 1");
 	is(d1, d3, "len(mp_next_nil()) == 1");
@@ -361,7 +361,7 @@ test_next_on_array(uint32_t count)
 	uint32_t len = count + mp_sizeof_array(count);
 	const char *d2 = data;
 	const char *d3 = data;
-	ok(mp_check(&d2, data + BUF_MAXLEN), "mp_check(array %u))", count);
+	ok(!mp_check(&d2, data + BUF_MAXLEN), "mp_check(array %u))", count);
 	is((d1 - data), len, "len(array %u) == %u", count, len);
 	is((d2 - data), len, "len(mp_check(array %u)) == %u", count, len);
 	mp_next(&d3);
@@ -404,7 +404,7 @@ test_next_on_map(uint32_t count)
 	uint32_t len = 2 * count + mp_sizeof_map(count);
 	const char *d2 = data;
 	const char *d3 = data;
-	ok(mp_check(&d2, data + BUF_MAXLEN), "mp_check(map %u))", count);
+	ok(!mp_check(&d2, data + BUF_MAXLEN), "mp_check(map %u))", count);
 	is((d1 - data), len, "len(map %u) == %u", count, len);
 	is((d2 - data), len, "len(mp_check(map %u)) == %u", count, len);
 	mp_next(&d3);

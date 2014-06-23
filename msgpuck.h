@@ -1858,7 +1858,7 @@ mp_check(const char **data, const char *end)
 			/* MP_EXT (8) */
 			if (mp_unlikely(*data + sizeof(uint8_t) + 1 > end))
 				return 1;
-			*data += *(uint8_t *) *data + sizeof(uint8_t);
+			*data += *(uint8_t *) *data + sizeof(uint8_t) + 1;
 			break;
 		case MP_HINT_EXT_16:
 			/* MP_EXT (16) */

@@ -51,7 +51,7 @@
  *
  * // Validate
  * const char *b = buf;
- * int r = mp_check(&b);
+ * int r = mp_check(&b, w);
  * assert(!r)
  * assert(b == w);
  *

@@ -105,6 +105,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
+#include <stdarg.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -735,6 +736,45 @@ mp_encode_binl(char *data, uint32_t len);
  */
 MP_PROTO char *
 mp_encode_bin(char *data, const char *str, uint32_t len);
+
+/**
+ * \brief Encode a sequence of values according to format string.
+ * Example: mp_format(buf, sz, "[%d {%d%s%d%s}]", 42, 0, "false", 1, "true");
+ * to get a msgpack array of two items: number 42 and map (0->"false, 2->"true")
+ * Does not write items that don't fit to data_size argument.
+ *
+ * \param data - a buffer
+ * \param data_size - a buffer size
+ * \param format - zero-end string, containing structure of resulting
+ * msgpack and types of next arguments.
+ * Format can contain '[' and ']' pairs, defining arrays,
+ * '{' and '}' pairs, defining maps, and format specifiers, described below:
+ * %d, %i - int
+ * %u - unsigned int
+ * %ld, %li - long
+ * %lu - unsigned long
+ * %lld, %lli - long long
+ * %llu - unsigned long long
+ * %hd, %hi - short
+ * %hu - unsigned short
+ * %hhd, %hhi - char (as number)
+ * %hhu - unsigned char (as number)
+ * %f - float
+ * %lf - double
+ * %b - bool
+ * %s - zero-end string
+ * %.*s - string with specified length
+ * %% is ignored
+ * %<smth else> assert and undefined behaviour
+ * NIL - a nil value
+ * all other symbols are ignored.
+ *
+ * \return the number of requred bytes.
+ * \retval > data_size means that is not enough space
+ * and whole msgpack was not encoded.
+ */
+MP_PROTO size_t
+mp_format(char *data, size_t data_size, const char *format, ...);
 
 /**
  * \brief Check that \a cur buffer has enough bytes to decode a string header
@@ -1884,6 +1924,173 @@ mp_check(const char **data, const char *end)
 
 	return 0;
 }
+
+MP_IMPL size_t
+mp_format(char *data, size_t data_size, const char *format, ...)
+{
+	size_t result = 0;
+	va_list vl;
+	va_start(vl, format);
+
+	for (const char *f = format; *f; f++) {
+		if (f[0] == '[') {
+			uint32_t size = 0;
+			int level = 1;
+			for (const char *e = f + 1; level && *e; e++) {
+				if (*e == '[' || *e == '{') {
+					if (level == 1)
+						size++;
+					level++;
+				} else if (*e == ']' || *e == '}') {
+					level--;
+					/* opened '[' must be closed by ']' */
+					assert(level || *e == ']');
+				} else if (*e == '%') {
+					if (e[1] == '%')
+						e++;
+					else if (level == 1)
+						size++;
+				} else if (*e == 'N' && e[1] == 'I'
+					   && e[2] == 'L' && level == 1) {
+					size++;
+				}
+			}
+			/* opened '[' must be closed */
+			assert(level == 0);
+			result += mp_sizeof_array(size);
+			if (result <= data_size)
+				data = mp_encode_array(data, size);
+		} else if (f[0] == '{') {
+			uint32_t count = 0;
+			int level = 1;
+			for (const char *e = f + 1; level && *e; e++) {
+				if (*e == '[' || *e == '{') {
+					if (level == 1)
+						count++;
+					level++;
+				} else if (*e == ']' || *e == '}') {
+					level--;
+					/* opened '{' must be closed by '}' */
+					assert(level || *e == '}');
+				} else if (*e == '%') {
+					if (e[1] == '%')
+						e++;
+					else if (level == 1)
+						count++;
+				} else if (*e == 'N' && e[1] == 'I'
+					   && e[2] == 'L' && level == 1) {
+					count++;
+				}
+			}
+			/* opened '{' must be closed */
+			assert(level == 0);
+			/* since map is a pair list, count must be even */
+			assert(count % 2 == 0);
+			uint32_t size = count / 2;
+			result += mp_sizeof_map(size);
+			if (result <= data_size)
+				data = mp_encode_map(data, size);
+		} else if (f[0] == '%') {
+			f++;
+			assert(f[0]);
+			int64_t int_value = 0;
+			int int_status = 0; /* 1 - signed, 2 - unsigned */
+
+			if (f[0] == 'd' || f[0] == 'i') {
+				int_value = va_arg(vl, int);
+				int_status = 1;
+			} else if (f[0] == 'u') {
+				int_value = va_arg(vl, unsigned int);
+				int_status = 2;
+			} else if (f[0] == 's') {
+				const char *str = va_arg(vl, const char *);
+				uint32_t len = (uint32_t)strlen(str);
+				result += mp_sizeof_str(len);
+				if (result <= data_size)
+					data = mp_encode_str(data, str, len);
+			} else if (f[0] == '.' && f[1] == '*' && f[2] == 's') {
+				uint32_t len = va_arg(vl, uint32_t);
+				const char *str = va_arg(vl, const char *);
+				result += mp_sizeof_str(len);
+				if (result <= data_size)
+					data = mp_encode_str(data, str, len);
+				f += 2;
+			} else if(f[0] == 'f') {
+				float v = (float)va_arg(vl, double);
+				result += mp_sizeof_float(v);
+				if (result <= data_size)
+					data = mp_encode_float(data, v);
+			} else if(f[0] == 'l' && f[1] == 'f') {
+				double v = va_arg(vl, double);
+				result += mp_sizeof_double(v);
+				if (result <= data_size)
+					data = mp_encode_double(data, v);
+				f++;
+			} else if(f[0] == 'b') {
+				bool v = (bool)va_arg(vl, int);
+				result += mp_sizeof_bool(v);
+				if (result <= data_size)
+					data = mp_encode_bool(data, v);
+			} else if (f[0] == 'l'
+				   && (f[1] == 'd' || f[1] == 'i')) {
+				int_value = va_arg(vl, long);
+				int_status = 1;
+				f++;
+			} else if (f[0] == 'l' && f[1] == 'u') {
+				int_value = va_arg(vl, unsigned long);
+				int_status = 2;
+				f++;
+			} else if (f[0] == 'l' && f[1] == 'l'
+				   && (f[2] == 'd' || f[2] == 'i')) {
+				int_value = va_arg(vl, long long);
+				int_status = 1;
+				f += 2;
+			} else if (f[0] == 'l' && f[1] == 'l' && f[2] == 'u') {
+				int_value = va_arg(vl, unsigned long long);
+				int_status = 2;
+				f += 2;
+			} else if (f[0] == 'h'
+				   && (f[1] == 'd' || f[1] == 'i')) {
+				int_value = va_arg(vl, int);
+				int_status = 1;
+				f++;
+			} else if (f[0] == 'h' && f[1] == 'u') {
+				int_value = va_arg(vl, unsigned int);
+				int_status = 2;
+				f++;
+			} else if (f[0] == 'h' && f[1] == 'h'
+				   && (f[2] == 'd' || f[2] == 'i')) {
+				int_value = va_arg(vl, int);
+				int_status = 1;
+				f += 2;
+			} else if (f[0] == 'h' && f[1] == 'h' && f[2] == 'u') {
+				int_value = va_arg(vl, unsigned int);
+				int_status = 2;
+				f += 2;
+			} else if (f[0] != '%') {
+				/* unexpected format specifier */
+				assert(false);
+			}
+
+			if (int_status == 1 && int_value < 0) {
+				result += mp_sizeof_int(int_value);
+				if (result <= data_size)
+					data = mp_encode_int(data, int_value);
+			} else if(int_status) {
+				result += mp_sizeof_uint(int_value);
+				if (result <= data_size)
+					data = mp_encode_uint(data, int_value);
+			}
+		} else if (f[0] == 'N' && f[1] == 'I' && f[2] == 'L') {
+			result += mp_sizeof_nil();
+			if (result <= data_size)
+				data = mp_encode_nil(data);
+			f += 2;
+		}
+	}
+	return result;
+}
+
 
 /** \endcond */
 

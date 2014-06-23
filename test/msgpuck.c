@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <inttypes.h>
+#include <limits.h>
 
 #include "msgpuck.h"
 #include "test.h"
@@ -478,9 +479,213 @@ test_compare_uints(void)
 	return check_plan();
 }
 
+static bool
+fequal(float a, float b)
+{
+	return a > b ? a - b < 1e-5f : b - a < 1e-5f;
+}
+
+static bool
+dequal(double a, double b)
+{
+	return a > b ? a - b < 1e-10 : b - a < 1e-10;
+}
+
+static int
+test_format(void)
+{
+	plan(230);
+	header();
+
+	const size_t buf_size = 1024;
+	char buf[buf_size];
+	size_t sz;
+	const char *fmt;
+	const char *p, *c, *e;
+	uint32_t len = 0;
+
+	fmt = "%d %u %i  %ld %lu %li  %lld %llu %lli"
+	      "%hd %hu %hi  %hhd %hhu %hhi";
+	sz = mp_format(buf, buf_size, fmt, 1, 2, 3,
+		       (long)4, (long)5, (long)6,
+		       (long long)7, (long long)8, (long long)9,
+		       (short)10, (short)11, (short)12,
+		       (char)13, (char)14, (char)15);
+	p = buf;
+	for (int i = 0; i < 15; i++) {
+		ok(mp_typeof(*p) == MP_UINT, "Test type on step %d", i);
+		ok(mp_decode_uint(&p) == i + 1, "Test value on step %d", i);
+	}
+	sz = mp_format(buf, buf_size, fmt, -1, -2, -3,
+		       (long)-4, (long)-5, (long)-6,
+		       (long long)-7, (long long)-8, (long long)-9,
+		       (short)-10, (unsigned short)-11, (short)-12,
+		       (char)-13, (unsigned char)-14, (char)-15);
+	p = buf;
+	for (int i = 0; i < 15; i++) {
+		uint64_t expects[5] = { UINT_MAX - 1,
+					ULONG_MAX - 4,
+					ULLONG_MAX - 7,
+					USHRT_MAX - 10,
+					UCHAR_MAX - 13 };
+		if (i % 3 == 1) {
+			ok(mp_typeof(*p) == MP_UINT, "Test type on step %d", i);
+			ok(mp_decode_uint(&p) == expects[i / 3],
+			   "Test value on step %d", i);
+		} else {
+			ok(mp_typeof(*p) == MP_INT, "Test type on step %d", i);
+			ok(mp_decode_int(&p) == - i - 1,
+			   "Test value on step %d", i);
+		}
+	}
+
+	fmt = "%d NIL [%d %b %b] this is test"
+		"[%d %%%% [[ %d {%s %f %%  %.*s %lf %.*s NIL} %d ]] %d%d%d]";
+#define TEST_PARAMS 0, 1, true, false, -1, 2, \
+	"flt", 0.1, 6, "double#ignored", 0.2, 0, "ignore", 3, 4, 5, 6
+	sz = mp_format(buf, buf_size, fmt, TEST_PARAMS);
+	p = buf;
+	e = buf + sz;
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
+	ok(mp_decode_uint(&p) == 0, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_NIL, "type at %d", __LINE__);
+	mp_decode_nil(&p);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_ARRAY, "type at %d", __LINE__);
+	ok(mp_decode_array(&p) == 3, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
+	ok(mp_decode_uint(&p) == 1, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_BOOL, "type at %d", __LINE__);
+	ok(mp_decode_bool(&p) == true, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_BOOL, "type at %d", __LINE__);
+	ok(mp_decode_bool(&p) == false, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_ARRAY, "type at %d", __LINE__);
+	ok(mp_decode_array(&p) == 5, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_INT, "type at %d", __LINE__);
+	ok(mp_decode_int(&p) == -1, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_ARRAY, "type at %d", __LINE__);
+	ok(mp_decode_array(&p) == 1, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_ARRAY, "type at %d", __LINE__);
+	ok(mp_decode_array(&p) == 3, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
+	ok(mp_decode_uint(&p) == 2, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_MAP, "type at %d", __LINE__);
+	ok(mp_decode_map(&p) == 3, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_STR, "type at %d", __LINE__);
+	c = mp_decode_str(&p, &len);
+	ok(len == 3, "decode at %d", __LINE__);
+	ok(memcmp(c, "flt", 3) == 0, "compare at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_FLOAT, "type at %d", __LINE__);
+	ok(fequal(mp_decode_float(&p), 0.1), "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_STR, "type at %d", __LINE__);
+	c = mp_decode_str(&p, &len);
+	ok(len == 6, "decode at %d", __LINE__);
+	ok(memcmp(c, "double", 6) == 0, "compare at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_DOUBLE, "type at %d", __LINE__);
+	ok(dequal(mp_decode_double(&p), 0.2), "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_STR, "type at %d", __LINE__);
+	c = mp_decode_str(&p, &len);
+	ok(len == 0, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_NIL, "type at %d", __LINE__);
+	mp_decode_nil(&p);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
+	ok(mp_decode_uint(&p) == 3, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
+	ok(mp_decode_uint(&p) == 4, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
+	ok(mp_decode_uint(&p) == 5, "decode at %d", __LINE__);
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
+	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
+	ok(mp_decode_uint(&p) == 6, "decode at %d", __LINE__);
+
+	ok(p == e, "nothing more");
+
+	ok(sz < 50, "no magic detected");
+
+	for (size_t lim = 0; lim <= 50; lim++) {
+		memset(buf, 0, buf_size);
+		size_t test_sz = mp_format(buf, lim, fmt, TEST_PARAMS);
+		ok(test_sz == sz, "return value on step %d", (int)lim);
+		bool all_zero = true;
+		for(size_t z = lim; z < buf_size; z++)
+			all_zero = all_zero && (buf[z] == 0);
+		ok(all_zero, "buffer overflow on step %d", (int)lim);
+
+	}
+
+#undef TEST_PARAMS
+
+	footer();
+	return check_plan();
+}
+
 int main()
 {
-	plan(15);
+	plan(16);
 
 	test_uints();
 	test_ints();
@@ -497,6 +702,7 @@ int main()
 	test_next_on_arrays();
 	test_next_on_maps();
 	test_compare_uints();
+	test_format();
 
 	return check_plan();
 }

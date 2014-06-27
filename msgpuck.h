@@ -2108,7 +2108,7 @@ mp_format(char *data, size_t data_size, const char *format, ...)
 	va_start(args, format);
 	size_t res = mp_vformat(data, data_size, format, args);
 	va_end(args);
-
+	return res;
 }
 
 /** \endcond */

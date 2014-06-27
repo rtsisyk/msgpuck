@@ -777,6 +777,18 @@ MP_PROTO size_t
 mp_format(char *data, size_t data_size, const char *format, ...);
 
 /**
+ * \brief mp_format variation, taking variable argument list
+ * Example:
+ *  va_list args;
+ *  va_start(args, fmt);
+ *  mp_vformat(data, data_size, fmt, args);
+ *  va_end(args);
+ * \sa \link mp_format()
+ */
+MP_PROTO size_t
+mp_vformat(char *data, size_t data_size, const char *format, va_list args);
+
+/**
  * \brief Check that \a cur buffer has enough bytes to decode a string header
  * \param cur buffer
  * \param end end of the buffer
@@ -1926,11 +1938,9 @@ mp_check(const char **data, const char *end)
 }
 
 MP_IMPL size_t
-mp_format(char *data, size_t data_size, const char *format, ...)
+mp_vformat(char *data, size_t data_size, const char *format, va_list vl)
 {
 	size_t result = 0;
-	va_list vl;
-	va_start(vl, format);
 
 	for (const char *f = format; *f; f++) {
 		if (f[0] == '[') {
@@ -2091,6 +2101,15 @@ mp_format(char *data, size_t data_size, const char *format, ...)
 	return result;
 }
 
+MP_IMPL size_t
+mp_format(char *data, size_t data_size, const char *format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	size_t res = mp_vformat(data, data_size, format, args);
+	va_end(args);
+
+}
 
 /** \endcond */
 

@@ -117,6 +117,12 @@ extern "C" {
 
 /** \cond 0 **/
 
+#if defined(__CC_ARM)         /* set the alignment to 1 for armcc compiler */
+#define __PACKED    __packed
+#else
+#define __PACKED
+#endif
+
 #if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
 #if !defined(MP_SOURCE)
 #define MP_PROTO extern inline
@@ -1048,11 +1054,11 @@ mp_encode_array(char *data, uint32_t size)
 		return data;
 	} else if (size <= UINT16_MAX) {
 		*(data++) = 0xdc;
-		*(uint16_t *) data = mp_bswap_u16(size);
+		*(__PACKED uint16_t *) data = mp_bswap_u16(size);
 		return data + sizeof(uint16_t);
 	} else {
 		*(data++) = 0xdd;
-		*(uint32_t *) data = mp_bswap_u32(size);
+		*(__PACKED uint32_t *) data = mp_bswap_u32(size);
 		return data + sizeof(uint32_t);
 	}
 }
@@ -1080,11 +1086,11 @@ mp_decode_array_slowpath(unsigned char c, const char **data)
 	uint32_t size;
 	switch (c & 0x1) {
 	case 0xdc & 0x1:
-		size = mp_bswap_u16(*(uint16_t *) *data);
+		size = mp_bswap_u16(*(__PACKED uint16_t *) *data);
 		*data += sizeof(uint16_t);
 		return size;
 	case 0xdd & 0x1:
-		size = mp_bswap_u32(*(uint32_t *) *data);
+		size = mp_bswap_u32(*(__PACKED uint32_t *) *data);
 		*data += sizeof(uint32_t);
 		return size;
 	default:
@@ -1124,11 +1130,11 @@ mp_encode_map(char *data, uint32_t size)
 		return data;
 	} else if (size <= UINT16_MAX) {
 		*(data++) = 0xde;
-		*(uint16_t *) data = mp_bswap_u16(size);
+		*(__PACKED uint16_t *) data = mp_bswap_u16(size);
 		return data + sizeof(uint16_t);
 	} else {
 		*(data++) = 0xdf;
-		*(uint32_t *) data = mp_bswap_u32(size);
+		*(__PACKED uint32_t *) data = mp_bswap_u32(size);
 		return data + sizeof(uint32_t);
 	}
 }
@@ -1157,11 +1163,11 @@ mp_decode_map(const char **data)
 	case 0x80 ... 0x8f:
 		return c & 0xf;
 	case 0xde:
-		size = mp_bswap_u16(*(uint16_t *) *data);
+		size = mp_bswap_u16(*(__PACKED uint16_t *) *data);
 		*data += sizeof(uint16_t);
 		return size;
 	case 0xdf:
-		size = mp_bswap_u32(*(uint32_t *) *data);
+		size = mp_bswap_u32(*(__PACKED uint32_t *) *data);
 		*data += sizeof(uint32_t);
 		return size;
 	default:
@@ -1232,17 +1238,17 @@ mp_encode_uint(char *data, uint64_t num)
 	} else if (num <= UINT16_MAX) {
 		*data = 0xcd;
 		data++;
-		*(uint16_t *) data = mp_bswap_u16(num);
+		*(__PACKED uint16_t *) data = mp_bswap_u16(num);
 		return data + sizeof(uint16_t);
 	} else if (num <= UINT32_MAX) {
 		*data = 0xce;
 		data++;
-		*(uint32_t *) data = mp_bswap_u32(num);
+		*(__PACKED uint32_t *) data = mp_bswap_u32(num);
 		return data + sizeof(uint32_t);
 	} else {
 		*data = 0xcf;
 		data++;
-		*(uint64_t *) data = mp_bswap_u64(num);
+		*(__PACKED uint64_t *) data = mp_bswap_u64(num);
 		return data + sizeof(uint64_t);
 	}
 }
@@ -1262,17 +1268,17 @@ mp_encode_int(char *data, int64_t num)
 	} else if (num >= INT16_MIN) {
 		*data = 0xd1;
 		data++;
-		*(int16_t *) data = mp_bswap_u16(num);
+		*(__PACKED int16_t *) data = mp_bswap_u16(num);
 		return data + sizeof(int16_t);
 	} else if (num >= INT32_MIN) {
 		*data = 0xd2;
 		data++;
-		*(int32_t *) data = mp_bswap_u32(num);
+		*(__PACKED int32_t *) data = mp_bswap_u32(num);
 		return data + sizeof(int32_t);
 	} else {
 		*data = 0xd3;
 		data++;
-		*(int64_t *) data = mp_bswap_u64(num);
+		*(__PACKED int64_t *) data = mp_bswap_u64(num);
 		return data + sizeof(int64_t);
 	}
 }
@@ -1292,15 +1298,15 @@ mp_decode_uint(const char **data)
 		*data += sizeof(uint8_t);
 		return val;
 	case 0xcd:
-		val = mp_bswap_u16(*(uint16_t *) *data);
+		val = mp_bswap_u16(*(__PACKED uint16_t *) *data);
 		*data += sizeof(uint16_t);
 		return val;
 	case 0xce:
-		val = mp_bswap_u32(*(uint32_t *) *data);
+		val = mp_bswap_u32(*(__PACKED uint32_t *) *data);
 		*data += sizeof(uint32_t);
 		return val;
 	case 0xcf:
-		val = mp_bswap_u64(*(uint64_t *) *data);
+		val = mp_bswap_u64(*(__PACKED uint64_t *) *data);
 		*data += sizeof(uint64_t);
 		return val;
 	default:
@@ -1330,16 +1336,16 @@ mp_compare_uint(const char *data_a, const char *data_b)
 		b = *(uint8_t *) data_b;
 		break;
 	case 0xcd & 0x3:
-		a = mp_bswap_u16(*(uint16_t *) data_a);
-		b = mp_bswap_u16(*(uint16_t *) data_b);
+		a = mp_bswap_u16(*(__PACKED uint16_t *) data_a);
+		b = mp_bswap_u16(*(__PACKED uint16_t *) data_b);
 		break;
 	case 0xce & 0x3:
-		a = mp_bswap_u32(*(uint32_t *) data_a);
-		b = mp_bswap_u32(*(uint32_t *) data_b);
+		a = mp_bswap_u32(*(__PACKED uint32_t *) data_a);
+		b = mp_bswap_u32(*(__PACKED uint32_t *) data_b);
 		break;
 	case 0xcf & 0x3:
-		a = mp_bswap_u64(*(uint64_t *) data_a);
-		b = mp_bswap_u64(*(uint64_t *) data_b);
+		a = mp_bswap_u64(*(__PACKED uint64_t *) data_a);
+		b = mp_bswap_u64(*(__PACKED uint64_t *) data_b);
 		return a < b ? -1 : a > b;
 		break;
 	default:
@@ -1364,15 +1370,15 @@ mp_decode_int(const char **data)
 		*data += sizeof(uint8_t);
 		return (int8_t) val;
 	case 0xd1:
-		val = mp_bswap_u16(*(int16_t *) *data);
+		val = mp_bswap_u16(*(__PACKED int16_t *) *data);
 		*data += sizeof(uint16_t);
 		return (int16_t) val;
 	case 0xd2:
-		val = mp_bswap_u32(*(int32_t *) *data);
+		val = mp_bswap_u32(*(__PACKED int32_t *) *data);
 		*data += sizeof(uint32_t);
 		return (int32_t) val;
 	case 0xd3:
-		val = mp_bswap_u64(*(int64_t *) *data);
+		val = mp_bswap_u64(*(__PACKED int64_t *) *data);
 		*data += sizeof(int64_t);
 		return val;
 	default:
@@ -1415,7 +1421,7 @@ mp_encode_float(char *data, float num)
 {
 	*data = 0xca;
 	data++;
-	*(float *) data = mp_bswap_float(num);
+	*(__PACKED float *) data = mp_bswap_float(num);
 	return data + sizeof(float);
 }
 
@@ -1424,7 +1430,7 @@ mp_encode_double(char *data, double num)
 {
 	*data = 0xcb;
 	data++;
-	*(double *) data = mp_bswap_double(num);
+	*(__PACKED double *) data = mp_bswap_double(num);
 	return data + sizeof(double);
 }
 
@@ -1435,7 +1441,7 @@ mp_decode_float(const char **data)
 	assert(c == 0xca);
 	(void) c;
 	*data += 1;
-	float val = mp_bswap_float(*(float *) *data);
+	float val = mp_bswap_float(*(__PACKED float *) *data);
 	*data += sizeof(float);
 	return val;
 }
@@ -1447,7 +1453,7 @@ mp_decode_double(const char **data)
 	assert(c == 0xcb);
 	(void) c;
 	*data += 1;
-	double val = mp_bswap_double(*(double *) *data);
+	double val = mp_bswap_double(*(__PACKED double *) *data);
 	*data += sizeof(double);
 	return val;
 }
@@ -1504,12 +1510,12 @@ mp_encode_strl(char *data, uint32_t len)
 	} else if (len <= UINT16_MAX) {
 		*data = 0xda;
 		data += 1;
-		*(uint16_t *) data = mp_bswap_u16(len);
+		*(__PACKED uint16_t *) data = mp_bswap_u16(len);
 		data += sizeof(uint16_t);
 	} else {
 		*data = 0xdb;
 		data += 1;
-		*(uint32_t *) data = mp_bswap_u32(len);
+		*(__PACKED uint32_t *) data = mp_bswap_u32(len);
 		data += sizeof(uint32_t);
 	}
 
@@ -1535,12 +1541,12 @@ mp_encode_binl(char *data, uint32_t len)
 	} else if (len <= UINT16_MAX) {
 		*data = 0xc5;
 		data += 1;
-		*(uint16_t *) data = mp_bswap_u16(len);
+		*(__PACKED uint16_t *) data = mp_bswap_u16(len);
 		data += sizeof(uint16_t);
 	} else {
 		*data = 0xc6;
 		data += 1;
-		*(uint32_t *) data = mp_bswap_u32(len);
+		*(__PACKED uint32_t *) data = mp_bswap_u32(len);
 		data += sizeof(uint32_t);
 	}
 
@@ -1598,11 +1604,11 @@ mp_decode_strl(const char **data)
 		*data += sizeof(uint8_t);
 		return len;
 	case 0xda:
-		len = mp_bswap_u16(*(uint16_t *) *data);
+		len = mp_bswap_u16(*(__PACKED uint16_t *) *data);
 		*data += sizeof(uint16_t);
 		return len;
 	case 0xdb:
-		len = mp_bswap_u32(*(uint32_t *) *data);
+		len = mp_bswap_u32(*(__PACKED uint32_t *) *data);
 		*data += sizeof(uint32_t);
 		return len;
 	default:
@@ -1634,11 +1640,11 @@ mp_decode_binl(const char **data)
 		*data += sizeof(uint8_t);
 		return len;
 	case 0xc5:
-		len = mp_bswap_u16(*(uint16_t *) *data);
+		len = mp_bswap_u16(*(__PACKED uint16_t *) *data);
 		*data += sizeof(uint16_t);
 		return len;
 	case 0xc6:
-		len = mp_bswap_u32(*(uint32_t *) *data);
+		len = mp_bswap_u32(*(__PACKED uint32_t *) *data);
 		*data += sizeof(uint32_t);
 		return len;
 	default:
@@ -1765,32 +1771,32 @@ mp_next_slowpath(const char **data, int k)
 			break;
 		case MP_HINT_STR_16:
 			/* MP_STR (16) */
-			*data += mp_bswap_u16(*(uint16_t *) *data) +
+			*data += mp_bswap_u16(*(__PACKED uint16_t *) *data) +
 					sizeof(uint16_t);
 			break;
 		case MP_HINT_STR_32:
 			/* MP_STR (32) */
-			*data += mp_bswap_u32(*(uint32_t *) *data) +
+			*data += mp_bswap_u32(*(__PACKED uint32_t *) *data) +
 					sizeof(uint32_t);
 			break;
 		case MP_HINT_ARRAY_16:
 			/* MP_ARRAY (16) */
-			k += mp_bswap_u16(*(uint16_t *) *data);
+			k += mp_bswap_u16(*(__PACKED uint16_t *) *data);
 			*data += sizeof(uint16_t);
 			break;
 		case MP_HINT_ARRAY_32:
 			/* MP_ARRAY (32) */
-			k += mp_bswap_u32(*(uint32_t *) *data);
+			k += mp_bswap_u32(*(__PACKED uint32_t *) *data);
 			*data += sizeof(uint32_t);
 			break;
 		case MP_HINT_MAP_16:
 			/* MP_MAP (16) */
-			k += 2 * mp_bswap_u16(*(uint16_t *) *data);
+			k += 2 * mp_bswap_u16(*(__PACKED uint16_t *) *data);
 			*data += sizeof(uint16_t);
 			break;
 		case MP_HINT_MAP_32:
 			/* MP_MAP (32) */
-			k += 2 * mp_bswap_u32(*(uint32_t *) *data);
+			k += 2 * mp_bswap_u32(*(__PACKED uint32_t *) *data);
 			*data += sizeof(uint32_t);
 			break;
 		case MP_HINT_EXT_8:
@@ -1799,12 +1805,12 @@ mp_next_slowpath(const char **data, int k)
 			break;
 		case MP_HINT_EXT_16:
 			/* MP_EXT (16) */
-			*data += mp_bswap_u16(*(uint16_t *) *data) +
+			*data += mp_bswap_u16(*(__PACKED uint16_t *) *data) +
 					sizeof(uint16_t) + 1;
 			break;
 		case MP_HINT_EXT_32:
 			/* MP_EXT (32) */
-			*data += mp_bswap_u32(*(uint32_t *) *data) +
+			*data += mp_bswap_u32(*(__PACKED uint32_t *) *data) +
 					sizeof(uint32_t) + 1;
 			break;
 		default:
@@ -1868,42 +1874,42 @@ mp_check(const char **data, const char *end)
 			/* MP_STR (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) > end))
 				return 1;
-			*data += mp_bswap_u16(*(uint16_t *) *data) +
+			*data += mp_bswap_u16(*(__PACKED uint16_t *) *data) +
 					sizeof(uint16_t);
 			break;
 		case MP_HINT_STR_32:
 			/* MP_STR (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) > end))
 				return 1;
-			*data += mp_bswap_u32(*(uint32_t *) *data) +
+			*data += mp_bswap_u32(*(__PACKED uint32_t *) *data) +
 					sizeof(uint32_t);
 			break;
 		case MP_HINT_ARRAY_16:
 			/* MP_ARRAY (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) > end))
 				return 1;
-			k += mp_bswap_u16(*(uint16_t *) *data);
+			k += mp_bswap_u16(*(__PACKED uint16_t *) *data);
 			*data += sizeof(uint16_t);
 			break;
 		case MP_HINT_ARRAY_32:
 			/* MP_ARRAY (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) > end))
 				return 1;
-			k += mp_bswap_u32(*(uint32_t *) *data);
+			k += mp_bswap_u32(*(__PACKED uint32_t *) *data);
 			*data += sizeof(uint32_t);
 			break;
 		case MP_HINT_MAP_16:
 			/* MP_MAP (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) > end))
 				return false;
-			k += 2 * mp_bswap_u16(*(uint16_t *) *data);
+			k += 2 * mp_bswap_u16(*(__PACKED uint16_t *) *data);
 			*data += sizeof(uint16_t);
 			break;
 		case MP_HINT_MAP_32:
 			/* MP_MAP (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) > end))
 				return 1;
-			k += 2 * mp_bswap_u32(*(uint32_t *) *data);
+			k += 2 * mp_bswap_u32(*(__PACKED uint32_t *) *data);
 			*data += sizeof(uint32_t);
 			break;
 		case MP_HINT_EXT_8:
@@ -1916,14 +1922,14 @@ mp_check(const char **data, const char *end)
 			/* MP_EXT (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) + 1 > end))
 				return 1;
-			*data += mp_bswap_u16(*(uint16_t *) *data) +
+			*data += mp_bswap_u16(*(__PACKED uint16_t *) *data) +
 					sizeof(uint16_t) + 1;
 			break;
 		case MP_HINT_EXT_32:
 			/* MP_EXT (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) + 1 > end))
 				return 1;
-			*data += mp_bswap_u32(*(uint32_t *) *data) +
+			*data += mp_bswap_u32(*(__PACKED uint32_t *) *data) +
 					sizeof(uint32_t) + 1;
 			break;
 		default:

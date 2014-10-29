@@ -1692,18 +1692,22 @@ mp_next_slowpath(const char **data, int k)
 			continue;
 		}
 
+		uint32_t len;
 		switch (l) {
 		case MP_HINT_STR_8:
 			/* MP_STR (8) */
-			*data += mp_load_u8(data);
+			len = mp_load_u8(data);
+			*data += len;
 			break;
 		case MP_HINT_STR_16:
 			/* MP_STR (16) */
-			*data += mp_load_u16(data);
+			len = mp_load_u16(data);
+			*data += len;
 			break;
 		case MP_HINT_STR_32:
 			/* MP_STR (32) */
-			*data += mp_load_u32(data);
+			len = mp_load_u32(data);
+			*data += len;
 			break;
 		case MP_HINT_ARRAY_16:
 			/* MP_ARRAY (16) */
@@ -1723,15 +1727,21 @@ mp_next_slowpath(const char **data, int k)
 			break;
 		case MP_HINT_EXT_8:
 			/* MP_EXT (8) */
-			*data += mp_load_u8(data) + 1;
+			len = mp_load_u8(data);
+			mp_load_u8(data);
+			*data += len;
 			break;
 		case MP_HINT_EXT_16:
 			/* MP_EXT (16) */
-			*data += mp_load_u16(data) + 1;
+			len = mp_load_u16(data);
+			mp_load_u8(data);
+			*data += len;
 			break;
 		case MP_HINT_EXT_32:
 			/* MP_EXT (32) */
-			*data += mp_load_u32(data) + 1;
+			len = mp_load_u32(data);
+			mp_load_u8(data);
+			*data += len;
 			break;
 		default:
 			mp_unreachable();
@@ -1751,7 +1761,8 @@ mp_next(const char **data)
 			continue;
 		} else if (mp_likely(c == 0xd9)){
 			/* MP_STR (8) */
-			*data += mp_load_u8(data);
+			uint8_t len = mp_load_u8(data);
+			*data += len;
 			continue;
 		} else if (l > MP_HINT) {
 			k -= l;
@@ -1781,24 +1792,28 @@ mp_check(const char **data, const char *end)
 			continue;
 		}
 
+		uint32_t len;
 		switch (l) {
 		case MP_HINT_STR_8:
 			/* MP_STR (8) */
 			if (mp_unlikely(*data + sizeof(uint8_t) > end))
 				return 1;
-			*data += mp_load_u8(data);
+			len = mp_load_u8(data);
+			*data += len;
 			break;
 		case MP_HINT_STR_16:
 			/* MP_STR (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) > end))
 				return 1;
-			*data += mp_load_u16(data);
+			len = mp_load_u16(data);
+			*data += len;
 			break;
 		case MP_HINT_STR_32:
 			/* MP_STR (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) > end))
 				return 1;
-			*data += mp_load_u32(data);
+			len = mp_load_u32(data);
+			*data += len;
 			break;
 		case MP_HINT_ARRAY_16:
 			/* MP_ARRAY (16) */
@@ -1828,19 +1843,25 @@ mp_check(const char **data, const char *end)
 			/* MP_EXT (8) */
 			if (mp_unlikely(*data + sizeof(uint8_t) + 1 > end))
 				return 1;
-			*data += mp_load_u8(data) + 1;
+			len = mp_load_u8(data);
+			mp_load_u8(data);
+			*data += len;
 			break;
 		case MP_HINT_EXT_16:
 			/* MP_EXT (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) + 1 > end))
 				return 1;
-			*data += mp_load_u16(data) + 1;
+			len = mp_load_u16(data);
+			mp_load_u8(data);
+			*data += len;
 			break;
 		case MP_HINT_EXT_32:
 			/* MP_EXT (32) */
 			if (mp_unlikely(*data + sizeof(uint32_t) + 1 > end))
 				return 1;
-			*data += mp_load_u32(data) + 1;
+		        len = mp_load_u32(data);
+			mp_load_u8(data);
+			*data += len;
 			break;
 		default:
 			mp_unreachable();

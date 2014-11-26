@@ -117,10 +117,17 @@ extern "C" {
 
 /** \cond 0 **/
 
-#if defined(__CC_ARM)         /* set the alignment to 1 for armcc compiler */
-#define MP_PACKED    __packed
+#if defined(__CC_ARM)
+#define SET(p,val,type) (*((__packed type *)(p))=(val))
+#define GET(p,val,type) ((val)=*((__packed type *)(p)))
+#elif defined(__GNUC__)
+#define SET(p,val,type) { struct unaligned_##type { type x __attribute__((packed)); };		\
+			(((struct unaligned_##type __attribute__((may_alias))*)(p))->x=(val)); }
+#define GET(p,val,type) { struct unaligned_##type { type x __attribute__((packed)); };		\
+			((val)=((struct unaligned_##type __attribute__((may_alias))*)(p))->x); }
 #else
-#define MP_PACKED
+#define SET(p,val,type) (*((type *)p)=(val))
+#define GET(p,val,type) ((val)=*((type *)p))
 #endif
 
 #if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
@@ -266,7 +273,9 @@ mp_load_##name(const char **data);						\
 MP_IMPL type									\
 mp_load_##name(const char **data)						\
 {										\
-	type val = mp_bswap_##name(*(MP_PACKED type *) *data);			\
+	type val;								\
+	GET(*data, val, type);							\
+	val = mp_bswap_##name(val);						\
 	*data += sizeof(type);							\
 	return val;								\
 }										\
@@ -275,7 +284,8 @@ mp_store_##name(char *data, type val);						\
 MP_IMPL char *									\
 mp_store_##name(char *data, type val)						\
 {										\
-	*(MP_PACKED type *) (data) = mp_bswap_##name(val);			\
+	val = mp_bswap_##name(val);						\
+	SET(data, val, type);							\
 	return data + sizeof(type);						\
 }
 

@@ -1878,12 +1878,15 @@ MP_IMPL size_t
 mp_vformat(char *data, size_t data_size, const char *format, va_list vl)
 {
 	size_t result = 0;
+	const char *f = NULL;
 
-	for (const char *f = format; *f; f++) {
+	for (f = format; *f; f++) {
 		if (f[0] == '[') {
 			uint32_t size = 0;
 			int level = 1;
-			for (const char *e = f + 1; level && *e; e++) {
+			const char *e = NULL;
+
+			for (e = f + 1; level && *e; e++) {
 				if (*e == '[' || *e == '{') {
 					if (level == 1)
 						size++;
@@ -1910,7 +1913,9 @@ mp_vformat(char *data, size_t data_size, const char *format, va_list vl)
 		} else if (f[0] == '{') {
 			uint32_t count = 0;
 			int level = 1;
-			for (const char *e = f + 1; level && *e; e++) {
+			const char *e = NULL;
+
+			for (e = f + 1; level && *e; e++) {
 				if (*e == '[' || *e == '{') {
 					if (level == 1)
 						count++;

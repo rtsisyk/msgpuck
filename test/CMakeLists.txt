@@ -3,7 +3,7 @@ include_directories("../")
 set(alltests)
 foreach (test msgpuck)
     add_executable(${test}.test ${test}.c test.c)
-    target_link_libraries(${test}.test msgpuck)
+    target_link_libraries(${test}.test msgpuck_shared)
 
     list(APPEND alltests ${test}.test_run)
     add_custom_target(${test}.test_run

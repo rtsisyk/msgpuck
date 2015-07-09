@@ -1,0 +1,6 @@
+libmsgpuck-dev/
+libmsgpuck-doc/
+tmp/
+files
+stamp-*
+*.substvars

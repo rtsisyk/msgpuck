@@ -1,0 +1,21 @@
+Source: msgpuck
+Priority: optional
+Section: libdevel
+Maintainer: Roman Tsisyk <roman@tarantool.org>
+Build-Depends: debhelper (>= 9), cdbs, doxygen
+Standards-Version: 3.9.5
+Homepage: https://github.com/rtsisyk/msgpuck
+Vcs-Git: git://github.com/rtsisyk/msgpuck.git
+Vcs-Browser: https://github.com/rtsisyk/msgpuck
+
+Package: libmsgpuck-dev
+Architecture: all
+Description: A MsgPack binary serialization library in a self-contained header
+  A MsgPack binary serialization library in a self-contained header.
+
+Package: libmsgpuck-doc
+Architecture: all
+Description: A MsgPack binary serialization library in a self-contained header
+  A MsgPack binary serialization library in a self-contained header.
+  This package contains documentation files.
+Depends: libmsgpuck-dev (= ${binary:Version})

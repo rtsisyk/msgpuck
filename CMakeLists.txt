@@ -20,7 +20,7 @@ endif()
 add_subdirectory(test)
 
 add_library(${PROJECT_NAME}_shared SHARED msgpuck.c)
-set_target_properties(${PROJECT_NAME}_shared PROPERTIES VERSION 0.1 SOVERSION 0)
+set_target_properties(${PROJECT_NAME}_shared PROPERTIES VERSION 1.0 SOVERSION 1)
 set_target_properties(${PROJECT_NAME}_shared PROPERTIES OUTPUT_NAME "msgpuck")
 
 install(TARGETS ${PROJECT_NAME}_shared
@@ -29,7 +29,7 @@ install(TARGETS ${PROJECT_NAME}_shared
     COMPONENT library)
 
 add_library(${PROJECT_NAME}_static STATIC msgpuck.c)
-set_target_properties(${PROJECT_NAME}_static PROPERTIES VERSION 0.1 SOVERSION 0)
+set_target_properties(${PROJECT_NAME}_static PROPERTIES VERSION 1.0 SOVERSION 1)
 set_target_properties(${PROJECT_NAME}_static PROPERTIES OUTPUT_NAME "msgpuck")
 
 install(TARGETS ${PROJECT_NAME}_static

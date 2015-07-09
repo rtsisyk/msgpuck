@@ -1081,7 +1081,7 @@ mp_encode_array(char *data, uint32_t size)
 		return mp_store_u8(data, 0x90 | size);
 	} else if (size <= UINT16_MAX) {
 		data = mp_store_u8(data, 0xdc);
-		return mp_store_u16(data, size);
+		data = mp_store_u16(data, size);
 		return data;
 	} else {
 		data = mp_store_u8(data, 0xdd);

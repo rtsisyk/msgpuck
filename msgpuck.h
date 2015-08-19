@@ -503,6 +503,14 @@ mp_sizeof_int(int64_t num);
  */
 MP_PROTO char *
 mp_encode_uint(char *data, uint64_t num);
+MP_PROTO char *
+mp_encode_uint8(char *data, uint64_t num);
+MP_PROTO char *
+mp_encode_uint16(char *data, uint64_t num);
+MP_PROTO char *
+mp_encode_uint32(char *data, uint64_t num);
+MP_PROTO char *
+mp_encode_uint64(char *data, uint64_t num);
 
 /**
  * \brief Encode a signed integer \a num.
@@ -516,6 +524,14 @@ mp_encode_uint(char *data, uint64_t num);
  */
 MP_PROTO char *
 mp_encode_int(char *data, int64_t num);
+MP_PROTO char *
+mp_encode_int8(char *data, int64_t num);
+MP_PROTO char *
+mp_encode_int16(char *data, int64_t num);
+MP_PROTO char *
+mp_encode_int32(char *data, int64_t num);
+MP_PROTO char *
+mp_encode_int64(char *data, int64_t num);
 
 /**
  * \brief Check that \a cur buffer has enough bytes to decode an uint
@@ -1263,6 +1279,59 @@ mp_encode_uint(char *data, uint64_t num)
 }
 
 MP_IMPL char *
+mp_encode_uint8(char *data, uint64_t num)
+{
+	if (num <= UINT8_MAX) {
+		data = mp_store_u8(data, 0xcc);
+		return mp_store_u8(data, num);
+	} else if (num <= UINT16_MAX) {
+		data = mp_store_u8(data, 0xcd);
+		return mp_store_u16(data, num);
+	} else if (num <= UINT32_MAX) {
+		data = mp_store_u8(data, 0xce);
+		return mp_store_u32(data, num);
+	} else {
+		data = mp_store_u8(data, 0xcf);
+		return mp_store_u64(data, num);
+	}
+}
+
+
+MP_IMPL char *
+mp_encode_uint16(char *data, uint64_t num)
+{
+	if (num <= UINT16_MAX) {
+		data = mp_store_u8(data, 0xcd);
+		return mp_store_u16(data, num);
+	} else if (num <= UINT32_MAX) {
+		data = mp_store_u8(data, 0xce);
+		return mp_store_u32(data, num);
+	} else {
+		data = mp_store_u8(data, 0xcf);
+		return mp_store_u64(data, num);
+	}
+}
+
+MP_IMPL char *
+mp_encode_uint32(char *data, uint64_t num)
+{
+	if (num <= UINT32_MAX) {
+		data = mp_store_u8(data, 0xce);
+		return mp_store_u32(data, num);
+	} else {
+		data = mp_store_u8(data, 0xcf);
+		return mp_store_u64(data, num);
+	}
+}
+
+MP_IMPL char *
+mp_encode_uint64(char *data, uint64_t num)
+{
+	data = mp_store_u8(data, 0xcf);
+	return mp_store_u64(data, num);
+}
+
+MP_IMPL char *
 mp_encode_int(char *data, int64_t num)
 {
 	assert(num < 0);
@@ -1281,6 +1350,64 @@ mp_encode_int(char *data, int64_t num)
 		data = mp_store_u8(data, 0xd3);
 		return mp_store_u64(data, num);
 	}
+}
+
+MP_IMPL char *
+mp_encode_int8(char *data, int64_t num)
+{
+	assert(num < 0);
+	if (num >= INT8_MIN) {
+		data = mp_store_u8(data, 0xd0);
+		return mp_store_u8(data, num);
+	} else if (num >= INT16_MIN) {
+		data = mp_store_u8(data, 0xd1);
+		return mp_store_u16(data, num);
+	} else if (num >= INT32_MIN) {
+		data = mp_store_u8(data, 0xd2);
+		return mp_store_u32(data, num);
+	} else {
+		data = mp_store_u8(data, 0xd3);
+		return mp_store_u64(data, num);
+	}
+}
+
+
+
+MP_IMPL char *
+mp_encode_int16(char *data, int64_t num)
+{
+	assert(num < 0);
+	if (num >= INT16_MIN) {
+		data = mp_store_u8(data, 0xd1);
+		return mp_store_u16(data, num);
+	} else if (num >= INT32_MIN) {
+		data = mp_store_u8(data, 0xd2);
+		return mp_store_u32(data, num);
+	} else {
+		data = mp_store_u8(data, 0xd3);
+		return mp_store_u64(data, num);
+	}
+}
+
+MP_IMPL char *
+mp_encode_int32(char *data, int64_t num)
+{
+	assert(num < 0);
+	if (num >= INT32_MIN) {
+		data = mp_store_u8(data, 0xd2);
+		return mp_store_u32(data, num);
+	} else {
+		data = mp_store_u8(data, 0xd3);
+		return mp_store_u64(data, num);
+	}
+}
+
+MP_IMPL char *
+mp_encode_int64(char *data, int64_t num)
+{
+	assert(num < 0);
+	data = mp_store_u8(data, 0xd3);
+	return mp_store_u64(data, num);
 }
 
 MP_IMPL uint64_t

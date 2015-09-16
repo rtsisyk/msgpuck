@@ -220,11 +220,11 @@ test_arrays(void)
 	test_array(1, "\x91", 1);
 	test_array(15, "\x9f", 1);
 	test_array(16, "\xdc\x00\x10", 3);
-	test_array(UINT16_MAX - 1, "\xdc\xff\xfe", 3);
-	test_array(UINT16_MAX, "\xdc\xff\xff", 3);
-	test_array(UINT16_MAX + 1, "\xdd\x00\x01\x00\x00", 5);
-	test_array(UINT32_MAX - 1, "\xdd\xff\xff\xff\xfe", 5);
-	test_array(UINT32_MAX, "\xdd\xff\xff\xff\xff", 5);
+	test_array(0xfffe, "\xdc\xff\xfe", 3);
+	test_array(0xffff, "\xdc\xff\xff", 3);
+	test_array(0x10000, "\xdd\x00\x01\x00\x00", 5);
+	test_array(0xfffffffeU, "\xdd\xff\xff\xff\xfe", 5);
+	test_array(0xffffffffU, "\xdd\xff\xff\xff\xff", 5);
 
 	footer();
 	return check_plan();
@@ -240,11 +240,11 @@ test_maps(void)
 	test_map(1, "\x81", 1);
 	test_map(15, "\x8f", 1);
 	test_map(16, "\xde\x00\x10", 3);
-	test_map(UINT16_MAX - 1, "\xde\xff\xfe", 3);
-	test_map(UINT16_MAX, "\xde\xff\xff", 3);
-	test_map(UINT16_MAX + 1, "\xdf\x00\x01\x00\x00", 5);
-	test_map(UINT32_MAX - 1, "\xdf\xff\xff\xff\xfe", 5);
-	test_map(UINT32_MAX, "\xdf\xff\xff\xff\xff", 5);
+	test_map(0xfffe, "\xde\xff\xfe", 3);
+	test_map(0xffff, "\xde\xff\xff", 3);
+	test_map(0x10000, "\xdf\x00\x01\x00\x00", 5);
+	test_map(0xfffffffeU, "\xdf\xff\xff\xff\xfe", 5);
+	test_map(0xffffffffU, "\xdf\xff\xff\xff\xff", 5);
 
 	footer();
 	return check_plan();

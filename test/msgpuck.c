@@ -548,119 +548,119 @@ test_format(void)
 	e = buf + sz;
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
-	ok(mp_decode_uint(&p) == 0, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_UINT, "type");
+	ok(mp_decode_uint(&p) == 0, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_NIL, "type at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_NIL, "type");
 	mp_decode_nil(&p);
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_ARRAY, "type at %d", __LINE__);
-	ok(mp_decode_array(&p) == 3, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_ARRAY, "type");
+	ok(mp_decode_array(&p) == 3, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
-	ok(mp_decode_uint(&p) == 1, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_UINT, "type");
+	ok(mp_decode_uint(&p) == 1, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_BOOL, "type at %d", __LINE__);
-	ok(mp_decode_bool(&p) == true, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_BOOL, "type");
+	ok(mp_decode_bool(&p) == true, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_BOOL, "type at %d", __LINE__);
-	ok(mp_decode_bool(&p) == false, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_BOOL, "type");
+	ok(mp_decode_bool(&p) == false, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_ARRAY, "type at %d", __LINE__);
-	ok(mp_decode_array(&p) == 5, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_ARRAY, "type");
+	ok(mp_decode_array(&p) == 5, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_INT, "type at %d", __LINE__);
-	ok(mp_decode_int(&p) == -1, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_INT, "type");
+	ok(mp_decode_int(&p) == -1, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_ARRAY, "type at %d", __LINE__);
-	ok(mp_decode_array(&p) == 1, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_ARRAY, "type");
+	ok(mp_decode_array(&p) == 1, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_ARRAY, "type at %d", __LINE__);
-	ok(mp_decode_array(&p) == 3, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_ARRAY, "type");
+	ok(mp_decode_array(&p) == 3, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
-	ok(mp_decode_uint(&p) == 2, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_UINT, "type");
+	ok(mp_decode_uint(&p) == 2, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_MAP, "type at %d", __LINE__);
-	ok(mp_decode_map(&p) == 3, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_MAP, "type");
+	ok(mp_decode_map(&p) == 3, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_STR, "type at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_STR, "type");
 	c = mp_decode_str(&p, &len);
-	ok(len == 3, "decode at %d", __LINE__);
-	ok(memcmp(c, "flt", 3) == 0, "compare at %d", __LINE__);
+	ok(len == 3, "decode");
+	ok(memcmp(c, "flt", 3) == 0, "compare");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_FLOAT, "type at %d", __LINE__);
-	ok(fequal(mp_decode_float(&p), 0.1), "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_FLOAT, "type");
+	ok(fequal(mp_decode_float(&p), 0.1), "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_STR, "type at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_STR, "type");
 	c = mp_decode_str(&p, &len);
-	ok(len == 6, "decode at %d", __LINE__);
-	ok(memcmp(c, "double", 6) == 0, "compare at %d", __LINE__);
+	ok(len == 6, "decode");
+	ok(memcmp(c, "double", 6) == 0, "compare");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_DOUBLE, "type at %d", __LINE__);
-	ok(dequal(mp_decode_double(&p), 0.2), "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_DOUBLE, "type");
+	ok(dequal(mp_decode_double(&p), 0.2), "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_STR, "type at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_STR, "type");
 	c = mp_decode_str(&p, &len);
-	ok(len == 0, "decode at %d", __LINE__);
+	ok(len == 0, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_NIL, "type at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_NIL, "type");
 	mp_decode_nil(&p);
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
-	ok(mp_decode_uint(&p) == 3, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_UINT, "type");
+	ok(mp_decode_uint(&p) == 3, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
-	ok(mp_decode_uint(&p) == 4, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_UINT, "type");
+	ok(mp_decode_uint(&p) == 4, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
-	ok(mp_decode_uint(&p) == 5, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_UINT, "type");
+	ok(mp_decode_uint(&p) == 5, "decode");
 
 	c = p;
-	ok(mp_check(&c, e) == 0, "check at %d", __LINE__);
-	ok(mp_typeof(*p) == MP_UINT, "type at %d", __LINE__);
-	ok(mp_decode_uint(&p) == 6, "decode at %d", __LINE__);
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_UINT, "type");
+	ok(mp_decode_uint(&p) == 6, "decode");
 
 	ok(p == e, "nothing more");
 

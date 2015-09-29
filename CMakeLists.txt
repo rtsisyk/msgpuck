@@ -1,5 +1,5 @@
 project(msgpuck)
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.5)
 
 if(POLICY CMP0037)
     cmake_policy(SET CMP0037 OLD) # don't blame custom target names

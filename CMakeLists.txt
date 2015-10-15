@@ -5,7 +5,7 @@ if(POLICY CMP0037)
     cmake_policy(SET CMP0037 OLD) # don't blame custom target names
 endif(POLICY CMP0037)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -fstrict-aliasing")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -pg -Wall -Wextra")
 
 if(NOT CMAKE_BUILD_TYPE)

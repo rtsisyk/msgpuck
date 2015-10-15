@@ -173,9 +173,7 @@ mp_unreachable(void) { assert(0); abort(); }
 #define mp_unreachable() (assert(0))
 #endif
 
-#define mp_bswap_u8(x) (x) /* just to simplify mp_load/mp_store macroses */
-
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define mp_identity(x) (x) /* just to simplify mp_load/mp_store macroses */
 
 #if MP_GCC_VERSION(4, 8) || __has_builtin(__builtin_bswap16)
 #define mp_bswap_u16(x) __builtin_bswap16(x)
@@ -209,11 +207,38 @@ mp_unreachable(void) { assert(0); abort(); }
 	(((x) >> 56) & UINT64_C(0x00000000000000ff)) )
 #endif
 
+#define MP_LOAD_STORE(name, type, bswap)					\
+MP_PROTO type									\
+mp_load_##name(const char **data);						\
+MP_IMPL type									\
+mp_load_##name(const char **data)						\
+{										\
+	type val = bswap(*(MP_PACKED type *) *data);				\
+	*data += sizeof(type);							\
+	return val;								\
+}										\
+MP_PROTO char *									\
+mp_store_##name(char *data, type val);						\
+MP_IMPL char *									\
+mp_store_##name(char *data, type val)						\
+{										\
+	*(MP_PACKED type *) (data) = bswap(val);				\
+	return data + sizeof(type);						\
+}
+
+MP_LOAD_STORE(u8, uint8_t, mp_identity);
+
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+
+MP_LOAD_STORE(u16, uint16_t, mp_bswap_u16);
+MP_LOAD_STORE(u32, uint32_t, mp_bswap_u32);
+MP_LOAD_STORE(u64, uint64_t, mp_bswap_u64);
+
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 
-#define mp_bswap_u16(x) (x)
-#define mp_bswap_u32(x) (x)
-#define mp_bswap_u64(x) (x)
+MP_LOAD_STORE(u16, uint16_t, mp_identity);
+MP_LOAD_STORE(u32, uint32_t, mp_identity);
+MP_LOAD_STORE(u64, uint64_t, mp_identity);
 
 #else
 #error Unsupported __BYTE_ORDER__
@@ -224,67 +249,82 @@ mp_unreachable(void) { assert(0); abort(); }
 #endif /* defined(__FLOAT_WORD_ORDER__) */
 
 #if __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
-MP_PROTO float
-mp_bswap_float(float f);
 
+/*
+ * Idiots from msgpack.org byte-swaps even IEEE754 float/double types.
+ * Some platforms (e.g. arm) cause SIGBUS on attempt to store
+ * invalid float in registers, so code like flt = mp_bswap_float(flt)
+ * can't be used here.
+ */
+
+union mp_float_cast {
+	uint32_t u32;
+	float f;
+};
+
+union mp_double_cast {
+	uint64_t u64;
+	double d;
+};
+
+MP_PROTO float
+mp_load_float(const char **data);
 MP_PROTO double
-mp_bswap_double(double d);
+mp_load_double(const char **data);
+MP_PROTO char *
+mp_store_float(char *data, float val);
+MP_PROTO char *
+mp_store_double(char *data, double val);
 
 MP_IMPL float
-mp_bswap_float(float f)
+mp_load_float(const char **data)
 {
-	union {
-		float f;
-		uint32_t n;
-	} cast;
-	cast.f = f;
-	cast.n = mp_bswap_u32(cast.n);
+	union mp_float_cast cast = *(MP_PACKED union mp_float_cast *) *data;
+	*data += sizeof(cast);
+	cast.u32 = mp_bswap_u32(cast.u32);
 	return cast.f;
 }
 
 MP_IMPL double
-mp_bswap_double(double d)
+mp_load_double(const char **data)
 {
-	union {
-		double d;
-		uint64_t n;
-	} cast;
-	cast.d = d;
-	cast.n = mp_bswap_u64(cast.n);
+	union mp_double_cast cast = *(MP_PACKED union mp_double_cast *) *data;
+	*data += sizeof(cast);
+	cast.u64 = mp_bswap_u64(cast.u64);
 	return cast.d;
 }
+
+MP_IMPL char *
+mp_store_float(char *data, float val)
+{
+	union mp_float_cast cast;
+	cast.f = val;
+	cast.u32 = mp_bswap_u32(cast.u32);
+	*(MP_PACKED union mp_float_cast *) (data) = cast;
+	return data + sizeof(cast);
+}
+
+MP_IMPL char *
+mp_store_double(char *data, double val)
+{
+	union mp_double_cast cast;
+	cast.d = val;
+	cast.u64 = mp_bswap_u64(cast.u64);
+	*(MP_PACKED union mp_double_cast *) (data) = cast;
+	return data + sizeof(cast);
+}
+
 #elif __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
-#define mp_bswap_float(x) (x)
-#define mp_bswap_double(x) (x)
+
+MP_LOAD_STORE(float, float, mp_identity);
+MP_LOAD_STORE(double, double, mp_identity);
+
 #else
 #error Unsupported __FLOAT_WORD_ORDER__
 #endif
 
-#define MP_LOAD_STORE(name, type)						\
-MP_PROTO type									\
-mp_load_##name(const char **data);						\
-MP_IMPL type									\
-mp_load_##name(const char **data)						\
-{										\
-	type val = mp_bswap_##name(*(MP_PACKED type *) *data);			\
-	*data += sizeof(type);							\
-	return val;								\
-}										\
-MP_PROTO char *									\
-mp_store_##name(char *data, type val);						\
-MP_IMPL char *									\
-mp_store_##name(char *data, type val)						\
-{										\
-	*(MP_PACKED type *) (data) = mp_bswap_##name(val);			\
-	return data + sizeof(type);						\
-}
-
-MP_LOAD_STORE(u8, uint8_t);
-MP_LOAD_STORE(u16, uint16_t);
-MP_LOAD_STORE(u32, uint32_t);
-MP_LOAD_STORE(u64, uint64_t);
-MP_LOAD_STORE(float, float);
-MP_LOAD_STORE(double, double);
+#undef mp_identity
+#undef MP_LOAD_STORE
 
 /** \endcond */
 
@@ -2697,7 +2737,6 @@ const int8_t mp_parser_hint[256] = {
 } /* extern "C" */
 #endif /* defined(__cplusplus) */
 
-#undef MP_LOAD_STORE
 #undef MP_SOURCE
 #undef MP_PROTO
 #undef MP_IMPL

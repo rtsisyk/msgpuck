@@ -520,7 +520,7 @@ test_format(void)
 		       (long)-4, (long)-5, (long)-6,
 		       (long long)-7, (long long)-8, (long long)-9,
 		       (short)-10, (unsigned short)-11, (short)-12,
-		       (char)-13, (unsigned char)-14, (char)-15);
+		       (signed char)-13, (unsigned char)-14, (signed char)-15);
 	p = buf;
 	for (int i = 0; i < 15; i++) {
 		uint64_t expects[5] = { UINT_MAX - 1,

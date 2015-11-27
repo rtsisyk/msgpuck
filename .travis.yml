@@ -10,6 +10,8 @@ compiler:
 env:
     global:
       - OUT_REPO=tarantool/modules
+      - GIT_REPO=https://github.com/tarantool/msgpuck.git
+      - PROJECT=msgpuck
     matrix:
       - OS=el DIST=6 PACK=rpm
       - OS=el DIST=7 PACK=rpm
@@ -17,20 +19,21 @@ env:
       - OS=fedora DIST=21 PACK=rpm
       - OS=fedora DIST=22 PACK=rpm
       - OS=fedora DIST=23 PACK=rpm
-      - OS=ubuntu DIST=trusty PACK=deb PROD=msgpuck P_URI=https://github.com/tarantool/msgpuck.git
-      - OS=ubuntu DIST=precise PACK=deb PROD=msgpuck P_URI=https://github.com/tarantool/msgpuck.git
-      - OS=ubuntu DIST=vivid PACK=deb PROD=msgpuck P_URI=https://github.com/tarantool/msgpuck.git
-      - OS=debian DIST=jessie PACK=deb PROD=msgpuck P_URI=https://github.com/tarantool/msgpuck.git
-      - OS=debian DIST=wheezy PACK=deb PROD=msgpuck P_URI=https://github.com/tarantool/msgpuck.git
-      - OS=debian DIST=stretch PACK=deb PROD=msgpuck P_URI=https://github.com/tarantool/msgpuck.git
+      - OS=ubuntu DIST=trusty PACK=deb
+      - OS=ubuntu DIST=precise PACK=deb
+      - OS=ubuntu DIST=vivid PACK=deb
+      - OS=debian DIST=jessie PACK=deb
+      - OS=debian DIST=wheezy PACK=deb
+      - OS=debian DIST=stretch PACK=deb
       - PACK=none
 
 before_install:
-  - git submodule update --init --recursive
   - sudo apt-get update
   - gem install package_cloud
 
 script:
+  - git clone https://github.com/tarantool/build.git
+  - cp build/pack/travis.sh .
   - bash travis.sh
 
 notifications:

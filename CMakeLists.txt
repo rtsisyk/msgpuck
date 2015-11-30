@@ -6,12 +6,15 @@ if(POLICY CMP0037)
 endif(POLICY CMP0037)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -fstrict-aliasing")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -pg -Wall -Wextra")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -pg -Wall -Wextra -Wcast-align")
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RelWithDebugInfo CACHE STRING
         "Build type, options are: Debug Release." FORCE)
 endif()
+
+include(CheckCCompilerFlag)
+check_c_compiler_flag("-mno-unaligned-access" CC_HAS_MNO_UNALIGNED_ACCESS)
 
 include(GNUInstallDirs)
 

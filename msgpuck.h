@@ -120,7 +120,7 @@ extern "C" {
 #if defined(__CC_ARM)         /* set the alignment to 1 for armcc compiler */
 #define MP_PACKED    __packed
 #else
-#define MP_PACKED
+#define MP_PACKED  __attribute__((packed))
 #endif
 
 #if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
@@ -213,7 +213,8 @@ mp_load_##name(const char **data);						\
 MP_IMPL type									\
 mp_load_##name(const char **data)						\
 {										\
-	type val = bswap(*(MP_PACKED type *) *data);				\
+	struct MP_PACKED cast { type val; };					\
+	type val = bswap(((struct cast *) *data)->val);				\
 	*data += sizeof(type);							\
 	return val;								\
 }										\
@@ -222,7 +223,8 @@ mp_store_##name(char *data, type val);						\
 MP_IMPL char *									\
 mp_store_##name(char *data, type val)						\
 {										\
-	*(MP_PACKED type *) (data) = bswap(val);				\
+	struct MP_PACKED cast { type val; };					\
+	((struct cast *) (data))->val = bswap(val);				\
 	return data + sizeof(type);						\
 }
 
@@ -257,12 +259,12 @@ MP_LOAD_STORE(u64, uint64_t, mp_identity);
  * can't be used here.
  */
 
-union mp_float_cast {
+union MP_PACKED mp_float_cast {
 	uint32_t u32;
 	float f;
 };
 
-union mp_double_cast {
+union MP_PACKED mp_double_cast {
 	uint64_t u64;
 	double d;
 };
@@ -279,7 +281,7 @@ mp_store_double(char *data, double val);
 MP_IMPL float
 mp_load_float(const char **data)
 {
-	union mp_float_cast cast = *(MP_PACKED union mp_float_cast *) *data;
+	union mp_float_cast cast = *(union mp_float_cast *) *data;
 	*data += sizeof(cast);
 	cast.u32 = mp_bswap_u32(cast.u32);
 	return cast.f;
@@ -288,7 +290,7 @@ mp_load_float(const char **data)
 MP_IMPL double
 mp_load_double(const char **data)
 {
-	union mp_double_cast cast = *(MP_PACKED union mp_double_cast *) *data;
+	union mp_double_cast cast = *(union mp_double_cast *) *data;
 	*data += sizeof(cast);
 	cast.u64 = mp_bswap_u64(cast.u64);
 	return cast.d;
@@ -300,7 +302,7 @@ mp_store_float(char *data, float val)
 	union mp_float_cast cast;
 	cast.f = val;
 	cast.u32 = mp_bswap_u32(cast.u32);
-	*(MP_PACKED union mp_float_cast *) (data) = cast;
+	*(union mp_float_cast *) (data) = cast;
 	return data + sizeof(cast);
 }
 
@@ -310,7 +312,7 @@ mp_store_double(char *data, double val)
 	union mp_double_cast cast;
 	cast.d = val;
 	cast.u64 = mp_bswap_u64(cast.u64);
-	*(MP_PACKED union mp_double_cast *) (data) = cast;
+	*(union mp_double_cast *) (data) = cast;
 	return data + sizeof(cast);
 }
 

@@ -9,8 +9,9 @@
 #define BUF_MAXLEN (1L << 18)
 #define STRBIN_MAXLEN (BUF_MAXLEN - 10)
 
-static char data[BUF_MAXLEN];
+static char buf[BUF_MAXLEN];
 static char str[STRBIN_MAXLEN];
+static char *data = buf + 1; /* use unaligned address to fail early */
 
 #define header() note("*** %s ***", __func__)
 #define footer() note("*** %s: done ***", __func__)

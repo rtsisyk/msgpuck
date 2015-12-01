@@ -1,6 +1,8 @@
+%global build_version %(git describe | sed "s/[0-9]*\.[0-9]*\.[0-9]*-//" | sed "s/-[a-z 0-9]*//")
+
 Name: msgpuck-devel
 Version: 1.0.0
-Release: 1%{?dist}
+Release: %{build_version}
 Summary: A MsgPack binary serialization library in a self-contained header
 Group: Development/Libraries
 License: BSD

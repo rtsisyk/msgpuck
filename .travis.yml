@@ -10,7 +10,7 @@ compiler:
 env:
     global:
       - OUT_REPO=tarantool/modules
-      - GIT_REPO=https://github.com/tarantool/msgpuck.git
+      - GIT_REPO=https://github.com/$TRAVIS_REPO_SLUG.git
       - PROJECT=msgpuck
     matrix:
       - OS=el DIST=6 PACK=rpm

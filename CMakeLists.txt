@@ -9,7 +9,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -fstrict-aliasing")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -pg -Wall -Wextra -Wcast-align")
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE RelWithDebugInfo CACHE STRING
+    set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
         "Build type, options are: Debug Release." FORCE)
 endif()
 

@@ -24,7 +24,7 @@ A MsgPack binary serialization library in a self-contained header
 %setup -c -q msgpuck-%{version}
 
 %build
-%cmake . -DCMAKE_INSTALL_LIBDIR='%{_libdir}' -DCMAKE_INSTALL_INCLUDEDIR='%{_includedir}' -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+%cmake . -DCMAKE_INSTALL_LIBDIR='%{_libdir}' -DCMAKE_INSTALL_INCLUDEDIR='%{_includedir}' -DCMAKE_BUILD_TYPE=RelWithDebInfo
 make %{?_smp_mflags}
 
 %install

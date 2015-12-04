@@ -2,21 +2,10 @@ sudo: required
 services:
   - docker
 
-language: c
-compiler:
-  #- clang
-  - gcc
-
 env:
-    global:
-      - OUT_REPO=tarantool/modules
-      - GIT_REPO=https://github.com/$TRAVIS_REPO_SLUG.git
-      - PROJECT=msgpuck
     matrix:
       - OS=el DIST=6 PACK=rpm
       - OS=el DIST=7 PACK=rpm
-      - OS=fedora DIST=20 PACK=rpm
-      - OS=fedora DIST=21 PACK=rpm
       - OS=fedora DIST=22 PACK=rpm
       - OS=fedora DIST=23 PACK=rpm
       - OS=ubuntu DIST=trusty PACK=deb
@@ -27,15 +16,9 @@ env:
       - OS=debian DIST=stretch PACK=deb
       - PACK=none
 
-before_install:
-  - sudo apt-get update
-  - gem install package_cloud
-
 script:
   - git clone https://github.com/tarantool/build.git
-  - cp build/pack/travis.sh .
-  - bash travis.sh
+  - ./build/pack/travis.sh
 
 notifications:
-  irc: false
   email: true

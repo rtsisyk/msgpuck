@@ -1,4 +1,4 @@
-%global build_version %(git describe | sed "s/[0-9]*\.[0-9]*\.[0-9]*-//" | sed "s/-[a-z 0-9]*//")
+%global build_version %(git describe --long | sed "s/[0-9]*\.[0-9]*\.[0-9]*-//" | sed "s/-[a-z 0-9]*//")
 
 Name: msgpuck-devel
 Version: 1.0.0

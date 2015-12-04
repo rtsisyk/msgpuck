@@ -2,6 +2,10 @@ sudo: required
 services:
   - docker
 
+language: c
+compiler:
+   - gcc
+
 env:
     matrix:
       - OS=el DIST=6 PACK=rpm

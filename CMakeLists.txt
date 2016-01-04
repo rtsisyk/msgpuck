@@ -20,25 +20,16 @@ include(GNUInstallDirs)
 
 add_subdirectory(test)
 
-add_library(${PROJECT_NAME}_shared SHARED msgpuck.c)
-set_target_properties(${PROJECT_NAME}_shared PROPERTIES VERSION 1.0 SOVERSION 1)
-set_target_properties(${PROJECT_NAME}_shared PROPERTIES OUTPUT_NAME "msgpuck")
+add_library(${PROJECT_NAME} STATIC msgpuck.c)
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1.0 SOVERSION 1)
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "msgpuck")
 
-install(TARGETS ${PROJECT_NAME}_shared
+install(TARGETS ${PROJECT_NAME}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     COMPONENT library)
 
-add_library(${PROJECT_NAME}_static STATIC msgpuck.c)
-set_target_properties(${PROJECT_NAME}_static PROPERTIES VERSION 1.0 SOVERSION 1)
-set_target_properties(${PROJECT_NAME}_static PROPERTIES OUTPUT_NAME "msgpuck")
-
-install(TARGETS ${PROJECT_NAME}_static
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    COMPONENT library)
-
-install(FILES msgpuck.h DESTINATION include/msgpuck)
+install(FILES msgpuck.h DESTINATION include)
 
 find_package(Doxygen)
 if(DOXYGEN_FOUND)

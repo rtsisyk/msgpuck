@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2015 Tarantool AUTHORS:
+ * Copyright (C) 2010-2016 Tarantool AUTHORS:
  * please see AUTHORS file in tarantool/tarantool repository.
  *
  * Redistribution and use in source and binary forms, with or

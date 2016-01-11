@@ -32,10 +32,35 @@ install(TARGETS ${PROJECT_NAME}
 install(FILES msgpuck.h DESTINATION include)
 
 find_package(Doxygen)
-if(DOXYGEN_FOUND)
-    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in" "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile")
-    add_custom_target(doc
-        COMMAND ${DOXYGEN_EXECUTABLE} "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
-        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMENT "Generating documentation" VERBATIM)
+if(NOT DOXYGEN_FOUND)
+    return()
 endif()
+
+set(GENERATE_HTML "NO")
+set(GENERATE_MAN "YES")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.man")
+add_custom_command(OUTPUT doc/man/man3/msgpuck.h.3
+    COMMAND ${CMAKE_COMMAND} -E make_directory doc/man
+    COMMAND ${DOXYGEN_EXECUTABLE} "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.man"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    DEPENDS msgpuck.h
+    COMMENT "Generating man pages" VERBATIM)
+add_custom_target(man DEPENDS doc/man/man3/msgpuck.h.3)
+
+set(GENERATE_HTML "YES")
+set(GENERATE_MAN "NO")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.html")
+add_custom_command(OUTPUT doc/html/index.html
+    COMMAND ${CMAKE_COMMAND} -E make_directory doc/html
+    COMMAND ${DOXYGEN_EXECUTABLE} "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.html"
+    COMMAND ${CMAKE_COMMAND} -E rename doc/html/msgpuck_8h.html
+                                       doc/html/index.html
+    COMMAND sed s/msgpuck_8h\\.html/index\\.html/ -i doc/html/index.html
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    DEPENDS msgpuck.h
+    COMMENT "Generating html documentation" VERBATIM)
+add_custom_target(html DEPENDS doc/html/index.html)
+
+add_custom_target(doc DEPENDS man html)

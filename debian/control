@@ -2,8 +2,11 @@ Source: msgpuck
 Priority: optional
 Section: libdevel
 Maintainer: Roman Tsisyk <roman@tarantool.org>
-Build-Depends: debhelper (>= 9), cdbs, doxygen, cmake (> 2.6), dpkg-dev (>= 1.16.1~)
-Standards-Version: 3.9.5
+Uploaders: Dmitry E. Oboukhov <unera@debian.org>
+Build-Depends: debhelper (>= 9), cdbs,
+               cmake (>= 2.8),
+               doxygen (>= 1.7)
+Standards-Version: 3.9.6
 Homepage: https://github.com/rtsisyk/msgpuck
 Vcs-Git: git://github.com/rtsisyk/msgpuck.git
 Vcs-Browser: https://github.com/rtsisyk/msgpuck
@@ -12,13 +15,15 @@ Package: libmsgpuck-dev
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Pre-Depends: ${misc:Pre-Depends}
-Description: A MsgPack binary serialization library in a self-contained header
-  A MsgPack binary serialization library in a self-contained header.
-
-Package: libmsgpuck-doc
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libmsgpuck-dev (= ${binary:Version})
-Pre-Depends: ${misc:Pre-Depends}
-Description: A MsgPack binary serialization library in a self-contained header
-  A MsgPack binary serialization library in a self-contained header.
-  This package contains documentation files.
+Description: MsgPack serialization library in a self-contained header file
+ MsgPack is a binary-based efficient object serialization library.
+ It enables to exchange structured objects between many languages like JSON.
+ But unlike JSON, it is very fast and small.
+ .
+ msgpuck is very lightweight header-only library designed to be inlined to
+ your application by the C/C++ compiler. The library is fully documented and
+ covered by unit tests.
+ .
+ This package provides a self-contained header file and a static library.
+ The static library contains generated code for inlined functions and
+ globals tables needed by the some library functions.

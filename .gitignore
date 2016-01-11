@@ -7,9 +7,11 @@
 *.cbp
 *.log
 obj-*/
+doc/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 install_manifest.txt
 Makefile
-Doxyfile
+Doxyfile.html
+Doxyfile.man

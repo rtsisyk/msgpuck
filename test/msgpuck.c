@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 MsgPuck Authors
+ * Copyright (c) 2013-2016 MsgPuck Authors
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or

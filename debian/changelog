@@ -1,3 +1,9 @@
+msgpuck (1.0.1-1) unstable; urgency=medium
+
+  * Fix SIGBUS on processesor without HW support for unaligned access
+
+ -- Roman Tsisyk <roman@tarantool.org>  Sun, 10 Jan 2016 22:06:09 +0300
+
 msgpuck (1.0.0-1) unstable; urgency=low
 
   * Initial release

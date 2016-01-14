@@ -168,7 +168,7 @@ test_ints(void)
 	     "\xd3\xff\xff\xff\xff\x7f\xff\xff\xff", 9);
 	test_int(-0x7fffffffffffffffLL,
 	     "\xd3\x80\x00\x00\x00\x00\x00\x00\x01", 9);
-	test_int(-0x8000000000000000LL,
+	test_int((int64_t)-0x8000000000000000LL,
 	     "\xd3\x80\x00\x00\x00\x00\x00\x00\x00", 9);
 
 	footer();
@@ -545,7 +545,7 @@ test_format(void)
 		       (short)10, (short)11, (short)12,
 		       (char)13, (char)14, (char)15);
 	p = buf;
-	for (int i = 0; i < 15; i++) {
+	for (unsigned i = 0; i < 15; i++) {
 		ok(mp_typeof(*p) == MP_UINT, "Test type on step %d", i);
 		ok(mp_decode_uint(&p) == i + 1, "Test value on step %d", i);
 	}

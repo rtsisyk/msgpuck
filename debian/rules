@@ -3,8 +3,16 @@
 DEB_CMAKE_EXTRA_FLAGS := -DCMAKE_BUILD_TYPE=RelWithDebInfo
 DEB_MAKE_CHECK_TARGET := test
 
+VERSION  := $(shell dpkg-parsechangelog|grep ^Version|awk '{print $$2}')
+UVERSION := $(shell echo $(VERSION)|sed 's/-[[:digit:]]\+$$//')
+
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/cmake.mk
 
 build-indep:
 	cd $(DEB_BUILDDIR) && $(MAKE) doc
+
+tarball: clean
+	tar --exclude=.git --exclude=debian             \
+                --transform='s,^\.,msgpuck_$(UVERSION),S' \
+                -czf ../msgpuck_$(UVERSION).orig.tar.gz . 

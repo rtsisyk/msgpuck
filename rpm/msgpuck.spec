@@ -38,7 +38,7 @@ covered by unit tests.
 
 This package provides a self-contained header file and a static library.
 The static library contains generated code for inlined functions and
-globals tables needed by the some library functions.
+global tables needed by the some library functions.
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -67,7 +67,7 @@ cp -f doc/man/man3/msgpuck.h.3* "%{buildroot}%{_mandir}/man3/"
 %license LICENSE AUTHORS
 
 %changelog
-* Sun Jul 10 2016 Roman Tsisyk <roman@tsisyk.com> 1.0.1-1
+* Fri Jan 22 2016 Roman Tsisyk <roman@tsisyk.com> 1.0.1-1
 - Changes according to Fedora review #1295217
 - Fix SIGBUS on processesor without HW support for unaligned access
 * Thu Jul 09 2015 Roman Tsisyk <roman@tsisyk.com> 1.0.0-1

@@ -80,7 +80,7 @@ Add this project as a submodule or just copy  `msgpuck.h` to your project.
 
 ### Static Library
 
-MsgPuck is designed to be fully inlined to your application by a C/C++
+MsgPuck is designed to be fully embedded to your application by a C/C++
 compiler. However, some functions require auxiliary static tables which
 should be expanded somewhere in a compilation unit (`*.c` or `*.cc` file).
 Please add libmsgpuck.a to your binary to avoid problems with unresolved

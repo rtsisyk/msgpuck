@@ -5,7 +5,7 @@ Maintainer: Roman Tsisyk <roman@tarantool.org>
 Uploaders: Dmitry E. Oboukhov <unera@debian.org>
 Build-Depends: debhelper (>= 9), cdbs,
                cmake (>= 2.8),
-               doxygen (>= 1.7)
+               doxygen (>= 1.6)
 Standards-Version: 3.9.6
 Homepage: https://github.com/rtsisyk/msgpuck
 Vcs-Git: git://github.com/rtsisyk/msgpuck.git
@@ -20,10 +20,10 @@ Description: MsgPack serialization library in a self-contained header file
  It enables to exchange structured objects between many languages like JSON.
  But unlike JSON, it is very fast and small.
  .
- msgpuck is very lightweight header-only library designed to be inlined to
+ msgpuck is very lightweight header-only library designed to be embedded to
  your application by the C/C++ compiler. The library is fully documented and
  covered by unit tests.
  .
  This package provides a self-contained header file and a static library.
- The static library contains generated code for inlined functions and
+ The static library contains generated code for inline functions and
  globals tables needed by the some library functions.

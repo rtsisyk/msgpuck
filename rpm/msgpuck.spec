@@ -1,13 +1,15 @@
 Name: msgpuck
-Version: 1.0.1
+Version: 1.0.2
 Release: 1%{?dist}
 Summary: MsgPack binary serialization library in a self-contained header
 Group: Development/Libraries
 License: BSD
 URL: https://github.com/rtsisyk/msgpuck
 Source0: https://github.com/rtsisyk/msgpuck/archive/%{version}/msgpuck-%{version}.tar.gz
+BuildRequires: gcc
+BuildRequires: coreutils
 BuildRequires: cmake >= 2.8
-BuildRequires: doxygen >= 1.7.0
+BuildRequires: doxygen >= 1.6.0
 
 # https://fedoraproject.org/wiki/Packaging:Guidelines#Packaging_Header_Only_Libraries
 # Nothing to add to -debuginfo package - this library is header-only
@@ -16,14 +18,13 @@ BuildRequires: doxygen >= 1.7.0
 %package devel
 Summary: MsgPack serialization library in a self-contained header file
 Provides: msgpuck-static = %{version}-%{release}
-Requires: msgpuck%{?_isa} = %{version}-%{release}
 
 %description
 MsgPack is a binary-based efficient object serialization library.
 It enables to exchange structured objects between many languages like JSON.
 But unlike JSON, it is very fast and small.
 
-msgpuck is very lightweight header-only library designed to be inlined to
+msgpuck is very lightweight header-only library designed to be embedded to
 your application by the C/C++ compiler. The library is fully documented and
 covered by unit tests.
 
@@ -32,23 +33,21 @@ MsgPack is a binary-based efficient object serialization library.
 It enables to exchange structured objects between many languages like JSON.
 But unlike JSON, it is very fast and small.
 
-msgpuck is very lightweight header-only library designed to be inlined to
+msgpuck is very lightweight header-only library designed to be embedded to
 your application by the C/C++ compiler. The library is fully documented and
 covered by unit tests.
 
 This package provides a self-contained header file and a static library.
-The static library contains generated code for inlined functions and
+The static library contains generated code for inline functions and
 global tables needed by the some library functions.
 
 %prep
 %setup -q -n %{name}-%{version}
 
 %build
-%cmake . -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-         -DCMAKE_INSTALL_LIBDIR='%{_libdir}' \
-         -DCMAKE_INSTALL_INCLUDEDIR='%{_includedir}'
+%cmake . -DCMAKE_BUILD_TYPE=RelWithDebInfo
 make %{?_smp_mflags}
-make doc
+make man
 
 %check
 make test
@@ -56,7 +55,7 @@ make test
 %install
 %make_install
 mkdir -p %{buildroot}%{_mandir}/man3
-cp -f doc/man/man3/msgpuck.h.3* "%{buildroot}%{_mandir}/man3/"
+install -Dpm 0644 doc/man/man3/msgpuck.h.3* %{buildroot}%{_mandir}/man3/
 
 %files devel
 %{_libdir}/libmsgpuck.a
@@ -67,8 +66,20 @@ cp -f doc/man/man3/msgpuck.h.3* "%{buildroot}%{_mandir}/man3/"
 %license LICENSE AUTHORS
 
 %changelog
+* Tue Feb 02 2016 Roman Tsisyk <roman@tsisyk.com> 1.0.2-1
+- Add coreutils and make to BuildRequires (#1295217)
+- Use `install -Dpm` instead of `cp -p`
+- Fix GCC 6.0 and Doxygen warnings
+
+* Mon Jan 25 2016 Roman Tsisyk <roman@tsisyk.com> 1.0.1-3
+- Add `BuildRequires: gcc` (#1295217)
+
+* Sun Jan 24 2016 Roman Tsisyk <roman@tsisyk.com> 1.0.1-2
+- Fix msgpuck-devel dependencies after removing empty msgpuck package
+
 * Fri Jan 22 2016 Roman Tsisyk <roman@tsisyk.com> 1.0.1-1
 - Changes according to Fedora review #1295217
 - Fix SIGBUS on processesor without HW support for unaligned access
+
 * Thu Jul 09 2015 Roman Tsisyk <roman@tsisyk.com> 1.0.0-1
 - Initial version of the RPM spec

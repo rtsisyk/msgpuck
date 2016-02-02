@@ -38,10 +38,10 @@
 #include "msgpuck.h"
 #include "test.h"
 
-#define BUF_MAXLEN (1L << 18)
+#define BUF_MAXLEN ((1L << 18) - 1)
 #define STRBIN_MAXLEN (BUF_MAXLEN - 10)
 
-static char buf[BUF_MAXLEN];
+static char buf[BUF_MAXLEN + 1];
 static char str[STRBIN_MAXLEN];
 static char *data = buf + 1; /* use unaligned address to fail early */
 

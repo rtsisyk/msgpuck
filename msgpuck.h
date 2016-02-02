@@ -115,7 +115,7 @@ extern "C" {
  * {{{ Platform-specific definitions
  */
 
-/** \cond 0 **/
+/** \cond false **/
 
 #if defined(__CC_ARM)         /* set the alignment to 1 for armcc compiler */
 #define MP_PACKED    __packed
@@ -841,7 +841,7 @@ mp_encode_bin(char *data, const char *str, uint32_t len);
  * %s - zero-end string
  * %.*s - string with specified length
  * %% is ignored
- * %<smth else> assert and undefined behaviour
+ * %smthelse assert and undefined behaviour
  * NIL - a nil value
  * all other symbols are ignored.
  *
@@ -859,7 +859,7 @@ mp_format(char *data, size_t data_size, const char *format, ...);
  *  va_start(args, fmt);
  *  mp_vformat(data, data_size, fmt, args);
  *  va_end(args);
- * \sa \link mp_format()
+ * \sa \link mp_format() mp_format() \endlink
  */
 MP_PROTO size_t
 mp_vformat(char *data, size_t data_size, const char *format, va_list args);
@@ -1094,7 +1094,7 @@ mp_check(const char **data, const char *end);
  * {{{ Implementation
  */
 
-/** \cond 0 */
+/** \cond false */
 extern const enum mp_type mp_type_hint[];
 extern const int8_t mp_parser_hint[];
 
@@ -2105,7 +2105,7 @@ mp_format(char *data, size_t data_size, const char *format, ...)
  * {{{ Implementation: parser tables
  */
 
-/** \cond 0 */
+/** \cond false */
 
 #if defined(MP_SOURCE)
 

@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # Copyright (c) 2015 MsgPuck Authors
 # All rights reserved.
 #
@@ -30,6 +28,9 @@
 # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-mkdir ./test_build && cd ./test_build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebugInfo
-make
-make test
+test:
+	rm -rf ./test_build
+	mkdir ./test_build && cd ./test_build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+	cd test_build && $(MAKE) test
+
+.PHONY: test

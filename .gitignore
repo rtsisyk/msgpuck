@@ -16,3 +16,8 @@ Makefile
 Doxyfile.html
 Doxyfile.man
 debian/*
+VERSION
+./build
+/build
+./test_build
+/test_build

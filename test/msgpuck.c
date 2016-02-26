@@ -396,10 +396,10 @@ test_next_on_array(uint32_t count)
 	const char *d2 = data;
 	const char *d3 = data;
 	ok(!mp_check(&d2, data + BUF_MAXLEN), "mp_check(array %u))", count);
-	is((d1 - data), len, "len(array %u) == %u", count, len);
-	is((d2 - data), len, "len(mp_check(array %u)) == %u", count, len);
+	is((d1 - data), (ptrdiff_t)len, "len(array %u) == %u", count, len);
+	is((d2 - data), (ptrdiff_t)len, "len(mp_check(array %u)) == %u", count, len);
 	mp_next(&d3);
-	is((d3 - data), len, "len(mp_next(array %u)) == %u", count, len);
+	is((d3 - data), (ptrdiff_t)len, "len(mp_next(array %u)) == %u", count, len);
 }
 
 static int
@@ -439,10 +439,10 @@ test_next_on_map(uint32_t count)
 	const char *d2 = data;
 	const char *d3 = data;
 	ok(!mp_check(&d2, data + BUF_MAXLEN), "mp_check(map %u))", count);
-	is((d1 - data), len, "len(map %u) == %u", count, len);
-	is((d2 - data), len, "len(mp_check(map %u)) == %u", count, len);
+	is((d1 - data), (ptrdiff_t)len, "len(map %u) == %u", count, len);
+	is((d2 - data), (ptrdiff_t)len, "len(mp_check(map %u)) == %u", count, len);
 	mp_next(&d3);
-	is((d3 - data), len, "len(mp_next(map %u)) == %u", count, len);
+	is((d3 - data), (ptrdiff_t)len, "len(mp_next(map %u)) == %u", count, len);
 }
 
 static int

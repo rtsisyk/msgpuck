@@ -10,6 +10,7 @@ BuildRequires: gcc
 BuildRequires: coreutils
 BuildRequires: cmake >= 2.8
 BuildRequires: doxygen >= 1.6.0
+BuildRequires: /usr/bin/prove
 
 # https://fedoraproject.org/wiki/Packaging:Guidelines#Packaging_Header_Only_Libraries
 # Nothing to add to -debuginfo package - this library is header-only

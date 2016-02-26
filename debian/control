@@ -5,7 +5,9 @@ Maintainer: Roman Tsisyk <roman@tarantool.org>
 Uploaders: Dmitry E. Oboukhov <unera@debian.org>
 Build-Depends: debhelper (>= 9), cdbs,
                cmake (>= 2.8),
-               doxygen (>= 1.6)
+               doxygen (>= 1.6),
+# For /usr/bin/prove
+               perl (>= 5.10.0)
 Standards-Version: 3.9.6
 Homepage: https://github.com/rtsisyk/msgpuck
 Vcs-Git: git://github.com/rtsisyk/msgpuck.git

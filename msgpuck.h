@@ -106,6 +106,8 @@
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <inttypes.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -863,6 +865,19 @@ mp_format(char *data, size_t data_size, const char *format, ...);
  */
 MP_PROTO size_t
 mp_vformat(char *data, size_t data_size, const char *format, va_list args);
+
+/**
+ * \brief prints to standart output msgpacked data to output
+ * prints smth like ["aaa", 123, {fisrt:1, second:2}]
+ * MP_EXT is printed as "EXT" only
+ * MP_BIN is printed in hex, smth like that: {0xDEADBEEF}
+ * \param file - pointer to file (or NULL for stdout)
+ * \param data - pointer to buffer containing msgpack object
+ * \retval 0 - success
+ * \retval -1 - wrong msgpack
+ */
+MP_PROTO int
+mp_fprint(FILE* file, const char *data);
 
 /**
  * \brief Check that \a cur buffer has enough bytes to decode a string header
@@ -2092,6 +2107,104 @@ mp_format(char *data, size_t data_size, const char *format, ...)
 	va_start(args, format);
 	size_t res = mp_vformat(data, data_size, format, args);
 	va_end(args);
+	return res;
+}
+
+MP_PROTO int
+mp_fprint_internal(FILE* file, const char **data);
+
+MP_IMPL int
+mp_fprint_internal(FILE* file, const char **data)
+{
+	if (!file)
+		file = stdout;
+	switch (mp_typeof(**data)) {
+	case MP_NIL:
+		mp_next(data);
+		fprintf(file, "NIL");
+		break;
+	case MP_UINT:
+		fprintf(file, "%" PRIu64, mp_decode_uint(data));
+		break;
+	case MP_INT:
+		fprintf(file, "%" PRId64, mp_decode_int(data));
+		break;
+	case MP_STR:
+	{
+		uint32_t strlen;
+		const char *str = mp_decode_str(data, &strlen);
+		fprintf(file, "\"%.*s\"", strlen, str);
+		break;
+	}
+	case MP_BIN:
+	{
+		uint32_t binlen;
+		const char *bin = mp_decode_bin(data, &binlen);
+		fprintf(file, "(0x");
+		const char *hex = "0123456789ABCDEF";
+		for (uint32_t i = 0; i < binlen; i++) {
+			unsigned char c = (unsigned char)bin[i];
+			fprintf(file, "%c%c", hex[c >> 4], hex[c & 0xF]);
+		}
+		fprintf(file, ")");
+		break;
+	}
+	case MP_ARRAY:
+	{
+		uint32_t size = mp_decode_array(data);
+		fprintf(file, "[");
+		for (uint32_t i = 0; i < size; i++) {
+			if (i)
+				fprintf(file, ", ");
+			if (mp_fprint_internal(file, data))
+				return -1;
+		}
+		fprintf(file, "]");
+		break;
+	}
+	case MP_MAP:
+	{
+		uint32_t size = mp_decode_map(data);
+		fprintf(file, "{");
+		for (uint32_t i = 0; i < size; i++) {
+			if (i)
+				fprintf(file, ", ");
+			if (mp_fprint_internal(file, data))
+				return -1;
+			fprintf(file, ":");
+			if (mp_fprint_internal(file, data))
+				return -1;
+		}
+		fprintf(file, "}");
+		break;
+	}
+	case MP_BOOL:
+		fprintf(file, "%s", mp_decode_bool(data) ? "true" : "false");
+		break;
+	case MP_FLOAT:
+		fprintf(file, "%g", mp_decode_float(data));
+		break;
+	case MP_DOUBLE:
+		fprintf(file, "%lg", mp_decode_double(data));
+		break;
+	case MP_EXT:
+		mp_next(data);
+		fprintf(file, "EXT");
+		break;
+	default:
+		assert(false);
+		return -1;
+	}
+	return 0;
+}
+
+MP_IMPL int
+mp_fprint(FILE *file, const char *data)
+{
+	if (!file)
+		file = stdout;
+	int res = mp_fprint_internal(file, &data);
+	fprintf(file, "\n");
 	return res;
 }
 

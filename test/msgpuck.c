@@ -716,9 +716,59 @@ test_format(void)
 	return check_plan();
 }
 
+int
+test_mp_print()
+{
+	plan(1);
+	header();
+
+	char data[512];
+
+	char *d = data;
+	d = mp_encode_array(d, 6);
+	d = mp_encode_int(d, -5);
+	d = mp_encode_uint(d, 42);
+	d = mp_encode_str(d, "kill bill", 9);
+	d = mp_encode_map(d, 6);
+	d = mp_encode_str(d, "bool true", 9);
+	d = mp_encode_bool(d, true);
+	d = mp_encode_str(d, "bool false", 10);
+	d = mp_encode_bool(d, false);
+	d = mp_encode_str(d, "null", 4);
+	d = mp_encode_nil(d);
+	d = mp_encode_str(d, "float", 5);
+	d = mp_encode_float(d, 3.14);
+	d = mp_encode_str(d, "double", 6);
+	d = mp_encode_double(d, 3.14);
+	d = mp_encode_uint(d, 100);
+	d = mp_encode_uint(d, 500);
+	*d++ = 0xd4; /* let's pack smallest fixed ext */
+	*d++ = 0;
+	*d++ = 0;
+	d = mp_encode_bin(d, "\x12\x34\xFF", 3);
+
+	mp_fprint(0, data);
+
+	const char *expected =
+		"[-5, 42, \"kill bill\", "
+		"{\"bool true\":true, \"bool false\":false, \"null\":NIL, "
+		"\"float\":3.14, \"double\":3.14, 100:500},"
+		" EXT, (0x1234FF)]\n";
+	FILE *tmpf = tmpfile();
+	mp_fprint(tmpf, data);
+	rewind(tmpf);
+	memset(data, 0, sizeof(data));
+	fgets(data, sizeof(data), tmpf);
+	fclose(tmpf);
+	ok(strcmp(data, expected) == 0, "identical");
+
+	footer();
+	return check_plan();
+}
+
 int main()
 {
-	plan(16);
+	plan(17);
 
 	test_uints();
 	test_ints();
@@ -736,6 +786,7 @@ int main()
 	test_next_on_maps();
 	test_compare_uints();
 	test_format();
+	test_mp_print();
 
 	return check_plan();
 }

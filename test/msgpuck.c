@@ -745,15 +745,14 @@ test_mp_print()
 	*d++ = 0xd4; /* let's pack smallest fixed ext */
 	*d++ = 0;
 	*d++ = 0;
-	d = mp_encode_bin(d, "\x12\x34\xFF", 3);
-
-	mp_fprint(0, data);
+	char bin[] = "\x12test\x34\b\t\n\"bla\\-bla\"\f\r";
+	d = mp_encode_bin(d, bin, sizeof(bin));
 
 	const char *expected =
 		"[-5, 42, \"kill bill\", "
-		"{\"bool true\":true, \"bool false\":false, \"null\":NIL, "
-		"\"float\":3.14, \"double\":3.14, 100:500},"
-		" EXT, (0x1234FF)]\n";
+		"{\"bool true\": true, \"bool false\": false, \"null\": null, "
+		"\"float\": 3.14, \"double\": 3.14, 100: 500}, undefined, "
+		"\"\\u0012test4\\b\\t\\n\\\"bla\\\\-bla\\\"\\f\\r\\u0000\"]";
 	FILE *tmpf = tmpfile();
 	mp_fprint(tmpf, data);
 	rewind(tmpf);

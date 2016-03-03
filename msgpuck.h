@@ -107,7 +107,6 @@
 #include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <inttypes.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -867,10 +866,8 @@ MP_PROTO size_t
 mp_vformat(char *data, size_t data_size, const char *format, va_list args);
 
 /**
- * \brief prints to standart output msgpacked data to output
- * prints smth like ["aaa", 123, {fisrt:1, second:2}]
+ * \brief print to \a file msgpacked data in JSON format.
  * MP_EXT is printed as "EXT" only
- * MP_BIN is printed in hex, smth like that: {0xDEADBEEF}
  * \param file - pointer to file (or NULL for stdout)
  * \param data - pointer to buffer containing msgpack object
  * \retval 0 - success
@@ -1112,6 +1109,7 @@ mp_check(const char **data, const char *end);
 /** \cond false */
 extern const enum mp_type mp_type_hint[];
 extern const int8_t mp_parser_hint[];
+extern const char *mp_char2escape[];
 
 MP_IMPL MP_ALWAYSINLINE enum mp_type
 mp_typeof(const char c)
@@ -2111,91 +2109,89 @@ mp_format(char *data, size_t data_size, const char *format, ...)
 }
 
 MP_PROTO int
-mp_fprint_internal(FILE* file, const char **data);
+mp_fprint_internal(FILE *file, const char **data);
 
 MP_IMPL int
-mp_fprint_internal(FILE* file, const char **data)
+mp_fprint_internal(FILE *file, const char **data)
 {
-	if (!file)
-		file = stdout;
+#define CHECK(exp) do { if (mp_unlikely((exp) < 0)) return -1; } while(0)
 	switch (mp_typeof(**data)) {
 	case MP_NIL:
-		mp_next(data);
-		fprintf(file, "NIL");
+		mp_decode_nil(data);
+		CHECK(fputs("null", file));
 		break;
 	case MP_UINT:
-		fprintf(file, "%" PRIu64, mp_decode_uint(data));
+		CHECK(fprintf(file, "%llu", (unsigned long long)
+			      mp_decode_uint(data)));
 		break;
 	case MP_INT:
-		fprintf(file, "%" PRId64, mp_decode_int(data));
+		CHECK(fprintf(file, "%lld", (long long)
+			      mp_decode_int(data)));
 		break;
 	case MP_STR:
-	{
-		uint32_t strlen;
-		const char *str = mp_decode_str(data, &strlen);
-		fprintf(file, "\"%.*s\"", strlen, str);
-		break;
-	}
 	case MP_BIN:
 	{
-		uint32_t binlen;
-		const char *bin = mp_decode_bin(data, &binlen);
-		fprintf(file, "(0x");
-		const char *hex = "0123456789ABCDEF";
-		for (uint32_t i = 0; i < binlen; i++) {
-			unsigned char c = (unsigned char)bin[i];
-			fprintf(file, "%c%c", hex[c >> 4], hex[c & 0xF]);
+		uint32_t len = mp_typeof(**data) == MP_STR ?
+			mp_decode_strl(data) : mp_decode_binl(data);
+		CHECK(fputc('"', file));
+		for (const char *s = *data; s < *data + len; s++) {
+			unsigned char c = (unsigned char ) *s;
+			if (c < 128 && mp_char2escape[c] != NULL) {
+				/* Escape character */
+				CHECK(fputs(mp_char2escape[c], file));
+			} else {
+				CHECK(fputc(c, file));
+			}
 		}
-		fprintf(file, ")");
+		CHECK(fputc('"', file));
+		*data += len;
 		break;
 	}
 	case MP_ARRAY:
 	{
 		uint32_t size = mp_decode_array(data);
-		fprintf(file, "[");
+		CHECK(fputc('[', file));
 		for (uint32_t i = 0; i < size; i++) {
 			if (i)
-				fprintf(file, ", ");
-			if (mp_fprint_internal(file, data))
-				return -1;
+				CHECK(fputs(", ", file));
+			CHECK(mp_fprint_internal(file, data));
 		}
-		fprintf(file, "]");
+		CHECK(fputc(']', file));
 		break;
 	}
 	case MP_MAP:
 	{
 		uint32_t size = mp_decode_map(data);
-		fprintf(file, "{");
+		CHECK(fputc('{', file));
 		for (uint32_t i = 0; i < size; i++) {
 			if (i)
-				fprintf(file, ", ");
-			if (mp_fprint_internal(file, data))
-				return -1;
-			fprintf(file, ":");
-			if (mp_fprint_internal(file, data))
-				return -1;
+				CHECK(fprintf(file, ", "));
+			CHECK(mp_fprint_internal(file, data));
+			CHECK(fputs(": ", file));
+			CHECK(mp_fprint_internal(file, data));
 		}
-		fprintf(file, "}");
+		CHECK(fputc('}', file));
 		break;
 	}
 	case MP_BOOL:
-		fprintf(file, "%s", mp_decode_bool(data) ? "true" : "false");
+		CHECK(fputs(mp_decode_bool(data) ? "true" : "false", file));
 		break;
 	case MP_FLOAT:
-		fprintf(file, "%g", mp_decode_float(data));
+		CHECK(fprintf(file, "%g", mp_decode_float(data)));
 		break;
 	case MP_DOUBLE:
-		fprintf(file, "%lg", mp_decode_double(data));
+		CHECK(fprintf(file, "%lg", mp_decode_double(data)));
 		break;
 	case MP_EXT:
 		mp_next(data);
-		fprintf(file, "EXT");
+		CHECK(fputs("undefined", file));
 		break;
 	default:
-		assert(false);
+		mp_unreachable();
 		return -1;
 	}
 	return 0;
+#undef CHECK
 }
 
 MP_IMPL int
@@ -2204,7 +2200,6 @@ mp_fprint(FILE *file, const char *data)
 	if (!file)
 		file = stdout;
 	int res = mp_fprint_internal(file, &data);
-	fprintf(file, "\n");
 	return res;
 }
 
@@ -2838,6 +2833,29 @@ const int8_t mp_parser_hint[256] = {
 	/* 0xfe */ 0,
 	/* 0xff */ 0
 	/* }}} */
+};
+
+const char *mp_char2escape[128] = {
+	"\\u0000", "\\u0001", "\\u0002", "\\u0003",
+	"\\u0004", "\\u0005", "\\u0006", "\\u0007",
+	"\\b", "\\t", "\\n", "\\u000b",
+	"\\f", "\\r", "\\u000e", "\\u000f",
+	"\\u0010", "\\u0011", "\\u0012", "\\u0013",
+	"\\u0014", "\\u0015", "\\u0016", "\\u0017",
+	"\\u0018", "\\u0019", "\\u001a", "\\u001b",
+	"\\u001c", "\\u001d", "\\u001e", "\\u001f",
+	NULL, NULL, "\\\"", NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, "\\/",
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, "\\\\", NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, "\\u007f"
 };
 
 #endif /* defined(MP_SOURCE) */

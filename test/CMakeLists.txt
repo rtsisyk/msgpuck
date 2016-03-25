@@ -1,6 +1,6 @@
 include_directories("../")
 
-find_program(PROVE prove)
+#find_program(PROVE prove)
 if (PROVE)
     set(TEST_RUNNER prove)
 else()

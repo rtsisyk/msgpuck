@@ -2134,7 +2134,8 @@ mp_fprint_internal(FILE *file, const char **data)
 		uint32_t len = mp_typeof(**data) == MP_STR ?
 			mp_decode_strl(data) : mp_decode_binl(data);
 		_CHECK_RC(fputc('"', file));
-		for (const char *s = *data; s < *data + len; s++) {
+		const char *s;
+		for (s = *data; s < *data + len; s++) {
 			unsigned char c = (unsigned char ) *s;
 			if (c < 128 && mp_char2escape[c] != NULL) {
 				/* Escape character */
@@ -2151,7 +2152,8 @@ mp_fprint_internal(FILE *file, const char **data)
 	{
 		uint32_t size = mp_decode_array(data);
 		_CHECK_RC(fputc('[', file));
-		for (uint32_t i = 0; i < size; i++) {
+		uint32_t i;
+		for (i = 0; i < size; i++) {
 			if (i)
 				_CHECK_RC(fputs(", ", file));
 			_CHECK_RC(mp_fprint_internal(file, data));
@@ -2163,7 +2165,8 @@ mp_fprint_internal(FILE *file, const char **data)
 	{
 		uint32_t size = mp_decode_map(data);
 		_CHECK_RC(fputc('{', file));
-		for (uint32_t i = 0; i < size; i++) {
+		uint32_t i;
+		for (i = 0; i < size; i++) {
 			if (i)
 				_CHECK_RC(fprintf(file, ", "));
 			_CHECK_RC(mp_fprint_internal(file, data));

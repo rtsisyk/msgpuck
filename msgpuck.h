@@ -2114,18 +2114,18 @@ mp_fprint_internal(FILE *file, const char **data);
 MP_IMPL int
 mp_fprint_internal(FILE *file, const char **data)
 {
-#define CHECK(exp) do { if (mp_unlikely((exp) < 0)) return -1; } while(0)
+#define _CHECK_RC(exp) do { if (mp_unlikely((exp) < 0)) return -1; } while(0)
 	switch (mp_typeof(**data)) {
 	case MP_NIL:
 		mp_decode_nil(data);
-		CHECK(fputs("null", file));
+		_CHECK_RC(fputs("null", file));
 		break;
 	case MP_UINT:
-		CHECK(fprintf(file, "%llu", (unsigned long long)
+		_CHECK_RC(fprintf(file, "%llu", (unsigned long long)
 			      mp_decode_uint(data)));
 		break;
 	case MP_INT:
-		CHECK(fprintf(file, "%lld", (long long)
+		_CHECK_RC(fprintf(file, "%lld", (long long)
 			      mp_decode_int(data)));
 		break;
 	case MP_STR:
@@ -2133,65 +2133,65 @@ mp_fprint_internal(FILE *file, const char **data)
 	{
 		uint32_t len = mp_typeof(**data) == MP_STR ?
 			mp_decode_strl(data) : mp_decode_binl(data);
-		CHECK(fputc('"', file));
+		_CHECK_RC(fputc('"', file));
 		for (const char *s = *data; s < *data + len; s++) {
 			unsigned char c = (unsigned char ) *s;
 			if (c < 128 && mp_char2escape[c] != NULL) {
 				/* Escape character */
-				CHECK(fputs(mp_char2escape[c], file));
+				_CHECK_RC(fputs(mp_char2escape[c], file));
 			} else {
-				CHECK(fputc(c, file));
+				_CHECK_RC(fputc(c, file));
 			}
 		}
-		CHECK(fputc('"', file));
+		_CHECK_RC(fputc('"', file));
 		*data += len;
 		break;
 	}
 	case MP_ARRAY:
 	{
 		uint32_t size = mp_decode_array(data);
-		CHECK(fputc('[', file));
+		_CHECK_RC(fputc('[', file));
 		for (uint32_t i = 0; i < size; i++) {
 			if (i)
-				CHECK(fputs(", ", file));
-			CHECK(mp_fprint_internal(file, data));
+				_CHECK_RC(fputs(", ", file));
+			_CHECK_RC(mp_fprint_internal(file, data));
 		}
-		CHECK(fputc(']', file));
+		_CHECK_RC(fputc(']', file));
 		break;
 	}
 	case MP_MAP:
 	{
 		uint32_t size = mp_decode_map(data);
-		CHECK(fputc('{', file));
+		_CHECK_RC(fputc('{', file));
 		for (uint32_t i = 0; i < size; i++) {
 			if (i)
-				CHECK(fprintf(file, ", "));
-			CHECK(mp_fprint_internal(file, data));
-			CHECK(fputs(": ", file));
-			CHECK(mp_fprint_internal(file, data));
+				_CHECK_RC(fprintf(file, ", "));
+			_CHECK_RC(mp_fprint_internal(file, data));
+			_CHECK_RC(fputs(": ", file));
+			_CHECK_RC(mp_fprint_internal(file, data));
 		}
-		CHECK(fputc('}', file));
+		_CHECK_RC(fputc('}', file));
 		break;
 	}
 	case MP_BOOL:
-		CHECK(fputs(mp_decode_bool(data) ? "true" : "false", file));
+		_CHECK_RC(fputs(mp_decode_bool(data) ? "true" : "false", file));
 		break;
 	case MP_FLOAT:
-		CHECK(fprintf(file, "%g", mp_decode_float(data)));
+		_CHECK_RC(fprintf(file, "%g", mp_decode_float(data)));
 		break;
 	case MP_DOUBLE:
-		CHECK(fprintf(file, "%lg", mp_decode_double(data)));
+		_CHECK_RC(fprintf(file, "%lg", mp_decode_double(data)));
 		break;
 	case MP_EXT:
 		mp_next(data);
-		CHECK(fputs("undefined", file));
+		_CHECK_RC(fputs("undefined", file));
 		break;
 	default:
 		mp_unreachable();
 		return -1;
 	}
 	return 0;
-#undef CHECK
+#undef _CHECK_RC
 }
 
 MP_IMPL int

@@ -77,10 +77,14 @@ static char *data = buf + 1; /* use unaligned address to fail early */
 		s1[i] = 'a' + i % 26;                                          \
 	}                                                                      \
 	const char *d1 = mp_encode_##_type(data, s1, _vl);                     \
-	const char *d2 = data;                                                 \
+	const char *d2;                                                        \
 	uint32_t len2;                                                         \
+	d2 = data;                                                             \
 	const char *s2 = mp_decode_##_type(&d2, &len2);                        \
 	is(_vl, len2, "len(mp_decode_"#_type"(x, %u))", _vl);                  \
+	d2 = data;                                                             \
+	(void) mp_decode_strbin(&d2, &len2);                                   \
+	is(_vl, len2, "len(mp_decode_strbin(x, %u))", _vl);                    \
 	const char *d3 = data;                                                 \
 	mp_next(&d3);                                                          \
 	const char *d4 = data;                                                 \
@@ -340,7 +344,7 @@ test_binls(void)
 static int
 test_strs(void)
 {
-	plan(84);
+	plan(96);
 	header();
 
 	test_str(0x01);
@@ -363,7 +367,7 @@ test_strs(void)
 static int
 test_bins(void)
 {
-	plan(84);
+	plan(96);
 	header();
 
 	test_bin(0x01);

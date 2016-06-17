@@ -943,6 +943,27 @@ MP_PROTO const char *
 mp_decode_bin(const char **data, uint32_t *len);
 
 /**
+ * \brief Decode a length of a string or binstring from MsgPack \a data
+ * \param data - the pointer to a buffer
+ * \return a length of a string
+ * \post *data = *data + mp_sizeof_strbinl(retval)
+ * \sa mp_encode_binl
+ */
+MP_PROTO uint32_t
+mp_decode_strbinl(const char **data);
+
+/**
+ * \brief Decode a string or binstring from MsgPack \a data
+ * \param data - the pointer to a buffer
+ * \param len - the pointer to save a binstring length
+ * \return a pointer to a decoded binstring
+ * \post *data = *data + mp_sizeof_strbinl(*len)
+ * \sa mp_encode_binl
+ */
+MP_PROTO const char *
+mp_decode_strbin(const char **data, uint32_t *len);
+
+/**
  * \brief Calculate exact buffer size needed to store the nil value.
  * The return value is always 1. The function was added to provide integrity of
  * the library.
@@ -1647,6 +1668,42 @@ mp_decode_bin(const char **data, uint32_t *len)
 	assert(len != NULL);
 
 	*len = mp_decode_binl(data);
+	const char *str = *data;
+	*data += *len;
+	return str;
+}
+
+MP_IMPL uint32_t
+mp_decode_strbinl(const char **data)
+{
+	uint8_t c = mp_load_u8(data);
+
+	switch (c) {
+	case 0xa0 ... 0xbf:
+		return c & 0x1f;
+	case 0xd9:
+		return mp_load_u8(data);
+	case 0xda:
+		return mp_load_u16(data);
+	case 0xdb:
+		return mp_load_u32(data);
+	case 0xc4:
+		return mp_load_u8(data);
+	case 0xc5:
+		return mp_load_u16(data);
+	case 0xc6:
+		return mp_load_u32(data);
+	default:
+		mp_unreachable();
+	}
+}
+
+MP_IMPL const char *
+mp_decode_strbin(const char **data, uint32_t *len)
+{
+	assert(len != NULL);
+
+	*len = mp_decode_strbinl(data);
 	const char *str = *data;
 	*data += *len;
 	return str;

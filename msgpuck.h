@@ -1256,14 +1256,14 @@ mp_decode_map(const char **data)
 {
 	uint8_t c = mp_load_u8(data);
 	switch (c) {
-	case 0x80 ... 0x8f:
-		return c & 0xf;
 	case 0xde:
 		return mp_load_u16(data);
 	case 0xdf:
 		return mp_load_u32(data);
 	default:
-		mp_unreachable();
+		if (mp_unlikely(c < 0x80 || c > 0x8f))
+			mp_unreachable();
+		return c & 0xf;
 	}
 }
 
@@ -1363,10 +1363,7 @@ MP_IMPL uint64_t
 mp_decode_uint(const char **data)
 {
 	uint8_t c = mp_load_u8(data);
-
 	switch (c) {
-	case 0x00 ... 0x7f:
-		return c;
 	case 0xcc:
 		return mp_load_u8(data);
 	case 0xcd:
@@ -1376,7 +1373,9 @@ mp_decode_uint(const char **data)
 	case 0xcf:
 		return mp_load_u64(data);
 	default:
-		mp_unreachable();
+		if (mp_unlikely(c > 0x7f))
+			mp_unreachable();
+		return c;
 	}
 }
 
@@ -1425,8 +1424,6 @@ mp_decode_int(const char **data)
 {
 	uint8_t c = mp_load_u8(data);
 	switch (c) {
-	case 0xe0 ... 0xff:
-		return (int8_t) (c);
 	case 0xd0:
 		return (int8_t) mp_load_u8(data);
 	case 0xd1:
@@ -1436,7 +1433,9 @@ mp_decode_int(const char **data)
 	case 0xd3:
 		return (int64_t) mp_load_u64(data);
 	default:
-		mp_unreachable();
+		if (mp_unlikely(c < 0xe0))
+			mp_unreachable();
+		return (int8_t) (c);
 	}
 }
 
@@ -1619,10 +1618,7 @@ MP_IMPL uint32_t
 mp_decode_strl(const char **data)
 {
 	uint8_t c = mp_load_u8(data);
-
 	switch (c) {
-	case 0xa0 ... 0xbf:
-		return c & 0x1f;
 	case 0xd9:
 		return mp_load_u8(data);
 	case 0xda:
@@ -1630,7 +1626,9 @@ mp_decode_strl(const char **data)
 	case 0xdb:
 		return mp_load_u32(data);
 	default:
-		mp_unreachable();
+		if (mp_unlikely(c < 0xa0 || c > 0xbf))
+			mp_unreachable();
+		return c & 0x1f;
 	}
 }
 
@@ -1679,8 +1677,6 @@ mp_decode_strbinl(const char **data)
 	uint8_t c = mp_load_u8(data);
 
 	switch (c) {
-	case 0xa0 ... 0xbf:
-		return c & 0x1f;
 	case 0xd9:
 		return mp_load_u8(data);
 	case 0xda:
@@ -1694,7 +1690,9 @@ mp_decode_strbinl(const char **data)
 	case 0xc6:
 		return mp_load_u32(data);
 	default:
-		mp_unreachable();
+		if (mp_unlikely(c < 0xa0 || c > 0xbf))
+			mp_unreachable();
+		return c & 0x1f;
 	}
 }
 

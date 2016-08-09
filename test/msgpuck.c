@@ -758,13 +758,15 @@ test_mp_print()
 		"\"float\": 3.14, \"double\": 3.14, 100: 500}, undefined, "
 		"\"\\u0012test4\\b\\t\\n\\\"bla\\\\-bla\\\"\\f\\r\\u0000\"]";
 	FILE *tmpf = tmpfile();
-	mp_fprint(tmpf, data);
-	rewind(tmpf);
-	memset(data, 0, sizeof(data));
-	fgets(data, sizeof(data), tmpf);
-	fclose(tmpf);
-	ok(strcmp(data, expected) == 0, "identical");
-
+	if (tmpf != NULL) {
+		mp_fprint(tmpf, data);
+		(void) rewind(tmpf);
+		memset(data, 0, sizeof(data));
+		if (fgets(data, sizeof(data), tmpf) != NULL) {
+			ok(strcmp(data, expected) == 0, "identical");
+		}
+		fclose(tmpf);
+	}
 	footer();
 	return check_plan();
 }

@@ -10,7 +10,6 @@ BuildRequires: gcc
 BuildRequires: coreutils
 BuildRequires: cmake >= 2.8
 BuildRequires: doxygen >= 1.6.0
-BuildRequires: /usr/bin/prove
 
 # https://fedoraproject.org/wiki/Packaging:Guidelines#Packaging_Header_Only_Libraries
 # Nothing to add to -debuginfo package - this library is header-only
@@ -67,6 +66,10 @@ install -Dpm 0644 doc/man/man3/msgpuck.h.3* %{buildroot}%{_mandir}/man3/
 %license LICENSE AUTHORS
 
 %changelog
+* Tue Aug 09 2016 Roman Tsisyk <roman@tsisyk.com> 1.0.3-1
+- Add mp_decode_strbin() and mp_decode_strbinl()
+- Add mp_fprint() for debug output
+
 * Tue Feb 02 2016 Roman Tsisyk <roman@tsisyk.com> 1.0.2-1
 - Add coreutils and make to BuildRequires (#1295217)
 - Use `install -Dpm` instead of `cp -p`

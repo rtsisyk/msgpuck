@@ -723,12 +723,11 @@ test_format(void)
 int
 test_mp_print()
 {
-	plan(1);
+	plan(10);
 	header();
 
-	char data[512];
-
-	char *d = data;
+	char msgpack[128];
+	char *d = msgpack;
 	d = mp_encode_array(d, 6);
 	d = mp_encode_int(d, -5);
 	d = mp_encode_uint(d, 42);
@@ -751,22 +750,53 @@ test_mp_print()
 	*d++ = 0;
 	char bin[] = "\x12test\x34\b\t\n\"bla\\-bla\"\f\r";
 	d = mp_encode_bin(d, bin, sizeof(bin));
+	assert(d <= msgpack + sizeof(msgpack));
 
 	const char *expected =
 		"[-5, 42, \"kill bill\", "
 		"{\"bool true\": true, \"bool false\": false, \"null\": null, "
 		"\"float\": 3.14, \"double\": 3.14, 100: 500}, undefined, "
 		"\"\\u0012test4\\b\\t\\n\\\"bla\\\\-bla\\\"\\f\\r\\u0000\"]";
+	int esize = strlen(expected);
+
+	char result[256];
+
+	int fsize = mp_snprint(result, sizeof(result), msgpack);
+	ok(fsize == esize, "mp_snprint return value");
+	ok(strcmp(result, expected) == 0, "mp_snprint result");
+
+	fsize = mp_snprint(NULL, 0, msgpack);
+	ok(fsize == esize, "mp_snprint limit = 0");
+
+	fsize = mp_snprint(result, 1, msgpack);
+	ok(fsize == esize && result[0] == '\0', "mp_snprint limit = 1");
+
+	fsize = mp_snprint(result, 2, msgpack);
+	ok(fsize == esize && result[1] == '\0', "mp_snprint limit = 2");
+
+	fsize = mp_snprint(result, esize, msgpack);
+	ok(fsize == esize && result[esize - 1] == '\0',
+	   "mp_snprint limit = expected");
+
+	fsize = mp_snprint(result, esize + 1, msgpack);
+	ok(fsize == esize && result[esize] == '\0',
+	   "mp_snprint limit = expected + 1");
+
 	FILE *tmpf = tmpfile();
 	if (tmpf != NULL) {
-		mp_fprint(tmpf, data);
+		int fsize = mp_fprint(tmpf, msgpack);
+		ok(fsize == esize, "mp_fprint return value");
 		(void) rewind(tmpf);
-		memset(data, 0, sizeof(data));
-		if (fgets(data, sizeof(data), tmpf) != NULL) {
-			ok(strcmp(data, expected) == 0, "identical");
-		}
+		int rsize = fread(result, 1, sizeof(result), tmpf);
+		ok(rsize == esize && memcmp(result, expected, esize) == 0,
+		   "mp_fprint result");
 		fclose(tmpf);
 	}
+
+	/* stdin is read-only */
+	int rc = mp_fprint(stdin, msgpack);
+	is(rc, -1, "mp_fprint I/O error");
+
 	footer();
 	return check_plan();
 }
@@ -774,7 +804,6 @@ test_mp_print()
 int main()
 {
 	plan(17);
-
 	test_uints();
 	test_ints();
 	test_bools();

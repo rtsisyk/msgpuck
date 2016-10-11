@@ -866,15 +866,33 @@ MP_PROTO size_t
 mp_vformat(char *data, size_t data_size, const char *format, va_list args);
 
 /**
- * \brief print to \a file msgpacked data in JSON format.
- * MP_EXT is printed as "EXT" only
+ * \brief print MsgPack data \a file using JSON-like format.
+ * MP_EXT is printed as "undefined"
  * \param file - pointer to file (or NULL for stdout)
  * \param data - pointer to buffer containing msgpack object
- * \retval 0 - success
- * \retval -1 - wrong msgpack
+ * \retval >=0 - the number of bytes printed
+ * \retval -1 - error
+ * \sa fprintf()
  */
 MP_PROTO int
-mp_fprint(FILE* file, const char *data);
+mp_fprint(FILE *file, const char *data);
+
+/**
+ * \brief format MsgPack data to \a buf using JSON-like format.
+ * \sa mp_fprint()
+ * \param buf - buffer to use
+ * \param size - buffer size. This function write at most size bytes
+ * (including the terminating null byte ('\0').
+ * \param data - pointer to buffer containing msgpack object
+ * \retval <size - the number of characters printed (excluding the null byte)
+ * \retval >=size - the number of characters (excluding the null byte),
+ *                  which would have been written to the final string if
+ *                  enough space had been available.
+ * \retval -1 - error
+ * \sa snprintf()
+ */
+MP_PROTO int
+mp_snprint(char *buf, int size, const char *data);
 
 /**
  * \brief Check that \a cur buffer has enough bytes to decode a string header
@@ -2163,93 +2181,106 @@ mp_format(char *data, size_t data_size, const char *format, ...)
 	return res;
 }
 
+#define MP_PRINT(SELF, PRINTF) \
+{										\
+	switch (mp_typeof(**data)) {						\
+	case MP_NIL:								\
+		mp_decode_nil(data);						\
+		PRINTF("null");							\
+		break;								\
+	case MP_UINT:								\
+		PRINTF("%llu", (unsigned long long) mp_decode_uint(data));	\
+		break;								\
+	case MP_INT:								\
+		PRINTF("%lld", (long long) mp_decode_int(data));		\
+		break;								\
+	case MP_STR:								\
+	case MP_BIN:								\
+	{									\
+		uint32_t len = mp_typeof(**data) == MP_STR ?			\
+			mp_decode_strl(data) : mp_decode_binl(data);		\
+		PRINTF("\"");							\
+		const char *s;							\
+		for (s = *data; s < *data + len; s++) {				\
+			unsigned char c = (unsigned char ) *s;			\
+			if (c < 128 && mp_char2escape[c] != NULL) {		\
+				/* Escape character */				\
+				PRINTF("%s", mp_char2escape[c]);		\
+			} else {						\
+				PRINTF("%c", c);				\
+			}							\
+		}								\
+		PRINTF("\"");							\
+		*data += len;							\
+		break;								\
+	}									\
+	case MP_ARRAY:								\
+	{									\
+		uint32_t count = mp_decode_array(data);				\
+		PRINTF("[");							\
+		uint32_t i;							\
+		for (i = 0; i < count; i++) {					\
+			if (i)							\
+				PRINTF(", ");					\
+			SELF(data);						\
+		}								\
+		PRINTF("]");							\
+		break;								\
+	}									\
+	case MP_MAP:								\
+	{									\
+		uint32_t count = mp_decode_map(data);				\
+		PRINTF("{");							\
+		uint32_t i;							\
+		for (i = 0; i < count; i++) {					\
+			if (i)							\
+				PRINTF(", ");					\
+			SELF(data);						\
+			PRINTF(": ");						\
+			SELF(data);						\
+		}								\
+		PRINTF("}");							\
+		break;								\
+	}									\
+	case MP_BOOL:								\
+		PRINTF(mp_decode_bool(data) ? "true" : "false");		\
+		break;								\
+	case MP_FLOAT:								\
+		PRINTF("%g", mp_decode_float(data));				\
+		break;								\
+	case MP_DOUBLE:								\
+		PRINTF("%lg", mp_decode_double(data));				\
+		break;								\
+	case MP_EXT:								\
+		mp_next(data);							\
+		PRINTF("undefined");						\
+		break;								\
+	default:								\
+		mp_unreachable();						\
+		return -1;							\
+	}									\
+}
+
 MP_PROTO int
 mp_fprint_internal(FILE *file, const char **data);
 
 MP_IMPL int
 mp_fprint_internal(FILE *file, const char **data)
 {
-#define _CHECK_RC(exp) do { if (mp_unlikely((exp) < 0)) return -1; } while(0)
-	switch (mp_typeof(**data)) {
-	case MP_NIL:
-		mp_decode_nil(data);
-		_CHECK_RC(fputs("null", file));
-		break;
-	case MP_UINT:
-		_CHECK_RC(fprintf(file, "%llu", (unsigned long long)
-			      mp_decode_uint(data)));
-		break;
-	case MP_INT:
-		_CHECK_RC(fprintf(file, "%lld", (long long)
-			      mp_decode_int(data)));
-		break;
-	case MP_STR:
-	case MP_BIN:
-	{
-		uint32_t len = mp_typeof(**data) == MP_STR ?
-			mp_decode_strl(data) : mp_decode_binl(data);
-		_CHECK_RC(fputc('"', file));
-		const char *s;
-		for (s = *data; s < *data + len; s++) {
-			unsigned char c = (unsigned char ) *s;
-			if (c < 128 && mp_char2escape[c] != NULL) {
-				/* Escape character */
-				_CHECK_RC(fputs(mp_char2escape[c], file));
-			} else {
-				_CHECK_RC(fputc(c, file));
-			}
-		}
-		_CHECK_RC(fputc('"', file));
-		*data += len;
-		break;
-	}
-	case MP_ARRAY:
-	{
-		uint32_t size = mp_decode_array(data);
-		_CHECK_RC(fputc('[', file));
-		uint32_t i;
-		for (i = 0; i < size; i++) {
-			if (i)
-				_CHECK_RC(fputs(", ", file));
-			_CHECK_RC(mp_fprint_internal(file, data));
-		}
-		_CHECK_RC(fputc(']', file));
-		break;
-	}
-	case MP_MAP:
-	{
-		uint32_t size = mp_decode_map(data);
-		_CHECK_RC(fputc('{', file));
-		uint32_t i;
-		for (i = 0; i < size; i++) {
-			if (i)
-				_CHECK_RC(fprintf(file, ", "));
-			_CHECK_RC(mp_fprint_internal(file, data));
-			_CHECK_RC(fputs(": ", file));
-			_CHECK_RC(mp_fprint_internal(file, data));
-		}
-		_CHECK_RC(fputc('}', file));
-		break;
-	}
-	case MP_BOOL:
-		_CHECK_RC(fputs(mp_decode_bool(data) ? "true" : "false", file));
-		break;
-	case MP_FLOAT:
-		_CHECK_RC(fprintf(file, "%g", mp_decode_float(data)));
-		break;
-	case MP_DOUBLE:
-		_CHECK_RC(fprintf(file, "%lg", mp_decode_double(data)));
-		break;
-	case MP_EXT:
-		mp_next(data);
-		_CHECK_RC(fputs("undefined", file));
-		break;
-	default:
-		mp_unreachable();
-		return -1;
-	}
-	return 0;
-#undef _CHECK_RC
+	int total_bytes = 0;
+#define HANDLE(FUN, ...) do {							\
+	int bytes = FUN(file, __VA_ARGS__);					\
+	if (mp_unlikely(bytes < 0))						\
+		return -1;							\
+	total_bytes += bytes;							\
+} while (0)
+#define PRINT(...) HANDLE(fprintf, __VA_ARGS__)
+#define SELF(...) HANDLE(mp_fprint_internal, __VA_ARGS__)
+MP_PRINT(SELF, PRINT)
+#undef HANDLE
+#undef SELF
+#undef PRINT
+	return total_bytes;
 }
 
 MP_IMPL int
@@ -2261,6 +2292,43 @@ mp_fprint(FILE *file, const char *data)
 	return res;
 }
 
+MP_PROTO int
+mp_snprint_internal(char *buf, int size, const char **data);
+
+MP_IMPL int
+mp_snprint_internal(char *buf, int size, const char **data)
+{
+	int total_bytes = 0;
+#define HANDLE(FUN, ...) do {							\
+	int bytes = FUN(buf, size, __VA_ARGS__);				\
+	if (mp_unlikely(bytes < 0))						\
+		return -1;							\
+	total_bytes += bytes;							\
+	if (bytes < size) {							\
+		buf += bytes;							\
+		size -= bytes;							\
+	} else {								\
+		/* Calculate the number of bytes needed */			\
+		buf = NULL;							\
+		size = 0;							\
+	}									\
+} while (0)
+#define PRINT(...) HANDLE(snprintf, __VA_ARGS__)
+#define SELF(...) HANDLE(mp_snprint_internal, __VA_ARGS__)
+MP_PRINT(SELF, PRINT)
+#undef HANDLE
+#undef SELF
+#undef PRINT
+	return total_bytes;
+}
+
+MP_IMPL int
+mp_snprint(char *buf, int size, const char *data)
+{
+	return mp_snprint_internal(buf, size, &data);
+}
+
+#undef MP_PRINT
 /** \endcond */
 
 /*

@@ -841,6 +841,8 @@ mp_encode_bin(char *data, const char *str, uint32_t len);
  * %b - bool
  * %s - zero-end string
  * %.*s - string with specified length
+ * %p - MsgPack data
+ * %.*p - MsgPack data with specified length
  * %% is ignored
  * %smthelse assert and undefined behaviour
  * NIL - a nil value
@@ -2094,6 +2096,26 @@ mp_vformat(char *data, size_t data_size, const char *format, va_list vl)
 				result += mp_sizeof_str(len);
 				if (result <= data_size)
 					data = mp_encode_str(data, str, len);
+				f += 2;
+			} else if (f[0] == 'p') {
+				const char *p = va_arg(vl, const char *);
+				const char *end = p;
+				mp_next(&end);
+				uint32_t len = end - p;
+				result += len;
+				if (result <= data_size) {
+					memcpy(data, p, len);
+					data += len;
+				}
+			} else if (f[0] == '.' && f[1] == '*' && f[2] == 'p') {
+				uint32_t len = va_arg(vl, uint32_t);
+				const char *p = va_arg(vl, const char *);
+				assert(len > 0);
+				result += len;
+				if (result <= data_size) {
+					memcpy(data, p, len);
+					data += len;
+				}
 				f += 2;
 			} else if(f[0] == 'f') {
 				float v = (float)va_arg(vl, double);

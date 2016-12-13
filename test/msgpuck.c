@@ -531,7 +531,7 @@ dequal(double a, double b)
 static int
 test_format(void)
 {
-	plan(230);
+	plan(282);
 	header();
 
 	const size_t buf_size = 1024;
@@ -576,10 +576,28 @@ test_format(void)
 		}
 	}
 
+	char data1[32];
+	char *data1_end = data1;
+	data1_end = mp_encode_array(data1_end, 2);
+	data1_end = mp_encode_str(data1_end, "ABC", 3);
+	data1_end = mp_encode_uint(data1_end, 11);
+	uint32_t data1_len = data1_end - data1;
+	assert(data1_len <= sizeof(data1));
+
+	char data2[32];
+	char *data2_end = data2;
+	data2_end = mp_encode_int(data2_end, -1234567890);
+	data2_end = mp_encode_str(data2_end, "DEFGHIJKLMN", 11);
+	data2_end = mp_encode_uint(data2_end, 321);
+	uint32_t data2_len = data2_end - data2;
+	assert(data2_len <= sizeof(data2));
+
 	fmt = "%d NIL [%d %b %b] this is test"
-		"[%d %%%% [[ %d {%s %f %%  %.*s %lf %.*s NIL} %d ]] %d%d%d]";
+		"[%d %%%% [[ %d {%s %f %%  %.*s %lf %.*s NIL}"
+		"%p %d %.*p ]] %d%d%d]";
 #define TEST_PARAMS 0, 1, true, false, -1, 2, \
-	"flt", 0.1, 6, "double#ignored", 0.2, 0, "ignore", 3, 4, 5, 6
+	"flt", 0.1, 6, "double#ignored", 0.2, 0, "ignore", \
+	data1, 3, data2_len, data2, 4, 5, 6
 	sz = mp_format(buf, buf_size, fmt, TEST_PARAMS);
 	p = buf;
 	e = buf + sz;
@@ -632,7 +650,7 @@ test_format(void)
 	c = p;
 	ok(mp_check(&c, e) == 0, "check");
 	ok(mp_typeof(*p) == MP_ARRAY, "type");
-	ok(mp_decode_array(&p) == 3, "decode");
+	ok(mp_decode_array(&p) == 5, "decode");
 
 	c = p;
 	ok(mp_check(&c, e) == 0, "check");
@@ -681,8 +699,31 @@ test_format(void)
 
 	c = p;
 	ok(mp_check(&c, e) == 0, "check");
+	ok((c - p == data1_len) &&
+	   memcmp(p, data1, data1_len) == 0, "compare");
+	p = c;
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check");
 	ok(mp_typeof(*p) == MP_UINT, "type");
 	ok(mp_decode_uint(&p) == 3, "decode");
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_INT, "type");
+	ok(mp_decode_int(&p) == -1234567890, "decode");
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_STR, "type");
+	c = mp_decode_str(&p, &len);
+	ok(len == 11, "decode");
+	ok(memcmp(c, "DEFGHIJKLMN", 11) == 0, "compare");
+
+	c = p;
+	ok(mp_check(&c, e) == 0, "check");
+	ok(mp_typeof(*p) == MP_UINT, "type");
+	ok(mp_decode_uint(&p) == 321, "decode");
 
 	c = p;
 	ok(mp_check(&c, e) == 0, "check");
@@ -701,9 +742,9 @@ test_format(void)
 
 	ok(p == e, "nothing more");
 
-	ok(sz < 50, "no magic detected");
+	ok(sz < 70, "no magic detected");
 
-	for (size_t lim = 0; lim <= 50; lim++) {
+	for (size_t lim = 0; lim <= 70; lim++) {
 		memset(buf, 0, buf_size);
 		size_t test_sz = mp_format(buf, lim, fmt, TEST_PARAMS);
 		ok(test_sz == sz, "return value on step %d", (int)lim);

@@ -801,9 +801,153 @@ test_mp_print()
 	return check_plan();
 }
 
+int
+test_mp_check()
+{
+	plan(65);
+	header();
+
+#define invalid(data, fmt, ...) ({ \
+	const char *p = data; \
+	isnt(mp_check(&p, p + sizeof(data) - 1), 0, fmt, ## __VA_ARGS__); \
+});
+
+	/* fixmap */
+	invalid("\x81", "invalid fixmap 1");
+	invalid("\x81\x01", "invalid fixmap 2");
+	invalid("\x8f\x01", "invalid fixmap 3");
+
+	/* fixarray */
+	invalid("\x91", "invalid fixarray 1");
+	invalid("\x92\x01", "invalid fixarray 2");
+	invalid("\x9f\x01", "invalid fixarray 3");
+
+	/* fixstr */
+	invalid("\xa1", "invalid fixstr 1");
+	invalid("\xa2\x00", "invalid fixstr 2");
+	invalid("\xbf\x00", "invalid fixstr 3");
+
+	/* bin8 */
+	invalid("\xc4", "invalid bin8 1");
+	invalid("\xc4\x01", "invalid bin8 2");
+
+	/* bin16 */
+	invalid("\xc5", "invalid bin16 1");
+	invalid("\xc5\x00\x01", "invalid bin16 2");
+
+	/* bin32 */
+	invalid("\xc6", "invalid bin32 1");
+	invalid("\xc6\x00\x00\x00\x01", "invalid bin32 2");
+
+	/* ext8 */
+	invalid("\xc7", "invalid ext8 1");
+	invalid("\xc7\x00", "invalid ext8 2");
+	invalid("\xc7\x01\xff", "invalid ext8 3");
+	invalid("\xc7\x02\xff\x00", "invalid ext8 4");
+
+	/* ext16 */
+	invalid("\xc8", "invalid ext16 1");
+	invalid("\xc8\x00\x00", "invalid ext16 2");
+	invalid("\xc8\x00\x01\xff", "invalid ext16 3");
+	invalid("\xc8\x00\x02\xff\x00", "invalid ext16 4");
+
+	/* ext32 */
+	invalid("\xc9", "invalid ext32 1");
+	invalid("\xc9\x00\x00\x00\x00", "invalid ext32 2");
+	invalid("\xc9\x00\x00\x00\x01\xff", "invalid ext32 3");
+	invalid("\xc9\x00\x00\x00\x02\xff\x00", "invalid ext32 4");
+
+	/* float32 */
+	invalid("\xca", "invalid float32 1");
+	invalid("\xca\x00\x00\x00", "invalid float32 2");
+
+	/* float64 */
+	invalid("\xcb", "invalid float64 1");
+	invalid("\xcb\x00\x00\x00\x00\x00\x00\x00", "invalid float64 2");
+
+	/* uint8 */
+	invalid("\xcc", "invalid uint8 1");
+
+	/* uint16 */
+	invalid("\xcd\x00", "invalid uint16 1");
+
+	/* uint32 */
+	invalid("\xce\x00\x00\x00", "invalid uint32 1");
+
+	/* uint64 */
+	invalid("\xcf\x00\x00\x00\x00\x00\x00\x00", "invalid uint64 1");
+
+	/* int8 */
+	invalid("\xd0", "invalid int8 1");
+
+	/* int16 */
+	invalid("\xd1\x00", "invalid int16 1");
+
+	/* int32 */
+	invalid("\xd2\x00\x00\x00", "invalid int32 1");
+
+	/* int64 */
+	invalid("\xd3\x00\x00\x00\x00\x00\x00\x00", "invalid int64 1");
+
+	/* fixext8 */
+	invalid("\xd4", "invalid fixext8 1");
+	invalid("\xd4\x05", "invalid fixext8 2");
+
+	/* fixext16 */
+	invalid("\xd5", "invalid fixext16 1");
+	invalid("\xd5\x05\x05", "invalid fixext16 2");
+
+	/* fixext32 */
+	invalid("\xd6", "invalid fixext32 1");
+	invalid("\xd6\x00\x00\x05\x05", "invalid fixext32 2");
+
+	/* fixext64 */
+	invalid("\xd7", "invalid fixext64 1");
+	invalid("\xd7\x00\x00\x00\x00\x00\x00\x05\x05", "invalid fixext64 2");
+
+	/* fixext128 */
+	invalid("\xd8", "invalid fixext128 1");
+	invalid("\xd8\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+		"\x00\x05\x05", "invalid fixext128 2");
+
+	/* str8 */
+	invalid("\xd9", "invalid str8 1");
+	invalid("\xd9\x01", "invalid str8 2");
+
+	/* str16 */
+	invalid("\xda", "invalid str16 1");
+	invalid("\xda\x00\x01", "invalid str16 2");
+
+	/* str32 */
+	invalid("\xdb", "invalid str32 1");
+	invalid("\xdb\x00\x00\x00\x01", "invalid str32 2");
+
+	/* array16 */
+	invalid("\xdc", "invalid array16 1");
+	invalid("\xdc\x00\x01", "invalid array16 2");
+
+	/* array32 */
+	invalid("\xdd", "invalid array32 1");
+	invalid("\xdd\x00\x00\x00\x01", "invalid array32 2");
+
+	/* map16 */
+	invalid("\xde", "invalid map16 1");
+	invalid("\xde\x00\x01", "invalid map16 2");
+	invalid("\xde\x00\x01\x5", "invalid map16 2");
+
+	/* map32 */
+	invalid("\xdf", "invalid map32 1");
+	invalid("\xdf\x00\x00\x00\x01", "invalid map32 2");
+	invalid("\xdf\x00\x00\x00\x01\x5", "invalid map32 3");
+
+	footer();
+
+	return check_plan();
+}
+
 int main()
 {
-	plan(17);
+	plan(18);
 	test_uints();
 	test_ints();
 	test_bools();
@@ -821,6 +965,7 @@ int main()
 	test_compare_uints();
 	test_format();
 	test_mp_print();
+	test_mp_check();
 
 	return check_plan();
 }

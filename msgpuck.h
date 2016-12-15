@@ -1958,7 +1958,7 @@ mp_check(const char **data, const char *end)
 		case MP_HINT_MAP_16:
 			/* MP_MAP (16) */
 			if (mp_unlikely(*data + sizeof(uint16_t) > end))
-				return false;
+				return 1;
 			k += 2 * mp_load_u16(data);
 			break;
 		case MP_HINT_MAP_32:

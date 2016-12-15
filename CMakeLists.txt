@@ -16,6 +16,14 @@ endif()
 include(CheckCCompilerFlag)
 check_c_compiler_flag("-mno-unaligned-access" CC_HAS_MNO_UNALIGNED_ACCESS)
 
+option(ENABLE_GCOV "Enable integration with gcov, a code coverage program" OFF)
+if (ENABLE_GCOV)
+    set(_flags "-fprofile-arcs -ftest-coverage")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${_flags}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${_flags}")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${_flags}")
+endif()
+
 include(GNUInstallDirs)
 
 add_subdirectory(test)

@@ -52,7 +52,7 @@ deploy:
     repository: "1_6"
     token: ${PACKAGECLOUD_TOKEN}
     dist: ${OS}/${DIST}
-    package_glob: build/*.{deb,rpm}
+    package_glob: build/*.{deb,dsc,rpm}
     skip_cleanup: true
     on:
       branch: master
@@ -62,7 +62,7 @@ deploy:
     repository: "1_7"
     token: ${PACKAGECLOUD_TOKEN}
     dist: ${OS}/${DIST}
-    package_glob: build/*.{deb,rpm}
+    package_glob: build/*.{deb,dsc,rpm}
     skip_cleanup: true
     on:
       branch: master

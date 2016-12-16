@@ -1,3 +1,11 @@
+msgpuck (1.1.3-1) unstable; urgency=medium
+
+  * Add mp_snprint() function.
+  * Change mp_fprint() to return the number of bytes printed instead of 0.
+  * Fix CVE-2016-9036.
+
+ -- Roman Tsisyk <roman@tarantool.org>  Fri, 16 Dec 2016 17:53:40 +0300
+
 msgpuck (1.0.3-1) unstable; urgency=medium
 
   * Fix GCC 6.0 and Doxygen warnings

@@ -1,5 +1,5 @@
 Name: msgpuck
-Version: 1.0.2
+Version: 1.1.3
 Release: 1%{?dist}
 Summary: MsgPack binary serialization library in a self-contained header
 Group: Development/Libraries
@@ -66,6 +66,11 @@ install -Dpm 0644 doc/man/man3/msgpuck.h.3* %{buildroot}%{_mandir}/man3/
 %license LICENSE AUTHORS
 
 %changelog
+* Fri Dec 16 2016 Roman Tsisyk <roman@tsisyk.com> 1.1.3-1
+- Add mp_snprint() function.
+- Change mp_fprint() to return the number of bytes printed instead of 0.
+- Fix CVE-2016-9036.
+
 * Tue Aug 09 2016 Roman Tsisyk <roman@tsisyk.com> 1.0.3-1
 - Add mp_decode_strbin() and mp_decode_strbinl()
 - Add mp_fprint() for debug output

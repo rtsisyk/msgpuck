@@ -1066,6 +1066,40 @@ MP_PROTO bool
 mp_decode_bool(const char **data);
 
 /**
+ * \brief Decode an integer value as int32_t from MsgPack \a data.
+ * \param data - the pointer to a buffer
+ * \param[out] ret - the pointer to save a result
+ * \retval  0 on success
+ * \retval -1 if underlying mp type is not MP_INT or MP_UINT
+ * \retval -1 if the result can't be stored in int32_t
+ */
+MP_PROTO int
+mp_read_int32(const char **data, int32_t *ret);
+
+/**
+ * \brief Decode an integer value as int64_t from MsgPack \a data.
+ * \param data - the pointer to a buffer
+ * \param[out] ret - the pointer to save a result
+ * \retval  0 on success
+ * \retval -1 if underlying mp type is not MP_INT or MP_UINT
+ * \retval -1 if the result can't be stored in int64_t
+ */
+MP_PROTO int
+mp_read_int64(const char **data, int64_t *ret);
+
+/**
+ * \brief Decode a floating point value as double from MsgPack \a data.
+ * \param data - the pointer to a buffer
+ * \param[out] ret - the pointer to save a result
+ * \retval  0 on success
+ * \retval -1 if underlying mp type is not MP_INT, MP_UINT,
+ *            MP_FLOAT, or MP_DOUBLE
+ * \retval -1 if the result can't be stored in double
+ */
+MP_PROTO int
+mp_read_double(const char **data, double *ret);
+
+/**
  * \brief Skip one element in a packed \a data.
  *
  * The function is faster than mp_typeof + mp_decode_XXX() combination.
@@ -1788,6 +1822,143 @@ mp_decode_bool(const char **data)
 	default:
 		mp_unreachable();
 	}
+}
+
+MP_IMPL int
+mp_read_int32(const char **data, int32_t *ret)
+{
+	uint32_t uval;
+	const char *p = *data;
+	uint8_t c = mp_load_u8(&p);
+	switch (c) {
+	case 0xd0:
+		*ret = (int8_t) mp_load_u8(&p);
+		break;
+	case 0xd1:
+		*ret = (int16_t) mp_load_u16(&p);
+		break;
+	case 0xd2:
+		*ret = (int32_t) mp_load_u32(&p);
+		break;
+	case 0xcc:
+		*ret = mp_load_u8(&p);
+		break;
+	case 0xcd:
+		*ret = mp_load_u16(&p);
+		break;
+	case 0xce:
+		uval = mp_load_u32(&p);
+		if (mp_unlikely(uval > INT32_MAX))
+			return -1;
+		*ret = uval;
+		break;
+	default:
+		if (mp_unlikely(c < 0xe0 && c > 0x7f))
+			return -1;
+		*ret = (int8_t) c;
+		break;
+	}
+	*data = p;
+	return 0;
+}
+
+MP_IMPL int
+mp_read_int64(const char **data, int64_t *ret)
+{
+	uint64_t uval;
+	const char *p = *data;
+	uint8_t c = mp_load_u8(&p);
+	switch (c) {
+	case 0xd0:
+		*ret = (int8_t) mp_load_u8(&p);
+		break;
+	case 0xd1:
+		*ret = (int16_t) mp_load_u16(&p);
+		break;
+	case 0xd2:
+		*ret = (int32_t) mp_load_u32(&p);
+		break;
+	case 0xd3:
+		*ret = (int64_t) mp_load_u64(&p);
+		break;
+	case 0xcc:
+		*ret = mp_load_u8(&p);
+		break;
+	case 0xcd:
+		*ret = mp_load_u16(&p);
+		break;
+	case 0xce:
+		*ret = mp_load_u32(&p);
+		break;
+	case 0xcf:
+		uval = mp_load_u64(&p);
+		if (uval > INT64_MAX)
+			return -1;
+		*ret = uval;
+		break;
+	default:
+		if (mp_unlikely(c < 0xe0 && c > 0x7f))
+			return -1;
+		*ret = (int8_t) c;
+		break;
+	}
+	*data = p;
+	return 0;
+}
+
+MP_IMPL int
+mp_read_double(const char **data, double *ret)
+{
+	int64_t ival;
+	uint64_t uval;
+	double val;
+	const char *p = *data;
+	uint8_t c = mp_load_u8(&p);
+	switch (c) {
+	case 0xd0:
+		*ret = (int8_t) mp_load_u8(&p);
+		break;
+	case 0xd1:
+		*ret = (int16_t) mp_load_u16(&p);
+		break;
+	case 0xd2:
+		*ret = (int32_t) mp_load_u32(&p);
+		break;
+	case 0xd3:
+		val = ival = (int64_t) mp_load_u64(&p);
+		if ((int64_t)val != ival)
+			return -1;
+		*ret = val;
+		break;
+	case 0xcc:
+		*ret = mp_load_u8(&p);
+		break;
+	case 0xcd:
+		*ret = mp_load_u16(&p);
+		break;
+	case 0xce:
+		*ret = mp_load_u32(&p);
+		break;
+	case 0xcf:
+		val = uval = mp_load_u64(&p);
+		if ((uint64_t)val != uval)
+			return -1;
+		*ret = val;
+		break;
+	case 0xca:
+		*ret = mp_load_float(&p);
+		break;
+	case 0xcb:
+		*ret = mp_load_double(&p);
+		break;
+	default:
+		if (mp_unlikely(c < 0xe0 && c > 0x7f))
+			return -1;
+		*ret = (int8_t) c;
+		break;
+	}
+	*data = p;
+	return 0;
 }
 
 /** See mp_parser_hint */

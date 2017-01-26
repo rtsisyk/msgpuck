@@ -986,9 +986,78 @@ test_mp_check()
 	return check_plan();
 }
 
+#define test_read_number(_func, _type, _mp_type, _val, _success) do {	\
+	const char *s = #_func "(mp_encode_" #_mp_type "(" #_val "))";	\
+	const char *d1 = data;						\
+	const char *d2 = mp_encode_##_mp_type(data, _val);		\
+	_type v;							\
+	int ret = _func(&d1, &v);					\
+	if (_success) {							\
+		is(ret, 0, "%s check success", s);			\
+		is(d1, d2, "%s check pos advanced", s);			\
+		ok(v - _val == 0, "%s check result", s);		\
+	} else {							\
+		is(ret, -1, "%s check fail", s);			\
+		is(d1, data, "%s check pos unchanged", s);		\
+	}								\
+} while (0)
+
+#define test_read_int32(...)	test_read_number(mp_read_int32, int32_t, __VA_ARGS__)
+#define test_read_int64(...)	test_read_number(mp_read_int64, int64_t, __VA_ARGS__)
+#define test_read_double(...)	test_read_number(mp_read_double, double, __VA_ARGS__)
+
+static int
+test_numbers()
+{
+	plan(96);
+	header();
+
+	test_read_int32(uint, 123, true);
+	test_read_int32(uint, 12345, true);
+	test_read_int32(uint, 2147483647, true);
+	test_read_int32(uint, 2147483648, false);
+	test_read_int32(int, -123, true);
+	test_read_int32(int, -12345, true);
+	test_read_int32(int, -2147483648, true);
+	test_read_int32(int, -2147483649LL, false);
+	test_read_int32(float, -1e2, false);
+	test_read_int32(double, 1.2345, false);
+	test_read_int32(map, 5, false);
+
+	test_read_int64(uint, 123, true);
+	test_read_int64(uint, 12345, true);
+	test_read_int64(uint, 123456789, true);
+	test_read_int64(uint, 9223372036854775807ULL, true);
+	test_read_int64(uint, 9223372036854775808ULL, false);
+	test_read_int64(int, -123, true);
+	test_read_int64(int, -12345, true);
+	test_read_int64(int, -123456789, true);
+	test_read_int64(int, -9223372036854775807LL, true);
+	test_read_int64(float, 100, false);
+	test_read_int64(double, -5.4321, false);
+	test_read_int64(array, 10, false);
+
+	test_read_double(uint, 123, true);
+	test_read_double(uint, 12345, true);
+	test_read_double(uint, 123456789, true);
+	test_read_double(uint, 1234567890000ULL, true);
+	test_read_double(uint, 123456789123456789ULL, false);
+	test_read_double(int, -123, true);
+	test_read_double(int, -12345, true);
+	test_read_double(int, -123456789, true);
+	test_read_double(int, -1234567890000LL, true);
+	test_read_double(int, -123456789123456789LL, false);
+	test_read_double(float, 6.565e6, true);
+	test_read_double(double, -5.555, true);
+	test_read_double(strl, 100, false);
+
+	footer();
+	return check_plan();
+}
+
 int main()
 {
-	plan(18);
+	plan(19);
 	test_uints();
 	test_ints();
 	test_bools();
@@ -1007,6 +1076,7 @@ int main()
 	test_format();
 	test_mp_print();
 	test_mp_check();
+	test_numbers();
 
 	return check_plan();
 }

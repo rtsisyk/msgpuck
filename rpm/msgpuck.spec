@@ -11,6 +11,10 @@ BuildRequires: coreutils
 BuildRequires: cmake >= 2.8
 BuildRequires: doxygen >= 1.6.0
 
+# https://fedoraproject.org/wiki/Packaging:Guidelines#Packaging_Header_Only_Libraries
+# Nothing to add to -debuginfo package - this library is header-only
+%global debug_package %{nil}
+
 %package devel
 Summary: Lightweight MessagePack library
 Provides: msgpuck-static = %{version}-%{release}

@@ -12,7 +12,7 @@ endif()
 include(CheckCCompilerFlag)
 check_c_compiler_flag("-mno-unaligned-access" CC_HAS_MNO_UNALIGNED_ACCESS)
 
-add_library(msgpuck STATIC msgpuck.c)
+add_library(msgpuck STATIC msgpuck.c hints.c)
 set_target_properties(msgpuck PROPERTIES VERSION 1.0 SOVERSION 1)
 set_target_properties(msgpuck PROPERTIES OUTPUT_NAME "msgpuck")
 

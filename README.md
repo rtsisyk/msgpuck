@@ -1,14 +1,13 @@
 MsgPuck
 =======
 
-MsgPuck is a simple and efficient [MsgPack](http://msgpack.org) binary
-serialization library in a self-contained header file.
+MsgPuck is a compact and efficient [MessagePack] serialization library:
 
- * Can be easily incorporated into your project
- * Is very easy to use (see examples below)
- * Is fully tested and documented
- * Has clean and readable C source code
- * Is published under the very liberal license (BSD-2)
+ * Zero-cost abstractions and zero overhead
+ * Clean and readable C code ready to use
+ * Easy to incorporate into your project
+ * Fully documented and covered by unit tests
+ * Liberal license (BSD-2)
 
 Status
 ------
@@ -17,7 +16,6 @@ MsgPuck is stable, which means it have been used in production without
 serious bugs for quite a while now. The library is fully documented and
 covered by unit tests.
 
-Latest MsgPack specification (2013-09) is supported.
 Please feel free to file a ticket if your have a problem or a question.
 
 [![Build Status](https://travis-ci.org/rtsisyk/msgpuck.png)]
@@ -75,28 +73,14 @@ Examples
 Usage
 -----
 
-You need a C89+ or C++03+ compatible compiler to use msgpuck.h.
-Add this project as a submodule or just copy  `msgpuck.h` to your project.
-
-### Static Library
+You need a C89+ or C++03+ compatible compiler to use msgpuck.
+Add this project as a submodule or just use libmsgpuck-dev package.
 
 MsgPuck is designed to be fully embedded to your application by a C/C++
 compiler. However, some functions require auxiliary static tables which
 should be expanded somewhere in a compilation unit (`*.c` or `*.cc` file).
-Please add libmsgpuck.a to your binary to avoid problems with unresolved
+Please link libmsgpuck.a to your binary to avoid problems with unresolved
 symbols.
-
-### Just a Header
-
-Include `msgpuck.h` as usual and define `MP_SOURCE 1` exactly in a single
-compilation unit:
-
-    #define MP_SOURCE 1 /* define in a single .c/.cc file */
-    #include "msgpuck.h"
-
-All non-inline versions of functions and global lookup tables will be
-stored in the file. `MP_SOURCE` must be defined exactly in a single file of
-your application, otherwise linker errors occur.
 
 Documentation
 -------------
@@ -113,3 +97,5 @@ MsgPuck was written to use within [Tarantool](http://tarantool.org) -
 the world's first full-featured MsgPack-based database.
 
  * roman@tsisyk.com
+
+[MessagePack]: https://msgpack.org/

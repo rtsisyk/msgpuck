@@ -15,15 +15,18 @@ Package: libmsgpuck-dev
 Architecture: any
 Depends: ${misc:Depends}
 Pre-Depends: ${misc:Pre-Depends}
-Description: MsgPack serialization library in a self-contained header file
- MsgPack is a binary-based efficient object serialization library.
- It enables to exchange structured objects between many languages like JSON.
- But unlike JSON, it is very fast and small.
+Description: Lightweight MessagePack library
+ MsgPuck is a compact and efficient MessagePack serialization library
+ designed with zero-cost abstractions in mind. Almost all encoding/decoding
+ functions can be fully inlined into your application by C/C++ compiler
+ to reach the maximum performance.
  .
- msgpuck is very lightweight header-only library designed to be embedded to
- your application by the C/C++ compiler. The library is fully documented and
- covered by unit tests.
+ MessagePack is an efficient binary serialization format.
+ It lets you exchange data among multiple languages like JSON.
+ But it's faster and smaller. Small integers are encoded into a single byte,
+ and typical short strings require only one extra byte in addition to the
+ strings themselves.
  .
- This package provides a self-contained header file and a static library.
- The static library contains generated code for inline functions and
- globals tables needed by the some library functions.
+ This package provides a header file and a static library.
+ The static library contains fallback code for inline functions and
+ globals tables needed by library functions.

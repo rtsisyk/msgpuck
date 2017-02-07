@@ -1,5 +1,5 @@
 Name: msgpuck
-Version: 1.1.3
+Version: 2.0.0
 Release: 1%{?dist}
 Summary: MsgPack binary serialization library in a self-contained header
 Group: Development/Libraries
@@ -11,22 +11,21 @@ BuildRequires: coreutils
 BuildRequires: cmake >= 2.8
 BuildRequires: doxygen >= 1.6.0
 
-# https://fedoraproject.org/wiki/Packaging:Guidelines#Packaging_Header_Only_Libraries
-# Nothing to add to -debuginfo package - this library is header-only
-%global debug_package %{nil}
-
 %package devel
-Summary: MsgPack serialization library in a self-contained header file
+Summary: Lightweight MessagePack library
 Provides: msgpuck-static = %{version}-%{release}
 
 %description
-MsgPack is a binary-based efficient object serialization library.
-It enables to exchange structured objects between many languages like JSON.
-But unlike JSON, it is very fast and small.
+MsgPuck is a compact and efficient MessagePack serialization library
+designed with zero-cost abstractions in mind. Almost all encoding/decoding
+functions can be fully inlined into your application by C/C++ compiler
+to reach the maximum performance.
 
-msgpuck is very lightweight header-only library designed to be embedded to
-your application by the C/C++ compiler. The library is fully documented and
-covered by unit tests.
+MessagePack is an efficient binary serialization format.
+It lets you exchange data among multiple languages like JSON.
+But it's faster and smaller. Small integers are encoded into a single byte,
+and typical short strings require only one extra byte in addition to the
+strings themselves.
 
 %description devel
 MsgPack is a binary-based efficient object serialization library.
@@ -66,6 +65,11 @@ install -Dpm 0644 doc/man/man3/msgpuck.h.3* %{buildroot}%{_mandir}/man3/
 %license LICENSE AUTHORS
 
 %changelog
+* Tue Feb 07 2017 Roman Tsisyk <roman@tsisyk.com> 2.0.0-1
+- Drop MP_SOURCE support and make libmsgpuck.a to be mandatory
+- Add helpers to decode any number to int64/double
+- Add -fPIC to libmsgpuck.a
+
 * Fri Dec 16 2016 Roman Tsisyk <roman@tsisyk.com> 1.1.3-1
 - Add mp_snprint() function.
 - Change mp_fprint() to return the number of bytes printed instead of 0.

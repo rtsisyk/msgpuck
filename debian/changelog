@@ -1,3 +1,11 @@
+msgpuck (2.0.0-1) unstable; urgency=medium
+
+  * Drop MP_SOURCE support and make libmsgpuck.a to be mandatory
+  * Add helpers to decode any number to int64/double
+  * Add -fPIC to libmsgpuck.a
+
+ -- Roman Tsisyk <roman@tarantool.org>  Tue, 07 Feb 2017 13:57:10 +0300
+
 msgpuck (1.1.3-1) unstable; urgency=medium
 
   * Add mp_snprint() function.

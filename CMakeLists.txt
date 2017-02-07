@@ -1,12 +1,8 @@
 project(msgpuck)
 cmake_minimum_required(VERSION 2.8.5)
 
-if(POLICY CMP0037)
-    cmake_policy(SET CMP0037 OLD) # don't blame custom target names
-endif(POLICY CMP0037)
-
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -fstrict-aliasing")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -pg -Wall -Wextra -Wcast-align -Werror")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -Werror")
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING
@@ -16,6 +12,15 @@ endif()
 include(CheckCCompilerFlag)
 check_c_compiler_flag("-mno-unaligned-access" CC_HAS_MNO_UNALIGNED_ACCESS)
 
+add_library(msgpuck STATIC msgpuck.c)
+set_target_properties(msgpuck PROPERTIES VERSION 1.0 SOVERSION 1)
+set_target_properties(msgpuck PROPERTIES OUTPUT_NAME "msgpuck")
+
+if (NOT ${PROJECT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
+    # Embedded mode, skip tests, documentation and the install targets
+    return()
+endif()
+
 option(ENABLE_GCOV "Enable integration with gcov, a code coverage program" OFF)
 if (ENABLE_GCOV)
     set(_flags "-fprofile-arcs -ftest-coverage")
@@ -24,19 +29,13 @@ if (ENABLE_GCOV)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${_flags}")
 endif()
 
-include(GNUInstallDirs)
-
 add_subdirectory(test)
 
-add_library(${PROJECT_NAME} STATIC msgpuck.c)
-set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1.0 SOVERSION 1)
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "msgpuck")
-
-install(TARGETS ${PROJECT_NAME}
+include(GNUInstallDirs)
+install(TARGETS msgpuck
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     COMPONENT library)
-
 install(FILES msgpuck.h DESTINATION include)
 
 find_package(Doxygen)

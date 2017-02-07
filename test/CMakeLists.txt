@@ -1,3 +1,7 @@
+if(POLICY CMP0037)
+    cmake_policy(SET CMP0037 OLD) # don't blame custom target names
+endif(POLICY CMP0037)
+
 include_directories("../")
 
 #find_program(PROVE prove)

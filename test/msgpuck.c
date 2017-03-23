@@ -581,7 +581,7 @@ test_format(void)
 	data1_end = mp_encode_array(data1_end, 2);
 	data1_end = mp_encode_str(data1_end, "ABC", 3);
 	data1_end = mp_encode_uint(data1_end, 11);
-	uint32_t data1_len = data1_end - data1;
+	size_t data1_len = data1_end - data1;
 	assert(data1_len <= sizeof(data1));
 
 	char data2[32];
@@ -589,7 +589,7 @@ test_format(void)
 	data2_end = mp_encode_int(data2_end, -1234567890);
 	data2_end = mp_encode_str(data2_end, "DEFGHIJKLMN", 11);
 	data2_end = mp_encode_uint(data2_end, 321);
-	uint32_t data2_len = data2_end - data2;
+	size_t data2_len = data2_end - data2;
 	assert(data2_len <= sizeof(data2));
 
 	fmt = "%d NIL [%d %b %b] this is test"
@@ -699,7 +699,7 @@ test_format(void)
 
 	c = p;
 	ok(mp_check(&c, e) == 0, "check");
-	ok((c - p == data1_len) &&
+	ok(((size_t)(c - p) == data1_len) &&
 	   memcmp(p, data1, data1_len) == 0, "compare");
 	p = c;
 

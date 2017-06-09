@@ -1,6 +1,13 @@
 MsgPuck
 =======
 
+[![Travis][travis-badge]][travis-url]
+[![License][license-badge]][license-url]
+[![RPM Packages][rpm-badge]][rpm-url]
+[![Debian Packages][deb-badge]][deb-url]
+[![Telegram][telegram-badge]][telegram-url]
+[![Maillist][groups-badge]][groups-url]
+
 MsgPuck is a compact and efficient [MessagePack] serialization library:
 
  * Zero-cost abstractions and zero overhead
@@ -17,9 +24,6 @@ serious bugs for quite a while now. The library is fully documented and
 covered by unit tests.
 
 Please feel free to file a ticket if your have a problem or a question.
-
-[![Build Status](https://travis-ci.org/rtsisyk/msgpuck.png)]
-(https://travis-ci.org/rtsisyk/msgpuck)
 
 Examples
 --------
@@ -82,20 +86,33 @@ should be expanded somewhere in a compilation unit (`*.c` or `*.cc` file).
 Please link libmsgpuck.a to your binary to avoid problems with unresolved
 symbols.
 
-Documentation
--------------
+See Also
+--------
 
  * [API Documentation](http://rtsisyk.github.io/msgpuck/)
  * [Specification](https://github.com/msgpack/msgpack/blob/master/spec.md)
+ * [Tests](test)
+ * [Packages](https://tarantool.org/download.html)
+ * [Maillist](https://groups.google.com/forum/#!forum/tarantool)
+ * [Facebook](http://facebook.com/TarantoolDatabase/)
+ * [Telegram Chat][telegram-url]
+ * [Maillist][groups-url]
 
 API documentation can be also generated using `make doc` (Doxygen is required).
-
-Contacts
---------
 
 MsgPuck was written to use within [Tarantool](http://tarantool.org) -
 the world's first full-featured MsgPack-based database.
 
- * roman@tsisyk.com
-
 [MessagePack]: https://msgpack.org/
+[travis-badge]: https://api.travis-ci.org/rtsisyk/msgpuck.svg?branch=master
+[travis-url]: https://travis-ci.org/rtsisyk/msgpuck
+[license-badge]: https://img.shields.io/badge/License-BSD--2-lightgray.svg?style=flat
+[license-url]: LICENSE
+[deb-badge]: https://img.shields.io/badge/Packages-Debian-red.svg?style=flat
+[deb-url]: https://packagecloud.io/tarantool/1\_7?filter=debs
+[rpm-badge]: https://img.shields.io/badge/Packages-RPM-blue.svg?style=flat
+[rpm-url]: https://packagecloud.io/tarantool/1\_7?filter=rpms
+[telegram-badge]: https://img.shields.io/badge/Telegram-join%20chat-blue.svg
+[telegram-url]: http://telegram.me/tarantool
+[groups-badge]: https://img.shields.io/badge/Google-Groups-orange.svg
+[groups-url]: https://groups.google.com/forum/#!forum/tarantool

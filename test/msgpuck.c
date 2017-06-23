@@ -1055,9 +1055,48 @@ test_numbers()
 	return check_plan();
 }
 
+static int
+test_overflow()
+{
+	plan(4);
+	header();
+
+	const char *chk;
+	char *d;
+	d = data;
+	chk = data;
+	d = mp_encode_array(d, 1);
+	d = mp_encode_array(d, UINT32_MAX);
+	is(mp_check(&chk, d), 1, "mp_check array overflow")
+
+	d = data;
+	chk = data;
+	d = mp_encode_array(d, 1);
+	d = mp_encode_map(d, UINT32_MAX);
+	is(mp_check(&chk, d), 1, "mp_check map overflow")
+
+	d = data;
+	chk = data;
+	d = mp_encode_array(d, 2);
+	d = mp_encode_str(d, "", 0);
+	d = mp_encode_strl(d, UINT32_MAX);
+	is(mp_check(&chk, d), 1, "mp_check str overflow")
+
+	d = data;
+	chk = data;
+	d = mp_encode_array(d, 2);
+	d = mp_encode_bin(d, "", 0);
+	d = mp_encode_binl(d, UINT32_MAX);
+	is(mp_check(&chk, d), 1, "mp_check bin overflow")
+
+	footer();
+	return check_plan();
+}
+
+
 int main()
 {
-	plan(19);
+	plan(20);
 	test_uints();
 	test_ints();
 	test_bools();
@@ -1077,6 +1116,7 @@ int main()
 	test_mp_print();
 	test_mp_check();
 	test_numbers();
+	test_overflow();
 
 	return check_plan();
 }

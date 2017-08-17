@@ -2153,7 +2153,6 @@ mp_check(const char **data, const char *end)
 		case MP_HINT_EXT_16:
 			/* MP_EXT (16) */
 			MP_CHECK_LEN(sizeof(uint16_t) + sizeof(uint8_t));
-				return 1;
 			len = mp_load_u16(data);
 			mp_load_u8(data);
 			MP_CHECK_LEN(len);

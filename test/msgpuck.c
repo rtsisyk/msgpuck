@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
+#include <math.h>
 
 #include "msgpuck.h"
 #include "test.h"
@@ -986,7 +987,10 @@ test_mp_check()
 	return check_plan();
 }
 
-#define test_read_number(_func, _type, _mp_type, _val, _success) do {	\
+#define int_eq(a, b) (((a) - (b)) == 0)
+#define double_eq(a, b) (fabs((a) - (b)) < 1e-15)
+
+#define test_read_number(_func, _eq,  _type, _mp_type, _val, _success) do {	\
 	const char *s = #_func "(mp_encode_" #_mp_type "(" #_val "))";	\
 	const char *d1 = data;						\
 	const char *d2 = mp_encode_##_mp_type(data, _val);		\
@@ -995,16 +999,16 @@ test_mp_check()
 	if (_success) {							\
 		is(ret, 0, "%s check success", s);			\
 		is(d1, d2, "%s check pos advanced", s);			\
-		ok(v - _val == 0, "%s check result", s);		\
+		ok(_eq(v, _val), "%s check result", s);		\
 	} else {							\
 		is(ret, -1, "%s check fail", s);			\
 		is(d1, data, "%s check pos unchanged", s);		\
 	}								\
 } while (0)
 
-#define test_read_int32(...)	test_read_number(mp_read_int32, int32_t, __VA_ARGS__)
-#define test_read_int64(...)	test_read_number(mp_read_int64, int64_t, __VA_ARGS__)
-#define test_read_double(...)	test_read_number(mp_read_double, double, __VA_ARGS__)
+#define test_read_int32(...)	test_read_number(mp_read_int32, int_eq, int32_t, __VA_ARGS__)
+#define test_read_int64(...)	test_read_number(mp_read_int64, int_eq, int64_t, __VA_ARGS__)
+#define test_read_double(...)	test_read_number(mp_read_double, double_eq, double, __VA_ARGS__)
 
 static int
 test_numbers()

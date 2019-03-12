@@ -33,7 +33,7 @@ Examples
     char buf[1024];
 
     char *w = buf;
-    w = mp_encode_array(w, 4)
+    w = mp_encode_array(w, 4);
     w = mp_encode_uint(w, 10);
     w = mp_encode_str(w, "hello world", strlen("hello world"));
     w = mp_encode_bool(w, true);

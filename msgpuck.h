@@ -43,7 +43,7 @@
  * // Encode
  * char buf[1024];
  * char *w = buf;
- * w = mp_encode_array(w, 4)
+ * w = mp_encode_array(w, 4);
  * w = mp_encode_uint(w, 10);
  * w = mp_encode_str(w, "hello world", strlen("hello world"));
  * w = mp_encode_bool(w, true);
@@ -52,7 +52,7 @@
  * // Validate
  * const char *b = buf;
  * int r = mp_check(&b, w);
- * assert(!r)
+ * assert(!r);
  * assert(b == w);
  *
  * // Decode
@@ -393,7 +393,7 @@ mp_sizeof_array(uint32_t size);
  * // Encode
  * char buf[1024];
  * char *w = buf;
- * w = mp_encode_array(w, 2)
+ * w = mp_encode_array(w, 2);
  * w = mp_encode_uint(w, 10);
  * w = mp_encode_uint(w, 15);
  *
@@ -759,13 +759,13 @@ mp_sizeof_bin(uint32_t len);
  * char *b = buffer;
  * b = mp_encode_strl(b, hdr.total_len);
  * char *s = b;
- * memcpy(b, pkt1.data, pkt1.len)
+ * memcpy(b, pkt1.data, pkt1.len);
  * b += pkt1.len;
  * // get next packet
- * memcpy(b, pkt2.data, pkt2.len)
+ * memcpy(b, pkt2.data, pkt2.len);
  * b += pkt2.len;
  * // get next packet
- * memcpy(b, pkt1.data, pkt3.len)
+ * memcpy(b, pkt1.data, pkt3.len);
  * b += pkt3.len;
  *
  * // Check that all data was received

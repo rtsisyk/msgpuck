@@ -118,9 +118,11 @@ extern "C" {
 /** \cond false **/
 
 #if defined(__CC_ARM)         /* set the alignment to 1 for armcc compiler */
-#define MP_PACKED    __packed
-#else
-#define MP_PACKED  __attribute__((packed))
+	#define MP_PACKED    __packed
+#elif defined(__GNUC__)
+	#define MP_PACKED  __attribute__((packed))
+#elif defined(_MSC_VER)
+	#define PACK( __Declaration__ ) __pragma( pack(push, 1) ) __Declaration__ __pragma( pack(pop) )
 #endif
 
 #if defined(MP_SOURCE)
@@ -144,7 +146,13 @@ extern "C" {
 #define MP_PROTO extern inline
 #define MP_IMPL inline
 #endif
+
+#if defined(__GNUC__)
 #define MP_ALWAYSINLINE __attribute__((always_inline))
+#else
+#define MP_ALWAYSINLINE
+#endif
+
 #endif /* GNU inline or C99 inline */
 
 #if !defined __GNUC_MINOR__ || defined __INTEL_COMPILER || \
@@ -170,8 +178,15 @@ extern "C" {
 #if MP_GCC_VERSION(4, 5) || __has_builtin(__builtin_unreachable)
 #define mp_unreachable() (assert(0), __builtin_unreachable())
 #else
+
+#ifdef __GNUC__
 MP_PROTO void
 mp_unreachable(void) __attribute__((noreturn));
+#else
+MP_PROTO void
+mp_unreachable(void);
+#endif
+
 MP_PROTO void
 mp_unreachable(void) { assert(0); abort(); }
 #define mp_unreachable() (assert(0))
@@ -211,13 +226,25 @@ mp_unreachable(void) { assert(0); abort(); }
 	(((x) >> 56) & UINT64_C(0x00000000000000ff)) )
 #endif
 
+/*MP_PACKED(struct cast { type val; }); don't know why this does not works*/   
+/*__pragma( pack(push, 1) )  struct cast1 { type val; } __pragma( pack(pop) ) */ 
+
+/*MP_PACKED(struct cast { type val; });   don't know why this does not  works*/ 	
+/*M__pragma( pack(push, 1) ) struct cast1 { type val; } __pragma( pack(pop) )*/ 
+
+/*
+		#pragma pack(push, 1)  \
+		#pragma pack(pop) \
+*/ 
+
+#if defined(__GNUC__)  
 #define MP_LOAD_STORE(name, type, bswap)					\
 MP_PROTO type									\
 mp_load_##name(const char **data);						\
 MP_IMPL type									\
 mp_load_##name(const char **data)						\
 {										\
-	struct MP_PACKED cast { type val; };					\
+	struct MP_PACKED cast { type val; };		\
 	type val = bswap(((struct cast *) *data)->val);				\
 	*data += sizeof(type);							\
 	return val;								\
@@ -231,6 +258,21 @@ mp_store_##name(char *data, type val)						\
 	((struct cast *) (data))->val = bswap(val);				\
 	return data + sizeof(type);						\
 }
+#else 
+
+
+//#define MP_PROTO
+//#define MP_IMPL
+#pragma pack(push, 1) 
+#define MP_LOAD_STORE(name, type, bswap)  \
+MP_PROTO type mp_load_##name(const char **data); \
+MP_PROTO char * mp_store_##name(char *data, type val); \
+MP_IMPL char * mp_store_##name(char *data, type val) { struct cast1 { type val; }; ((struct  cast1*) (data))->val = bswap(val); return data + sizeof(type); } \
+MP_IMPL type mp_load_##name(const char **data) { struct cast1 { type val; }; type val=bswap(((struct cast1*) *data)->val); *data += sizeof(type); return val; }						
+#pragma pack(pop)
+
+
+#endif
 
 MP_LOAD_STORE(u8, uint8_t, mp_identity);
 
@@ -263,6 +305,9 @@ MP_LOAD_STORE(u64, uint64_t, mp_identity);
  * can't be used here.
  */
 
+#if defined(__GNUC__)  
+
+
 union MP_PACKED mp_float_cast {
 	uint32_t u32;
 	float f;
@@ -272,6 +317,24 @@ union MP_PACKED mp_double_cast {
 	uint64_t u64;
 	double d;
 };
+
+#else 
+
+#pragma pack(push, 1) 
+
+union  mp_float_cast {
+	uint32_t u32;
+	float f;
+};
+
+union  mp_double_cast {
+	uint64_t u64;
+	double d;
+};
+
+#pragma pack(pop)
+
+#endif
 
 MP_PROTO float
 mp_load_float(const char **data);
@@ -370,7 +433,12 @@ enum mp_type {
  * \param c - a first byte of encoded data
  * \return MsgPack type
  */
+
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) enum mp_type
+#else
+MP_PROTO enum mp_type
+#endif
 mp_typeof(const char c);
 
 /**
@@ -380,7 +448,11 @@ mp_typeof(const char c);
  * \param size - a number of elements
  * \return buffer size in bytes (max is 5)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
 mp_sizeof_array(uint32_t size);
 
 /**
@@ -423,7 +495,11 @@ mp_encode_array(char *data, uint32_t size);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_ARRAY
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO ptrdiff_t
+#endif
 mp_check_array(const char *cur, const char *end);
 
 /**
@@ -445,7 +521,12 @@ mp_decode_array(const char **data);
  * \param size - a number of elements
  * \return buffer size in bytes (max is 5)
  */
+
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
 mp_sizeof_map(uint32_t size);
 
 /**
@@ -494,7 +575,11 @@ mp_encode_map(char *data, uint32_t size);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_MAP
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO ptrdiff_t
+#endif
 mp_check_map(const char *cur, const char *end);
 
 /**
@@ -524,7 +609,12 @@ mp_decode_map(const char **data);
  * \param num - a number
  * \return buffer size in bytes (max is 9)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
+
 mp_sizeof_uint(uint64_t num);
 
 /**
@@ -535,7 +625,12 @@ mp_sizeof_uint(uint64_t num);
  * \return buffer size in bytes (max is 9)
  * \pre \a num < 0
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
+
 mp_sizeof_int(int64_t num);
 
 /**
@@ -572,7 +667,11 @@ mp_encode_int(char *data, int64_t num);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_UINT
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO ptrdiff_t
+#endif
 mp_check_uint(const char *cur, const char *end);
 
 /**
@@ -584,7 +683,12 @@ mp_check_uint(const char *cur, const char *end);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_INT
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO ptrdiff_t
+#endif
+
 mp_check_int(const char *cur, const char *end);
 
 /**
@@ -615,7 +719,11 @@ mp_decode_int(const char **data);
  * \retval   0 when \a a == \a b
  * \retval > 0 when \a a > \a b
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) int
+#else
+MP_PROTO int
+#endif
 mp_compare_uint(const char *data_a, const char *data_b);
 
 /**
@@ -625,7 +733,11 @@ mp_compare_uint(const char *data_a, const char *data_b);
  * \param num - a float
  * \return buffer size in bytes (always 5)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
 mp_sizeof_float(float num);
 
 /**
@@ -636,7 +748,11 @@ mp_sizeof_float(float num);
  * \param num - a double
  * \return buffer size in bytes (5 or 9)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
 mp_sizeof_double(double num);
 
 /**
@@ -672,7 +788,11 @@ mp_encode_double(char *data, double num);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_FLOAT
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO ptrdiff_t
+#endif
 mp_check_float(const char *cur, const char *end);
 
 /**
@@ -684,7 +804,11 @@ mp_check_float(const char *cur, const char *end);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_DOUBLE
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO ptrdiff_t
+#endif
 mp_check_double(const char *cur, const char *end);
 
 /**
@@ -712,7 +836,11 @@ mp_decode_double(const char **data);
  * \param len - a string length
  * \return size in chars (max is 5)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
 mp_sizeof_strl(uint32_t len);
 
 /**
@@ -720,7 +848,11 @@ mp_sizeof_strl(uint32_t len);
  * \param len - a string length
  * \return size in chars (max is 5 + \a len)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
 mp_sizeof_str(uint32_t len);
 
 /**
@@ -730,7 +862,11 @@ mp_sizeof_str(uint32_t len);
  * \param len - a string length
  * \return size in chars (max is 5)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
 mp_sizeof_binl(uint32_t len);
 
 /**
@@ -738,7 +874,11 @@ mp_sizeof_binl(uint32_t len);
  * \param len - a string length
  * \return size in chars (max is 5 + \a len)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO uint32_t
+#endif
 mp_sizeof_bin(uint32_t len);
 
 /**
@@ -908,7 +1048,11 @@ mp_snprint(char *buf, int size, const char *data);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_STR
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO  ptrdiff_t
+#endif
 mp_check_strl(const char *cur, const char *end);
 
 /**
@@ -920,7 +1064,11 @@ mp_check_strl(const char *cur, const char *end);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_BIN
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO  ptrdiff_t
+#endif
 mp_check_binl(const char *cur, const char *end);
 
 /**
@@ -992,7 +1140,11 @@ mp_decode_strbin(const char **data, uint32_t *len);
  * the library.
  * \return buffer size in bytes (always 1)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO  uint32_t
+#endif
 mp_sizeof_nil(void);
 
 /**
@@ -1015,7 +1167,11 @@ mp_encode_nil(char *data);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_NIL
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO  ptrdiff_t
+#endif
 mp_check_nil(const char *cur, const char *end);
 
 /**
@@ -1032,7 +1188,11 @@ mp_decode_nil(const char **data);
  * the library.
  * \return buffer size in bytes (always 1)
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((const)) uint32_t
+#else
+MP_PROTO  uint32_t
+#endif
 mp_sizeof_bool(bool val);
 
 /**
@@ -1056,7 +1216,11 @@ mp_encode_bool(char *data, bool val);
  * \pre cur < end
  * \pre mp_typeof(*cur) == MP_BOOL
  */
+#if defined(__GNUC__)  
 MP_PROTO __attribute__((pure)) ptrdiff_t
+#else
+MP_PROTO  ptrdiff_t
+#endif
 mp_check_bool(const char *cur, const char *end);
 
 /**
@@ -1252,6 +1416,7 @@ mp_decode_array_slowpath(uint8_t c, const char **data)
 		return size;
 	default:
 		mp_unreachable();
+		return (uint32_t)0;
 	}
 }
 
@@ -1714,6 +1879,7 @@ mp_decode_binl(const char **data)
 		return mp_load_u32(data);
 	default:
 		mp_unreachable();
+		return (uint32_t)0;
 	}
 }
 
@@ -1824,6 +1990,7 @@ mp_decode_bool(const char **data)
 		return false;
 	default:
 		mp_unreachable();
+		return false;
 	}
 }
 
@@ -2073,7 +2240,8 @@ mp_next(const char **data)
 			continue;
 		} else {
 			*data -= sizeof(uint8_t);
-			return mp_next_slowpath(data, k);
+			mp_next_slowpath(data, k);
+			return;
 		}
 	}
 }

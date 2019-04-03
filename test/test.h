@@ -59,8 +59,16 @@ int __ok(int condition, const char *fmt, ...);
 /* private function, use note(...) or diag(...) instead */
 void __space(FILE *stream);
 
-#define msg(stream, ...) ({ __space(stream); fprintf(stream, "# ");            \
-	fprintf(stream, __VA_ARGS__); fprintf(stream, "\n"); })
+
+#if defined(__GUNC__)
+#define msg(stream, ...) ( { __space(stream); fprintf(stream, "# ");            \
+	fprintf(stream, __VA_ARGS__); fprintf(stream, "\n"); } )
+
+#else
+
+#define msg(stream, ...)  { __space(stream); fprintf(stream, "# "); fprintf(stream, __VA_ARGS__); fprintf(stream, "\n"); } 
+
+#endif
 
 #define note(...) msg(stdout, __VA_ARGS__)
 #define diag(...) msg(stderr, __VA_ARGS__)
@@ -77,8 +85,9 @@ void plan(int count);
 /**
 @brief check if plan is reached and print report
 */
-int check_plan(void);
+int check_plan(void); 
 
+#if defined(__GNUC__)
 #define ok(condition, fmt, args...)	{		\
 	int res = __ok(condition, fmt, ##args);		\
 	if (!res) {					\
@@ -115,9 +124,52 @@ int check_plan(void);
 	}						\
 }
 
-#define fail(fmt, args...)		\
+#define fail(fmt...)		\
 	ok(0, fmt, ##args)
 
+#else
+
+
+#define ok(condition, fmt, ...)	{		\
+	int res = __ok(condition, fmt, ##__VA_ARGS__);		\
+	if (!res) {					\
+		__space(stderr);			\
+		fprintf(stderr, "#   Failed test '");	\
+		fprintf(stderr, fmt, ##__VA_ARGS__);		\
+		fprintf(stderr, "'\n");			\
+		__space(stderr);			\
+		fprintf(stderr, "#   in %s at line %d\n", __FILE__, __LINE__); \
+	}						\
+}
+__VA_ARGS__
+#define is(a, b, fmt, ...)	{			\
+	int res = __ok((a) == (b), fmt, ##__VA_ARGS__);	\
+	if (!res) {					\
+		__space(stderr);			\
+		fprintf(stderr, "#   Failed test '");	\
+		fprintf(stderr, fmt, ##__VA_ARGS__);		\
+		fprintf(stderr, "'\n");			\
+		__space(stderr);			\
+		fprintf(stderr, "#   in %s at line %d\n", __FILE__, __LINE__); \
+	}						\
+}
+
+#define isnt(a, b, fmt, ...) {			\
+	int res = __ok((a) != (b), fmt, ##__VA_ARGS__);	\
+	if (!res) {					\
+		__space(stderr);			\
+		fprintf(stderr, "#   Failed test '");	\
+		fprintf(stderr, fmt, ##__VA_ARGS__);		\
+		fprintf(stderr, "'\n");			\
+		__space(stderr);			\
+		fprintf(stderr, "#   in %s at line %d\n", __FILE__, __LINE__); \
+	}						\
+}
+
+#define fail(fmt, ...)		\
+	ok(0, fmt, ##__VA_ARGS__)
+
+#endif
 
 #endif /* TEST_H_INCLUDED */
 
